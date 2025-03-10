@@ -17,4 +17,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+use App\Http\Controllers\Admin\UserVerificationController;
+
+Route::middleware(['owner', 'auth'])->group(function () {
+    Route::get('/admin/verify-users', [UserVerificationController::class, 'index'])->name('admin.verify-users');
+    Route::post('/admin/verify-users/{user}', [UserVerificationController::class, 'verify'])->name('admin.verify-user');
+});
+
+require __DIR__ . '/auth.php';

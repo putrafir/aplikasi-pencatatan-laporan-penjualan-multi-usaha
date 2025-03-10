@@ -25,6 +25,12 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
+        $user = Auth::user();
+
+        if (!$user->is_verified) {
+            Auth::logout();
+            return back()->with('warning', 'Akun anda belum diverifikasi oleh pemilik usaha.');
+        }
 
         $request->session()->regenerate();
 
