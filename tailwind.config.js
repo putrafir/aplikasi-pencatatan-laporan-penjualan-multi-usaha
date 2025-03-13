@@ -10,6 +10,7 @@ export default {
     ],
 
     theme: {
+
         screens: {
             sm: "576px",
             "sm-max": { max: "576px" },
@@ -1003,6 +1004,7 @@ export default {
                 "50%": {
                     opacity: ".5",
                 },
+     
             },
             bounce: {
                 "0%, 100%": {
@@ -1429,5 +1431,5 @@ export default {
         "disabled",
     ],
 
-    plugins: [forms],
+    plugins: [forms, require("flowbite/plugin")],
 };
