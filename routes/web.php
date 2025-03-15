@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,10 +19,18 @@ Route::middleware('auth')->group(function () {
 });
 
 use App\Http\Controllers\Admin\UserVerificationController;
+use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
 
 Route::middleware(['owner', 'auth'])->group(function () {
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('owner.dashboard');
     Route::get('/admin/verify-users', [UserVerificationController::class, 'index'])->name('admin.verify-users');
     Route::post('/admin/verify-users/{user}', [UserVerificationController::class, 'verify'])->name('admin.verify-user');
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/pegawai/dashboard', [PegawaiDashboardController::class, 'index'])->name('pegawai.dashboard');
+});
+
+
 
 require __DIR__ . '/auth.php';

@@ -34,7 +34,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return $this->redirectBasedOnRole($user->role);
     }
 
     /**
@@ -49,5 +49,22 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    /**
+     * Redirect user based on their role.
+     */
+    protected function redirectBasedOnRole(string $role): RedirectResponse
+    {
+        if ($role === 'owner') {
+            return redirect()->intended(route('owner.dashboard') . '?verified=1');
+        }
+
+        if ($role === 'pegawai') {
+            return redirect()->intended(route('pegawai.dashboard') . '?verified=1');
+        }
+
+        // Default redirect if role is not matched
+        return redirect()->intended(route('dashboard') . '?verified=1');
     }
 }
