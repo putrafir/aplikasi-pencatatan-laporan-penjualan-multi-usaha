@@ -63,6 +63,7 @@
                                                 class="focus:shadow-soft-primary-outline text-sm leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:outline-none focus:transition-shadow"
                                                 placeholder="Email" aria-label="Email" aria-describedby="email-addon" />
                                             <x-input-error :messages="$errors->get('email')" class="mt-2"/>
+                                                @include('components.ui.Message.warning')
                                         </div>
                                         <label class="mb-2 ml-1 font-bold text-xs text-slate-700">Password</label>
                                         <div class="mb-4">
@@ -71,14 +72,6 @@
                                                 placeholder="Password" aria-label="Password"
                                                 aria-describedby="password-addon" />
                                             <x-input-error :messages="$errors->get('password')" class="mt-2"/>
-                                        </div>
-                                        <div class="min-h-6 mb-0.5 block pl-12">
-                                            <input id="rememberMe"
-                                                class="mt-0.54 rounded-10 duration-250 ease-soft-in-out after:rounded-circle after:shadow-soft-2xl after:duration-250 checked:after:translate-x-5.25 h-5 relative float-left -ml-12 w-10 cursor-pointer appearance-none border border-solid border-gray-200 bg-slate-800/10 bg-none bg-contain bg-left bg-no-repeat align-top transition-all after:absolute after:top-px after:h-4 after:w-4 after:translate-x-px after:bg-white after:content-[''] checked:border-slate-800/95 checked:bg-slate-800/95 checked:bg-none checked:bg-right"
-                                                type="checkbox" checked="" />
-                                            <label
-                                                class="mb-2 ml-1 font-normal cursor-pointer select-none text-sm text-slate-700"
-                                                for="rememberMe">Remember me</label>
                                         </div>
                                         <div class="text-center">
                                             <button type="submit"
