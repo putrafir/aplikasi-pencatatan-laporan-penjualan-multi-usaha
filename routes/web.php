@@ -1,12 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserVerificationController;
 use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::get('/dashboard', function () {
@@ -19,8 +20,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-use App\Http\Controllers\Admin\UserVerificationController;
-use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
 
 Route::middleware(['owner', 'auth'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('owner.dashboard');
@@ -30,6 +29,10 @@ Route::middleware(['owner', 'auth'])->group(function () {
     // Management Users
     Route::post('/admin/verify-users/{user}', [UserVerificationController::class, 'verify'])->name('admin.verify-user');
     Route::post('/admin/delete-users/{user}', [UserVerificationController::class, 'deleteUser'])->name('admin.delete-user');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/pegawai/dashboard', [PegawaiDashboardController::class, 'index'])->name('pegawai.dashboard');
 });
 
 require __DIR__ . '/auth.php';

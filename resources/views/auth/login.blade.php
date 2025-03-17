@@ -11,7 +11,7 @@
     <!-- Fonts and icons -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Font Awesome Icons -->
-    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    {{-- <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script> --}}
     <!-- Nucleo Icons -->
     <link href="{{ asset('/css/nucleo-icons.css') }}" rel="stylesheet" />
     <link href="{{ asset('/css/nucleo-svg.css') }}" rel="stylesheet" />
@@ -20,7 +20,8 @@
 
     <!-- Nepcha Analytics (nepcha.com) -->
     <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
-    <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body class="m-0 font-sans antialiased font-normal bg-white text-start text-base leading-default text-slate-500">
@@ -62,8 +63,8 @@
                                                 required
                                                 class="focus:shadow-soft-primary-outline text-sm leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:outline-none focus:transition-shadow"
                                                 placeholder="Email" aria-label="Email" aria-describedby="email-addon" />
-                                            <x-input-error :messages="$errors->get('email')" class="mt-2"/>
-                                                @include('components.ui.Message.warning')
+                                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                                            @include('components.ui.Message.warning')
                                         </div>
                                         <label class="mb-2 ml-1 font-bold text-xs text-slate-700">Password</label>
                                         <div class="mb-4">
@@ -71,7 +72,7 @@
                                                 class="focus:shadow-soft-primary-outline text-sm leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:outline-none focus:transition-shadow"
                                                 placeholder="Password" aria-label="Password"
                                                 aria-describedby="password-addon" />
-                                            <x-input-error :messages="$errors->get('password')" class="mt-2"/>
+                                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
                                         </div>
                                         <div class="text-center">
                                             <button type="submit"
@@ -103,7 +104,9 @@
                 </div>
             </div>
         </section>
+
     </main>
+
     @if (session('success_title'))
         <script>
             Swal.fire({
@@ -113,10 +116,12 @@
             });
         </script>
     @endif
+
+    {{-- <!-- plugin for scrollbar  -->
+    <script src="{{ asset('/js/plugins/perfect-scrollbar.min.js') }}" async></script>
+    <!-- main script file  -->
+    <script src="{{ asset('/js/soft-ui-dashboard-tailwind.js?v=1.0.5') }}" async></script> --}}
+
 </body>
-<!-- plugin for scrollbar  -->
-<script src="{{ asset('/js/plugins/perfect-scrollbar.min.js') }}" async></script>
-<!-- main script file  -->
-<script src="{{ asset('/js/soft-ui-dashboard-tailwind.js?v=1.0.5') }}" async></script>
 
 </html>

@@ -57,7 +57,7 @@ class AuthenticatedSessionController extends Controller
     protected function redirectBasedOnRole(string $role): RedirectResponse
     {
         if ($role === 'owner') {
-            return redirect()->intended(route('admin.dashboard') . '?verified=1');
+            return redirect()->intended(route('owner.dashboard') . '?verified=1');
         }
 
         if ($role === 'pegawai') {

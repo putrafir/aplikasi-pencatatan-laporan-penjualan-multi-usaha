@@ -56,7 +56,7 @@
                             <div class="mt-4 p-6 mb-0 text-center bg-white border-b-0 rounded-t-2xl">
                                 <h5>Register</h5>
                             </div>
-                            
+
                             <div class="flex-auto p-6">
                                 <form role="form text-left" method="POST" action="{{ route('register') }}">
                                     @csrf
@@ -107,8 +107,8 @@
 
                                         <x-text-input id="password_confirmation"
                                             class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
-                                            placeholder="Confirm Password" type="password"
-                                            name="password_confirmation" required autocomplete="new-password" />
+                                            placeholder="Confirm Password" type="password" name="password_confirmation"
+                                            required autocomplete="new-password" />
 
                                         <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                                     </div>
@@ -132,9 +132,9 @@
         </section>
     </main>
 </body>
-<!-- plugin for scrollbar  -->
+{{-- <!-- plugin for scrollbar  -->
 <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}" async></script>
 <!-- main script file  -->
-<script src="{{ asset('js/soft-ui-dashboard-tailwind.js') }}" async></script>
+<script src="{{ asset('js/soft-ui-dashboard-tailwind.js') }}" async></script> --}}
 
 </html>
