@@ -104,6 +104,15 @@
             </div>
         </section>
     </main>
+    @if (session('success_title'))
+        <script>
+            Swal.fire({
+                title: "{{ session('success_title') }}",
+                text: "{{ session('success_subtitle') }}",
+                icon: "success"
+            });
+        </script>
+    @endif
 </body>
 <!-- plugin for scrollbar  -->
 <script src="{{ asset('/js/plugins/perfect-scrollbar.min.js') }}" async></script>
