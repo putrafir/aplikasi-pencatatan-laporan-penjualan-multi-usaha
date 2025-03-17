@@ -10,7 +10,7 @@ class UserVerificationController extends Controller
 {
     public function index()
     {
-        $users = User::orderBy('id', 'asc')->get();
+        $users = User::where('role', '!=', 'owner')->orderBy('id', 'asc')->get();
         return view('admin.manage-user.verify-users', compact('users'));
     }
 
