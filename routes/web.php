@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UserVerificationController;
+use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,13 +20,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-use App\Http\Controllers\Admin\UserVerificationController;
-use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
-
 Route::middleware(['owner', 'auth'])->group(function () {
-    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('owner.dashboard');
+    // Halaman Admin
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/verify-users', [UserVerificationController::class, 'index'])->name('admin.verify-users');
+    Route::get('/admin/profile', [DashboardController::class, 'profile'])->name('admin.profile');
+
+    // Management Users
     Route::post('/admin/verify-users/{user}', [UserVerificationController::class, 'verify'])->name('admin.verify-user');
+    Route::post('/admin/delete-users/{user}', [UserVerificationController::class, 'deleteUser'])->name('admin.delete-user');
 });
 
 Route::middleware(['auth'])->group(function () {

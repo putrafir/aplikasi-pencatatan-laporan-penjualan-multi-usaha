@@ -10,7 +10,7 @@ class UserVerificationController extends Controller
 {
     public function index()
     {
-        $users = User::where('is_verified', false)->get();
+        $users = User::orderBy('id', 'asc')->get();
         return view('admin.manage-user.verify-users', compact('users'));
     }
 
@@ -19,5 +19,13 @@ class UserVerificationController extends Controller
         $user->update(['is_verified' => true]);
 
         return back()->with('success', 'Akun berhasil diverifikasi.');
+    }
+
+    public function deleteUser($id)
+    {
+        $employee = User::findOrFail($id);
+        $employee->delete();
+
+        return redirect()->back()->with('success', 'Employee deleted successfully');
     }
 }

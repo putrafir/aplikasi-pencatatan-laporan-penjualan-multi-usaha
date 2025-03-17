@@ -13,4 +13,10 @@ class DashboardController extends Controller
         $user = Auth::user();
         return view('admin.dashboard', compact('user'));
     }
+
+    public function profile()
+    {
+        $user = Auth::user();
+        return view('admin.profile', compact('user'));
+    }
 }
