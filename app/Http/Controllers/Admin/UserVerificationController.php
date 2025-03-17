@@ -20,4 +20,12 @@ class UserVerificationController extends Controller
 
         return back()->with('success', 'Akun berhasil diverifikasi.');
     }
+
+    public function deleteUser($id)
+    {
+        $employee = User::findOrFail($id);
+        $employee->delete();
+
+        return redirect()->back()->with('success', 'Employee deleted successfully');
+    }
 }

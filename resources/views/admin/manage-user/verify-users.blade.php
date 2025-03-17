@@ -1,5 +1,5 @@
 @extends('components.layout.OwnerLayout.body.index')
-@section('title', 'Verification')
+@section('title', 'Manage Users')
 @section('admin')
     <!-- table 1 -->
 
@@ -76,13 +76,21 @@
                                         </td>
 
                                         <td
-                                            class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                            class="flex justify-center p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                             <form action="{{ route('admin.verify-user', $item) }}" method="POST">
                                                 @csrf
                                                 <button type="submit"
                                                     class="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all bg-transparent rounded-lg cursor-pointer leading-pro text-xs ease-soft-in shadow-soft-md bg-150 bg-gradient-to-tl from-gray-900 to-slate-800 hover:shadow-soft-xs active:opacity-85 hover:scale-102 tracking-tight-soft bg-x-25">
                                                     Verify
                                                 </button>
+                                            </form>
+                                            <form id="delete-form-{{ $item->id }}" action="{{ route('admin.delete-user', $item->id) }}" method="POST"
+                                                class="inline">
+                                                @csrf
+                                                <button
+                                                    class="z-10 inline-block px-4 py-3 mb-0 font-bold text-center text-transparent uppercase align-middle transition-all border-0 rounded-lg shadow-none cursor-pointer leading-pro text-xs ease-soft-in bg-150 bg-gradient-to-tl from-red-600 to-rose-400 hover:scale-102 active:opacity-85 bg-x-25 bg-clip-text"
+                                                    type="submit" onclick="confirmDelete(event, {{ $item->id }})"><i
+                                                        class="mr-2 far fa-trash-alt bg-150 bg-gradient-to-tl from-red-600 to-rose-400 bg-x-25 bg-clip-text"></i>Delete</button>
                                             </form>
                                         </td>
                                     </tr>
@@ -95,4 +103,28 @@
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(event, employeeId) {
+            event.preventDefault();
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Apakah Anda yakin?',
+                text: 'Data karyawan akan dihapus secara permanen!',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + employeeId).submit();
+                }
+            });
+        }
+    </script>
+
+
 @endsection

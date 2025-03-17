@@ -21,9 +21,14 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['owner', 'auth'])->group(function () {
+    // Halaman Admin
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/verify-users', [UserVerificationController::class, 'index'])->name('admin.verify-users');
+    Route::get('/admin/profile', [DashboardController::class, 'profile'])->name('admin.profile');
+
+    // Management Users
     Route::post('/admin/verify-users/{user}', [UserVerificationController::class, 'verify'])->name('admin.verify-user');
+    Route::post('/admin/delete-users/{user}', [UserVerificationController::class, 'deleteUser'])->name('admin.delete-user');
 });
 
 Route::middleware(['auth'])->group(function () {
