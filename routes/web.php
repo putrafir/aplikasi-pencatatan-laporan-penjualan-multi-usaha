@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UserVerificationController;
+use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,10 +20,16 @@ Route::middleware('auth')->group(function () {
 });
 
 use App\Http\Controllers\Admin\UserVerificationController;
+use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
 
 Route::middleware(['owner', 'auth'])->group(function () {
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('owner.dashboard');
     Route::get('/admin/verify-users', [UserVerificationController::class, 'index'])->name('admin.verify-users');
+    Route::get('/admin/profile', [DashboardController::class, 'profile'])->name('admin.profile');
+
+    // Management Users
     Route::post('/admin/verify-users/{user}', [UserVerificationController::class, 'verify'])->name('admin.verify-user');
+    Route::post('/admin/delete-users/{user}', [UserVerificationController::class, 'deleteUser'])->name('admin.delete-user');
 });
 
 require __DIR__ . '/auth.php';
