@@ -141,6 +141,9 @@
                         <li
                             class="relative block px-4 py-2 pl-0 leading-normal bg-white border-0 border-t-0 text-sm text-inherit">
                             <strong class="text-slate-700">Email:</strong> &nbsp; {{ $user->email }}</li>
+                            <li
+                            class="relative block px-4 py-2 pl-0 leading-normal bg-white border-0 border-t-0 text-sm text-inherit">
+                            <strong class="text-slate-700">Role:</strong> &nbsp; {{ $user->role }}</li>
                     </ul>
                     <!-- Tombol Edit -->
                     <button class="z-10 flex items-center justify-center px-6 py-3 mt-3 font-bold text-center text-white uppercase transition-all border-0 rounded-lg shadow-md cursor-pointer leading-pro text-xs ease-soft-in bg-150 bg-gradient-to-tl from-blue-600 to-purple-500 hover:scale-105 active:opacity-85"
