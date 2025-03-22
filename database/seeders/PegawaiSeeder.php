@@ -6,7 +6,7 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class PegawaiPisangGorengSeeder extends Seeder
+class PegawaiSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -19,6 +19,15 @@ class PegawaiPisangGorengSeeder extends Seeder
             'password' => 'jono1234',
             'role' => 'pegawai',
             'id_business' => 1,
+            'is_verified' => true,
+        ]);
+
+        User::factory()->create([
+            'name' => 'Tono Ton',
+            'email' => 'tono@gmail.com',
+            'password' => 'tono1234',
+            'role' => 'pegawai',
+            'id_business' => 2,
             'is_verified' => true,
         ]);
     }
