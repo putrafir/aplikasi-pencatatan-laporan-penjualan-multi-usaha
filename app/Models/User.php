@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Business;
 
 class User extends Authenticatable
 {
@@ -51,5 +52,10 @@ class User extends Authenticatable
     public function isOwner()
     {
         return $this->role === 'owner';
+    }
+
+    public function business()
+    {
+        return $this->belongsTo(Business::class, 'id_business', 'id');
     }
 }
