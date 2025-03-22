@@ -62,14 +62,10 @@
                                     @csrf
 
                                     <!-- Name -->
+                                    <x-input-label for="name" :value="__('Name')" />
                                     <div class="mb-4">
-                                        <x-input-label
-                                            class="mb-1 ml-1 font-normal cursor-pointer select-none text-sm text-slate-700"
-                                            for="name" :value="__('Name')" />
-                                        <x-text-input id="name"
-                                            class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
-                                            type="text" name="name" :value="old('name')" required autofocus
-                                            autocomplete="name" placeholder="Name" />
+                                        <x-text-input id="name" type="text" name="name" :value="old('name')"
+                                            required autofocus autocomplete="name" placeholder="Name" />
                                         <x-input-error :messages="$errors->get('name')" class="mt-2" />
                                     </div>
 
@@ -79,15 +75,16 @@
                                             class="mb-1 ml-1 font-normal cursor-pointer select-none text-sm text-slate-700"
                                             for="jenis_usaha" :value="__('Jenis Usaha')" />
 
-                                            <select id="id_business" name="id_business"
+                                        <select id="id_business" name="id_business"
                                             class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full
                                             appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding
                                             py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300
                                             focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
                                             required>
                                             <option value="" disabled selected>Pilih Jenis Usaha</option>
-                                            @foreach($businesses as $business)
-                                                <option value="{{ $business->id }}">{{ $business->business_name }}</option>
+                                            @foreach ($businesses as $business)
+                                                <option value="{{ $business->id }}">{{ $business->business_name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                         <x-input-error :messages="$errors->get('jenis_usaha')" class="mt-2" />
