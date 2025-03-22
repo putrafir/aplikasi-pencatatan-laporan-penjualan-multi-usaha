@@ -14,8 +14,8 @@ class BusinessSeeder extends Seeder
     public function run(): void
     {
         $businesses = [
-            ['business_name' => 'Pisang Goreng'],
-            ['business_name' => 'Smoothies']
+            ['business_name' => 'PISGOR CRUNCHY'],
+            ['business_name' => 'MISS SMOOTHIES']
         ];
 
         Business::insert($businesses);

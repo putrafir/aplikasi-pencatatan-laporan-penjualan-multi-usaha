@@ -207,11 +207,59 @@
                 </a>
             </li>
 
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit"
-                    class="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</button>
-            </form>
+            <li class="mt-auto w-full absolute bottom-0">
+                <form method="POST" action="{{ route('logout') }}" id="logoutBtn">
+                    @csrf
+                    <button type="submit"
+                        class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors">
+                        <div
+                            class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5">
+                            <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
+                                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <title>logout</title>
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                                        <g transform="translate(1716.000000, 291.000000)">
+                                            <g transform="translate(153.000000, 2.000000)">
+                                                <path class="fill-slate-800"
+                                                    d="M12,20 L28,20 L28,24 L12,24 L12,30 L5,23 L12,16 L12,20 Z">
+                                                </path>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                            </svg>
+                        </div>
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Logout</span>
+                    </button>
+                </form>
+            </li>
+            
         </ul>
     </div>
 </aside>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.getElementById('logoutBtn').addEventListener('submit', function (e) {
+        e.preventDefault();
+    
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Anda akan keluar dari akun ini!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Ya, Logout!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                e.target.submit();
+            }
+        });
+    });
+    </script>
+    
+    

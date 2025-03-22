@@ -18,7 +18,14 @@ class UserVerificationController extends Controller
     {
         $user->update(['is_verified' => true]);
 
-        return back()->with('success', 'Akun berhasil diverifikasi.');
+        return back()->with('success', 'Akun berhasil di verifikasi.');
+    }
+
+    public function inverify(User $user)
+    {
+        $user->update(['is_verified' => false]);
+
+        return back()->with('success', 'Akun berhasil di inverifikasi.');
     }
 
     public function deleteUser($id)
