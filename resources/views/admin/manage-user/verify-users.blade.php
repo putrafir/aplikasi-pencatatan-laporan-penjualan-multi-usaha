@@ -53,7 +53,8 @@
                                         </td>
                                         <td
                                             class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                            <p class="mb-0 text-xs leading-tight text-slate-400">{{ $item->business->business_name }}</p>
+                                            <p class="mb-0 text-xs leading-tight text-slate-400">
+                                                {{ $item->business->business_name }}</p>
                                         </td>
                                         @if ($item->is_verified == true)
                                             <td
@@ -77,14 +78,17 @@
 
                                         <td
                                             class="flex justify-center p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                            <form action="{{ route($item->is_verified == false ? 'admin.verify-user' : 'admin.inverify-user', $item) }}" method="POST">
+                                            <form
+                                                action="{{ route($item->is_verified == false ? 'admin.verify-user' : 'admin.inverify-user', $item) }}"
+                                                method="POST">
                                                 @csrf
                                                 <button type="submit"
                                                     class="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all bg-transparent rounded-lg cursor-pointer leading-pro text-xs ease-soft-in shadow-soft-md bg-150 bg-gradient-to-tl from-gray-900 to-slate-800 hover:shadow-soft-xs active:opacity-85 hover:scale-102 tracking-tight-soft bg-x-25">
                                                     {{ $item->is_verified == false ? 'Verify' : 'In Verify' }}
                                                 </button>
                                             </form>
-                                            <form id="delete-form-{{ $item->id }}" action="{{ route('admin.delete-user', $item->id) }}" method="POST"
+                                            <form id="delete-form-{{ $item->id }}"
+                                                action="{{ route('admin.delete-user', $item->id) }}" method="POST"
                                                 class="inline">
                                                 @csrf
                                                 <button
@@ -104,27 +108,7 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function confirmDelete(event, employeeId) {
-            event.preventDefault();
 
-            Swal.fire({
-                icon: 'warning',
-                title: 'Apakah Anda yakin?',
-                text: 'Data karyawan akan dihapus secara permanen!',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Ya, Hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form-' + employeeId).submit();
-                }
-            });
-        }
-    </script>
-
+    @include('components.ui.Modal.delete')
 
 @endsection
