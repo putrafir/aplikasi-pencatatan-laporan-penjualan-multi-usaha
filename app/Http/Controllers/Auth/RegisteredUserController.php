@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Models\Business;
 
 class RegisteredUserController extends Controller
 {
@@ -19,7 +20,8 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        $businesses = Business::all();
+        return view('auth.register', compact('businesses'));
     }
 
     /**
@@ -33,6 +35,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'id_business' => ['required', 'exists:business,id'],
         ]);
 
         $user = User::create([
@@ -41,6 +44,7 @@ class RegisteredUserController extends Controller
             'role' => 'pegawai',
             'is_verified' => false,
             'password' => Hash::make($request->password),
+            'id_business' => $request->id_business,
         ]);
 
         event(new Registered($user));
