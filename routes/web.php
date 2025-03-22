@@ -27,6 +27,7 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::get('/admin/profile', [DashboardController::class, 'profile'])->name('admin.profile');
 
     // Management Users
+    Route::post('/admin/unverify-users/{user}', [UserVerificationController::class, 'inverify'])->name('admin.inverify-user');
     Route::post('/admin/verify-users/{user}', [UserVerificationController::class, 'verify'])->name('admin.verify-user');
     Route::post('/admin/delete-users/{user}', [UserVerificationController::class, 'deleteUser'])->name('admin.delete-user');
 });
