@@ -57,19 +57,16 @@
                                 <div class="flex-auto p-6">
                                     <form method="POST" action="{{ route('login') }}">
                                         @csrf
-                                        <label class="mb-2 ml-1 font-bold text-xs text-slate-700">Email</label>
+                                        <x-input-label for="email" :value="__('Email')"/>
                                         <div class="mb-4">
-                                            <input type="email" name="email" id="email" :value="old('email')"
-                                                required
-                                                class="focus:shadow-soft-primary-outline text-sm leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:outline-none focus:transition-shadow"
+                                            <x-text-input type="email" name="email" id="email" :value="old('email')" required
                                                 placeholder="Email" aria-label="Email" aria-describedby="email-addon" />
                                             <x-input-error :messages="$errors->get('email')" class="mt-2" />
                                             @include('components.ui.Message.warning')
                                         </div>
-                                        <label class="mb-2 ml-1 font-bold text-xs text-slate-700">Password</label>
+                                        <x-input-label for="password" :value="__('Password')"/>
                                         <div class="mb-4">
-                                            <input type="password" name="password" id="password" required
-                                                class="focus:shadow-soft-primary-outline text-sm leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:outline-none focus:transition-shadow"
+                                            <x-text-input type="password" name="password" id="password" required
                                                 placeholder="Password" aria-label="Password"
                                                 aria-describedby="password-addon" />
                                             <x-input-error :messages="$errors->get('password')" class="mt-2" />
