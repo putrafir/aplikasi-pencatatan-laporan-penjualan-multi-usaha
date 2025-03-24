@@ -30,6 +30,8 @@
     @include('components.layout.OwnerLayout.body.sidebar')
     <!-- end sidenav -->
 
+    <div id="overlay" class="hidden fixed inset-0 bg-black opacity-50 z-40"></div>
+
     <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
         <!-- Navbar -->
         @include('components.layout.OwnerLayout.body.header')
@@ -45,6 +47,13 @@
 
     </main>
 </body>
+
+<!-- component JS -->
+<script src="{{ asset('js/components/sidebar.js') }}"></script>
+
+<!-- Alert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <!-- plugin for charts  -->
 <script src="{{ asset('js/plugins/chartjs.min.js') }}" async></script>
 <!-- plugin for scrollbar  -->

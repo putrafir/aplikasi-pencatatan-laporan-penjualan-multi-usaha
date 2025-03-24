@@ -71,9 +71,7 @@
 
                                     <!-- jenis usaha -->
                                     <div class="mb-4">
-                                        <x-input-label
-                                            class="mb-1 ml-1 font-normal cursor-pointer select-none text-sm text-slate-700"
-                                            for="jenis_usaha" :value="__('Jenis Usaha')" />
+                                        <x-input-label for="jenis_usaha" :value="__('Jenis Usaha')" />
 
                                         <select id="id_business" name="id_business"
                                             class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full
@@ -92,25 +90,17 @@
 
                                     <!-- Email Address -->
                                     <div class="mb-4">
-                                        <x-input-label
-                                            class="mb-1 ml-1 font-normal cursor-pointer select-none text-sm text-slate-700"
-                                            for="email" :value="__('Email')" />
-                                        <x-text-input id="email"
-                                            class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
-                                            type="email" name="email" :value="old('email')" required
+                                        <x-input-label for="email" :value="__('Email')" />
+                                        <x-text-input id="email" type="email" name="email" :value="old('email')" required
                                             autocomplete="username" placeholder="Email" />
                                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
                                     </div>
 
                                     <!-- Password -->
                                     <div class="mb-4">
-                                        <x-input-label
-                                            class="mb-1 ml-1 font-normal cursor-pointer select-none text-sm text-slate-700"
-                                            for="password" :value="__('Password')" />
+                                        <x-input-label for="password" :value="__('Password')" />
 
-                                        <x-text-input id="password"
-                                            class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
-                                            placeholder="Password" type="password" name="password" required
+                                        <x-text-input id="password" placeholder="Password" type="password" name="password" required
                                             autocomplete="new-password" />
 
                                         <x-input-error :messages="$errors->get('password')" class="mt-2" />
@@ -118,13 +108,9 @@
 
                                     <!-- Confirm Password -->
                                     <div class="mb-4">
-                                        <x-input-label
-                                            class="mb-1 ml-1 font-normal cursor-pointer select-none text-sm text-slate-700"
-                                            for="password_confirmation" :value="__('Confirm Password')" />
+                                        <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
 
-                                        <x-text-input id="password_confirmation"
-                                            class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
-                                            placeholder="Confirm Password" type="password" name="password_confirmation"
+                                        <x-text-input id="password_confirmation" placeholder="Confirm Password" type="password" name="password_confirmation"
                                             required autocomplete="new-password" />
 
                                         <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
@@ -132,8 +118,7 @@
 
                                     <!-- Button -->
                                     <div class="text-center">
-                                        <x-primary-button
-                                            class="flex justify-center items-center w-full px-6 py-3 mt-6 mb-2 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-gray-900 to-slate-800 hover:border-slate-700 hover:bg-slate-700 hover:text-white ms-4">
+                                        <x-primary-button>
                                             {{ __('Register') }}
                                         </x-primary-button>
                                     </div>

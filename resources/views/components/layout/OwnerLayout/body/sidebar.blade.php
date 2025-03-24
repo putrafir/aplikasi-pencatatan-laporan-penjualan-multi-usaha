@@ -1,5 +1,5 @@
-<aside
-    class="max-w-62.5 ease-nav-brand z-990 fixed inset-y-0 my-4 ml-4 block w-full -translate-x-full flex-wrap items-center justify-between overflow-y-auto rounded-2xl border-0 bg-white p-0 antialiased shadow-none transition-transform duration-200 xl:left-0 xl:translate-x-0 xl:bg-transparent">
+<aside id="sidebar"
+    class="max-w-62.5 ease-nav-brand fixed z-100 inset-y-0 my-4 ml-4 block w-full flex-wrap items-center justify-between overflow-y-auto rounded-2xl border-0 bg-white p-0 antialiased shadow-none transition-transform duration-200 -translate-x-full xl:left-0 xl:translate-x-0 xl:bg-transparent">
     <div class="h-19.5">
         <i class="absolute top-0 right-0 hidden p-4 opacity-50 cursor-pointer fas fa-times text-slate-400 xl:hidden"
             sidenav-close></i>
@@ -208,29 +208,12 @@
             </li>
 
             <li class="mt-auto w-full absolute bottom-0">
-                <form method="POST" action="{{ route('logout') }}" id="logoutBtn">
+                <form method="POST" action="{{ route('logout') }}" id="logoutBtn" class="w-full">
                     @csrf
-                    <button type="submit"
-                        class="py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors">
-                        <div
-                            class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5">
-                            <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1"
-                                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                <title>logout</title>
-                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                    <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
-                                        <g transform="translate(1716.000000, 291.000000)">
-                                            <g transform="translate(153.000000, 2.000000)">
-                                                <path class="fill-slate-800"
-                                                    d="M12,20 L28,20 L28,24 L12,24 L12,30 L5,23 L12,16 L12,20 Z">
-                                                </path>
-                                            </g>
-                                        </g>
-                                    </g>
-                                </g>
-                            </svg>
-                        </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Logout</span>
+                    <button type="submit" id="logout-btn"
+                        class="w-full py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap px-4 transition-colors">
+                        <span
+                            class="w-full px-6 py-3 my-4 font-bold text-center text-white uppercase align-middle transition-all ease-in border-0 rounded-lg select-none shadow-soft-md bg-150 bg-x-25 leading-pro text-xs bg-gradient-to-tl from-purple-700 to-pink-500 hover:shadow-soft-2xl hover:scale-102">Logout</span>
                     </button>
                 </form>
             </li>
@@ -239,27 +222,4 @@
     </div>
 </aside>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
-    document.getElementById('logoutBtn').addEventListener('submit', function (e) {
-        e.preventDefault();
-    
-        Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: "Anda akan keluar dari akun ini!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Ya, Logout!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                e.target.submit();
-            }
-        });
-    });
-    </script>
-    
-    
+<script src="{{ asset('js/components/logout.js') }}"></script>
