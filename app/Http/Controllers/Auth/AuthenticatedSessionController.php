@@ -34,7 +34,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return $this->redirectBasedOnRole($user->role);
+        return $this->redirectBasedOnRole($user->role, $user->id_business);
     }
 
     /**
@@ -54,14 +54,16 @@ class AuthenticatedSessionController extends Controller
     /**
      * Redirect user based on their role.
      */
-    protected function redirectBasedOnRole(string $role): RedirectResponse
+    protected function redirectBasedOnRole(string $role, ?int $id_business = null): RedirectResponse
     {
         if ($role === 'owner') {
             return redirect()->intended(route('owner.dashboard') . '?verified=1');
         }
 
         if ($role === 'pegawai') {
-            return redirect()->intended(route('pegawai.dashboard') . '?verified=1');
+            if ($id_business == 2) {
+                return redirect()->intended(route('pegawai.miss.home') . '?verified=1');
+            }
         }
 
         // Default redirect if role is not matched
