@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserVerificationController;
 use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
 use App\Http\Controllers\Pegawai\MissController;
+use App\Http\Controllers\Pegawai\PisgorController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -36,6 +37,7 @@ Route::middleware(['owner', 'auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/pegawai/miss/home', [MissController::class, 'index'])->name('pegawai.miss.home');
+    Route::get('/pegawai/pisgor/home', [PisgorController::class, 'index'])->name('pegawai.pisgor.home');
 });
 
 require __DIR__ . '/auth.php';
