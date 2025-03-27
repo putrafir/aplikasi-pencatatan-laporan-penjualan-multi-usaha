@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
+use App\Models\Menu;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -27,5 +29,13 @@ class DatabaseSeeder extends Seeder
             'role' => 'owner',
             'is_verified' => true,
         ]);
+
+        $categories = ['Smoothies', 'Juice', 'Other'];
+
+        foreach ($categories as $category) {
+            Category::create(['nama' => $category]);
+        }
+
+        Menu::factory()->count(10)->create();
     }
 }

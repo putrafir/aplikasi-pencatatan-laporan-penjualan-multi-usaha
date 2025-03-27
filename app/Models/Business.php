@@ -16,6 +16,11 @@ class Business extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class, 'id_business', 'id'); 
+        return $this->hasMany(User::class, 'id_business', 'id');
+    }
+
+    public function menus()
+    {
+        return $this->hasMany(Menu::class, 'business_id');
     }
 }
