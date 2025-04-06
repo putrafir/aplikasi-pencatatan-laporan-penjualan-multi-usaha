@@ -4,7 +4,9 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserVerificationController;
+
 use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
+use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\Pegawai\MissController;
 use App\Http\Controllers\Pegawai\PisgorController;
 
@@ -38,6 +40,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/pegawai/miss/home', [MissController::class, 'index'])->name('pegawai.miss.home');
     Route::get('/pegawai/pisgor/home', [PisgorController::class, 'index'])->name('pegawai.pisgor.home');
+
+    Route::post('/pegawai/keranjang/add', [MissController::class, 'addToCart'])->name('pegawai.keranjang.add');
+    Route::get('/pegawai/keranjang', [MissController::class, 'viewCart'])->name('pegawai.keranjang.view');
+    Route::delete('/pegawai/keranjang/{id}', [MissController::class, 'removeFromCart'])->name('pegawai.keranjang.remove');
+    Route::post('/pegawai/keranjang/checkout', [MissController::class, 'checkout'])->name('pegawai.keranjang.checkout');
 });
 
 require __DIR__ . '/auth.php';
