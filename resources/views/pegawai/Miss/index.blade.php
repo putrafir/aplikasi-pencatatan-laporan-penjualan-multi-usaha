@@ -19,9 +19,14 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="text-3xl font-bold text-gray-900 "> @php echo number_format($menu->harga, 0, ',', '.'); @endphp</span>
-                        <a href="#"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Add
-                            to cart</a>
+                        <form action="{{ route('pegawai.keranjang.add', $menu->id) }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="menu_id" value="{{ $menu->id }}">
+                            <button type="submit"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                Tambah
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

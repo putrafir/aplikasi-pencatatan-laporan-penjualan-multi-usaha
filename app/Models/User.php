@@ -58,4 +58,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Business::class, 'id_business', 'id');
     }
+
+    public function transaksis()
+    {
+        return $this->hasMany(Transaksi::class);
+    }
 }
