@@ -21,41 +21,25 @@ class PisgorController extends Controller
     {
         $request->validate([
             'menu_id' => 'required|exists:menus,id',
-            'ukuran' => 'nullable|string',
+            'extra_topping' => 'nullable|boolean',
         ]);
 
-        $menu = Menu::with('kategori.sizePrices.size')->findOrFail($request->menu_id);
+        $menu = Menu::findOrFail($request->menu_id);
         $businessId = Auth::user()->id_business;
+        $harga = $menu->harga;
+        $extraTopping = $request->extra_topping ? true : false;
 
-        $isSmoothies = $menu->kategori_id == 1 && $menu->business_id == 2;
-
-        // Hitung harga
-        if ($isSmoothies) {
-            $sizePrice = $menu->kategori->sizePrices()
-                ->whereHas('size', function ($q) use ($request) {
-                    $q->where('nama', $request->ukuran);
-                })->first();
-
-            if (!$sizePrice) {
-                return redirect()->back()->with('error', 'Ukuran tidak valid atau tidak ditemukan.');
-            }
-
-            $harga = $sizePrice->harga;
-        } else {
-            $harga = $menu->harga;
+        if ($extraTopping) {
+            $harga += 3000;
         }
 
-        // Cari apakah sudah ada item ini dalam keranjang
         $keranjang = Keranjang::where('menu_id', $request->menu_id)
             ->where('business_id', $businessId)
-            ->when($isSmoothies, function ($query) use ($request) {
-                return $query->where('ukuran', $request->ukuran);
-            })
+            ->where('extra_topping', $extraTopping)
             ->first();
 
         if ($keranjang) {
-            $keranjang->jumlah += 1;
-            $keranjang->harga_satuan = $harga; // simpan harga terbaru jika berubah
+            $keranjang->jumlah++;
             $keranjang->total_harga = $keranjang->jumlah * $harga;
             $keranjang->save();
         } else {
@@ -65,9 +49,10 @@ class PisgorController extends Controller
                 'harga_satuan' => $harga,
                 'total_harga' => $harga,
                 'business_id' => $businessId,
-                'ukuran' => $isSmoothies ? $request->ukuran : null,
+                'extra_topping' => $extraTopping,
             ]);
         }
+
 
         return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang.');
     }
