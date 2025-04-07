@@ -66,28 +66,22 @@ class MissController extends Controller
             'uang_dibayarkan' => 'required|numeric|min:0',
         ]);
 
-        // Ambil semua item keranjang
         $keranjangs = Keranjang::all();
 
         if ($keranjangs->isEmpty()) {
             return redirect()->back()->with('error', 'Keranjang kosong, tidak ada yang bisa dibayar.');
         }
 
-        // Hitung total pembayaran
         $totalBayar = $keranjangs->sum('total_harga');
 
-        // Validasi apakah uang yang dibayarkan cukup
         if ($request->uang_dibayarkan < $totalBayar) {
             return redirect()->back()->with('error', 'Uang yang dibayarkan tidak cukup.');
         }
 
-        // Hitung kembalian
         $kembalian = $request->uang_dibayarkan - $totalBayar;
 
-        // Ambil `business_id` dari pengguna yang sedang login
         $businessId = Auth::user()->id_business;
 
-        // Simpan detail produk dalam bentuk array
         $details = $keranjangs->map(function ($keranjang) {
             return [
                 'menu_id' => $keranjang->menu_id,
@@ -98,17 +92,15 @@ class MissController extends Controller
             ];
         });
 
-        // Simpan transaksi ke tabel `transaksis`
         $transaksi = Transaksi::create([
             'user_id' => Auth::id(),
-            'business_id' => $businessId, // Isi otomatis berdasarkan bisnis pengguna
+            'business_id' => $businessId,
             'total_bayar' => $totalBayar,
             'uang_dibayarkan' => $request->uang_dibayarkan,
             'kembalian' => $kembalian,
             'details' => $details->toJson(),
         ]);
 
-        // Kosongkan tabel keranjang
         Keranjang::truncate();
 
         return redirect()->back()->with('success', "Pembayaran berhasil. Uang yang di bayarkan: Rp " . number_format($request->uang_dibayarkan, 0, ',', '.') . ". Kembalian: Rp " . number_format($kembalian, 0, ',', '.'));
