@@ -112,7 +112,7 @@ class MissController extends Controller
                 'menu_id' => $keranjang->menu_id,
                 'nama' => $keranjang->menu->nama,
                 'jumlah' => $keranjang->jumlah,
-                'harga' => $keranjang->menu->harga,
+                'harga' => $keranjang->harga_satuan,
                 'subtotal' => $keranjang->total_harga,
                 'ukuran' => $keranjang->ukuran,
                 'extra_topping' => $keranjang->extra_topping,
@@ -128,7 +128,7 @@ class MissController extends Controller
             'details' => $details->toJson(),
         ]);
 
-        Keranjang::truncate();
+        Keranjang::where('business_id', Auth::user()->id_business)->delete();
 
         return redirect()->back()->with('success', "Pembayaran berhasil. Uang yang di bayarkan: Rp " . number_format($request->uang_dibayarkan, 0, ',', '.') . ". Kembalian: Rp " . number_format($kembalian, 0, ',', '.'));
     }

@@ -272,9 +272,9 @@
                                             <span class="font-semibold leading-tight text-xs"> @php echo number_format($transaksi->total_bayar, 0, ',', '.'); @endphp</span>
                                         </td>
                                         <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap">
-
-                                            <a href="javascript:;"
-                                                class="text-xs font-semibold leading-tight text-slate-400"> Detail </a>
+                                            <button type="button" onclick="showDetail({{ $transaksi->id }})"
+                                                class="text-xs font-semibold leading-tight text-slate-400"> Detail
+                                            </button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -384,4 +384,66 @@
             </div>
         </div>
     </div>
+
+
+    <div id="detailModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="relative w-full max-w-lg p-4 bg-white rounded-lg shadow-lg">
+                <div class="flex justify-between items-center pb-3">
+                    <h3 class="text-lg font-semibold">Detail Transaksi</h3>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">&times;</button>
+                </div>
+                <div id="modalContent" class="text-sm text-gray-700">
+                    <!-- Konten detail transaksi akan dimuat di sini -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showDetail(id) {
+            fetch(`/admin/transaksi/${id}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const modalContent = document.getElementById('modalContent');
+                    let detailHtml = `
+                <p><strong>Tanggal:</strong> ${data.created_at}</p>
+                <p><strong>Pegawai:</strong> ${data.user.name}</p>
+                <p><strong>Total Bayar:</strong> Rp ${data.total_bayar}</p>
+                <p><strong>Uang yang di bayarkan:</strong> Rp ${data.uang_dibayarkan}</p>
+                <p><strong>Kembalian:</strong> Rp ${data.kembalian}</p>
+                <h4 class="mt-4 font-semibold">Detail Pesanan:</h4>
+                <ul class="list-disc pl-5">
+            `;
+
+                    data.details.forEach(detail => {
+                        detailHtml += `
+                    <li>
+                        <strong>${detail.nama}</strong> - ${detail.jumlah} x Rp ${detail.harga} = Rp ${detail.subtotal}
+                        ${detail.ukuran ? `(Ukuran: ${detail.ukuran})` : ''}
+                        ${detail.extra_topping ? '(Extra Topping)' : ''}
+                    </li>
+                `;
+                    });
+
+                    detailHtml += '</ul>';
+
+                    modalContent.innerHTML = detailHtml;
+                    document.getElementById('detailModal').classList.remove('hidden');
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                    alert('Gagal mengambil detail transaksi. Silakan coba lagi.');
+                });
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+    </script>
 @endsection
