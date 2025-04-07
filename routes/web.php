@@ -10,6 +10,7 @@ use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardControll
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\Pegawai\MissController;
 use App\Http\Controllers\Pegawai\PisgorController;
+use App\Models\Transaksi;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -55,5 +56,12 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/pegawai/keranjang/{id}', [MissController::class, 'removeFromCart'])->name('pegawai.keranjang.remove');
     Route::post('/pegawai/keranjang/checkout', [MissController::class, 'checkout'])->name('pegawai.keranjang.checkout');
 });
+
+
+
+
+Route::get('/admin/transaksi/{id}', [CatatanTransaksiController::class, 'getTransaksiDetail'])->name('admin.transaksi.detail');
+
+
 
 require __DIR__ . '/auth.php';
