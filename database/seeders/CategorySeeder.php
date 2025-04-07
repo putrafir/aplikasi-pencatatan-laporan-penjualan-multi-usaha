@@ -17,6 +17,8 @@ class CategorySeeder extends Seeder
             ['nama' => 'Smoothies'],
             ['nama' => 'Juice'],
             ['nama' => 'Other'],
+            ['nama' => 'Pisgor'],
+            ['nama' => 'Cemilans'],
         ]);
     }
 }

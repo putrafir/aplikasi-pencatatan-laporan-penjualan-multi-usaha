@@ -33,8 +33,8 @@
                         <td class="border border-gray-300 px-4 py-2">{{ $loop->iteration }}</td>
                         <td class="border border-gray-300 px-4 py-2">
                             {{ $keranjang->menu->nama }}
-                            @if ($keranjang->ukuran)
-                                <div class="text-xs text-gray-500">(Ukuran: {{ $keranjang->ukuran }})</div>
+                            @if ($keranjang->extra_topping)
+                                ➕ Extra Topping
                             @endif
                         </td>
                         <td class="border border-gray-300 px-4 py-2">

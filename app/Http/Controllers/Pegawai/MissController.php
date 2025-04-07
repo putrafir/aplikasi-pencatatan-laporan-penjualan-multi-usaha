@@ -29,7 +29,6 @@ class MissController extends Controller
 
         $isSmoothies = $menu->kategori_id == 1 && $menu->business_id == 2;
 
-        // Hitung harga
         if ($isSmoothies) {
             $sizePrice = $menu->kategori->sizePrices()
                 ->whereHas('size', function ($q) use ($request) {
@@ -45,7 +44,6 @@ class MissController extends Controller
             $harga = $menu->harga;
         }
 
-        // Cari apakah sudah ada item ini dalam keranjang
         $keranjang = Keranjang::where('menu_id', $request->menu_id)
             ->where('business_id', $businessId)
             ->when($isSmoothies, function ($query) use ($request) {
@@ -55,7 +53,7 @@ class MissController extends Controller
 
         if ($keranjang) {
             $keranjang->jumlah += 1;
-            $keranjang->harga_satuan = $harga; // simpan harga terbaru jika berubah
+            $keranjang->harga_satuan = $harga;
             $keranjang->total_harga = $keranjang->jumlah * $harga;
             $keranjang->save();
         } else {
@@ -116,6 +114,8 @@ class MissController extends Controller
                 'jumlah' => $keranjang->jumlah,
                 'harga' => $keranjang->menu->harga,
                 'subtotal' => $keranjang->total_harga,
+                'ukuran' => $keranjang->ukuran,
+                'extra_topping' => $keranjang->extra_topping,
             ];
         });
 

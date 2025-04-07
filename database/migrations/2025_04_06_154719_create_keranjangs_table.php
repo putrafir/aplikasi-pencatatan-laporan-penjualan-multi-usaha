@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('jumlah');
             $table->decimal('harga_satuan', 10, 2);
             $table->string('ukuran')->nullable();
+            $table->boolean('extra_topping')->default(false);
             $table->integer('total_harga');
             $table->timestamps();
             $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade');

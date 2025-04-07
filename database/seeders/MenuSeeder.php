@@ -76,23 +76,23 @@ class MenuSeeder extends Seeder
         ]);
 
         $menus_pisgor = [
-            ['nama' => 'Pisgor Ori Palm Sugar',     'harga' => 12000, 'kategori_id' => 1, 'business_id' => 1],
-            ['nama' => 'Pisgor Coklat',             'harga' => 15000, 'kategori_id' => 1, 'business_id' => 1],
-            ['nama' => 'Pisgor Full Keju',          'harga' => 15000, 'kategori_id' => 1, 'business_id' => 1],
-            ['nama' => 'Pisgor Coklat Crunchy',     'harga' => 15000, 'kategori_id' => 1, 'business_id' => 1],
-            ['nama' => 'Pisgor Coklat Keju',        'harga' => 15000, 'kategori_id' => 1, 'business_id' => 1],
-            ['nama' => 'Pisgor Coklat Milo',        'harga' => 15000, 'kategori_id' => 1, 'business_id' => 1],
-            ['nama' => 'Pisgor Coklat Tiramisu',    'harga' => 15000, 'kategori_id' => 1, 'business_id' => 1],
-            ['nama' => 'Pisgor Coklat Matcha',      'harga' => 15000, 'kategori_id' => 1, 'business_id' => 1],
-            ['nama' => 'Pisgor Coklat Taro',        'harga' => 15000, 'kategori_id' => 1, 'business_id' => 1],
-            ['nama' => 'Pisgor Coklat Strawberry',  'harga' => 15000, 'kategori_id' => 1, 'business_id' => 1],
+            ['nama' => 'Pisgor Ori Palm Sugar',     'harga' => 12000, 'kategori_id' => 4, 'business_id' => 1],
+            ['nama' => 'Pisgor Coklat',             'harga' => 15000, 'kategori_id' => 4, 'business_id' => 1],
+            ['nama' => 'Pisgor Full Keju',          'harga' => 15000, 'kategori_id' => 4, 'business_id' => 1],
+            ['nama' => 'Pisgor Coklat Crunchy',     'harga' => 15000, 'kategori_id' => 4, 'business_id' => 1],
+            ['nama' => 'Pisgor Coklat Keju',        'harga' => 15000, 'kategori_id' => 4, 'business_id' => 1],
+            ['nama' => 'Pisgor Coklat Milo',        'harga' => 15000, 'kategori_id' => 4, 'business_id' => 1],
+            ['nama' => 'Pisgor Coklat Tiramisu',    'harga' => 15000, 'kategori_id' => 4, 'business_id' => 1],
+            ['nama' => 'Pisgor Coklat Matcha',      'harga' => 15000, 'kategori_id' => 4, 'business_id' => 1],
+            ['nama' => 'Pisgor Coklat Taro',        'harga' => 15000, 'kategori_id' => 4, 'business_id' => 1],
+            ['nama' => 'Pisgor Coklat Strawberry',  'harga' => 15000, 'kategori_id' => 4, 'business_id' => 1],
 
             // Cemilan's
-            ['nama' => 'Potato Twister',            'harga' => 10000, 'kategori_id' => 2, 'business_id' => 1],
-            ['nama' => 'Singkong Keju',             'harga' => 13000, 'kategori_id' => 2, 'business_id' => 1],
-            ['nama' => 'Brota isi 4',               'harga' => 15000, 'kategori_id' => 2, 'business_id' => 1],
-            ['nama' => 'Pastel Ayam Premium',       'harga' => 15000, 'kategori_id' => 2, 'business_id' => 1],
-            ['nama' => 'Pastel Sapi Premium',       'harga' => 15000, 'kategori_id' => 2, 'business_id' => 1],
+            ['nama' => 'Potato Twister',            'harga' => 10000, 'kategori_id' => 5, 'business_id' => 1],
+            ['nama' => 'Singkong Keju',             'harga' => 13000, 'kategori_id' => 5, 'business_id' => 1],
+            ['nama' => 'Brota isi 4',               'harga' => 15000, 'kategori_id' => 5, 'business_id' => 1],
+            ['nama' => 'Pastel Ayam Premium',       'harga' => 15000, 'kategori_id' => 5, 'business_id' => 1],
+            ['nama' => 'Pastel Sapi Premium',       'harga' => 15000, 'kategori_id' => 5, 'business_id' => 1],
         ];
 
         foreach ($menus_pisgor as $menu_pisgor) {
