@@ -11,6 +11,11 @@ class Menu extends Model
     use HasFactory;
     protected $guarded = [];
 
+    // public function sizes()
+    // {
+    //     return $this->hasMany(MenuSize::class);
+    // }
+
     public function kategori()
     {
         return $this->belongsTo(Category::class, 'kategori_id');

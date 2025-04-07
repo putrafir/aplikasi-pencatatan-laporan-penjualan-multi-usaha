@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->text('deskripsi')->nullable();
-            $table->decimal('harga', 10, 2);
+            $table->decimal('harga', 10, 2)->nullable();
             $table->unsignedBigInteger('kategori_id');
             $table->unsignedBigInteger('business_id');
             $table->string('super_kategori')->nullable();

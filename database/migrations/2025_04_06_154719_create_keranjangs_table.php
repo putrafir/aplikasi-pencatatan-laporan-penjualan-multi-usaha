@@ -16,6 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('menu_id');
             $table->foreignId('business_id')->constrained('business')->onDelete('cascade');
             $table->integer('jumlah');
+            $table->decimal('harga_satuan', 10, 2);
+            $table->string('ukuran')->nullable();
             $table->integer('total_harga');
             $table->timestamps();
             $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade');
