@@ -2,21 +2,21 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
+use App\Models\Size;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class CategorySeeder extends Seeder
+class SizeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Category::insert([
-            ['nama' => 'Smoothies'],
-            ['nama' => 'Juice'],
-            ['nama' => 'Other'],
+        Size::insert([
+            ['nama' => 'M'],
+            ['nama' => 'L'],
+            ['nama' => 'XL'],
         ]);
     }
 }

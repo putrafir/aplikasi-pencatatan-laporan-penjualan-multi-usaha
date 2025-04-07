@@ -21,24 +21,51 @@ class MissController extends Controller
     {
         $request->validate([
             'menu_id' => 'required|exists:menus,id',
+            'ukuran' => 'nullable|string',
         ]);
 
-        $menu = Menu::findOrFail($request->menu_id);
+        $menu = Menu::with('kategori.sizePrices.size')->findOrFail($request->menu_id);
         $businessId = Auth::user()->id_business;
 
+        $isSmoothies = $menu->kategori_id == 1 && $menu->business_id == 2;
 
-        $keranjang = Keranjang::where('menu_id', $request->menu_id)->first();
+        // Hitung harga
+        if ($isSmoothies) {
+            $sizePrice = $menu->kategori->sizePrices()
+                ->whereHas('size', function ($q) use ($request) {
+                    $q->where('nama', $request->ukuran);
+                })->first();
+
+            if (!$sizePrice) {
+                return redirect()->back()->with('error', 'Ukuran tidak valid atau tidak ditemukan.');
+            }
+
+            $harga = $sizePrice->harga;
+        } else {
+            $harga = $menu->harga;
+        }
+
+        // Cari apakah sudah ada item ini dalam keranjang
+        $keranjang = Keranjang::where('menu_id', $request->menu_id)
+            ->where('business_id', $businessId)
+            ->when($isSmoothies, function ($query) use ($request) {
+                return $query->where('ukuran', $request->ukuran);
+            })
+            ->first();
 
         if ($keranjang) {
             $keranjang->jumlah += 1;
-            $keranjang->total_harga = $keranjang->jumlah * $menu->harga;
+            $keranjang->harga_satuan = $harga; // simpan harga terbaru jika berubah
+            $keranjang->total_harga = $keranjang->jumlah * $harga;
             $keranjang->save();
         } else {
             Keranjang::create([
                 'menu_id' => $request->menu_id,
                 'jumlah' => 1,
-                'total_harga' => $menu->harga,
+                'harga_satuan' => $harga,
+                'total_harga' => $harga,
                 'business_id' => $businessId,
+                'ukuran' => $isSmoothies ? $request->ukuran : null,
             ]);
         }
 
@@ -47,7 +74,7 @@ class MissController extends Controller
 
     public function viewCart()
     {
-        $keranjangs = Keranjang::with('menu')->get();
+        $keranjangs = Keranjang::with('menu')->where('business_id', 2)->get();
         $totalBayar = $keranjangs->sum('total_harga');
         return view('pegawai.Miss.keranjang', compact('keranjangs', 'totalBayar'));
     }

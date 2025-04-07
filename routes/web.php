@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CatatanTransaksiController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +30,8 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('owner.dashboard');
     Route::get('/admin/verify-users', [UserVerificationController::class, 'index'])->name('admin.verify-users');
     Route::get('/admin/profile', [DashboardController::class, 'profile'])->name('admin.profile');
+    Route::get('/admin/miss/laporan', [CatatanTransaksiController::class, 'missView'])->name('admin.miss');
+    Route::get('/admin/pisgor/laporan', [CatatanTransaksiController::class, 'pisgorView'])->name('admin.pisgor');
 
     // Management Users
     Route::post('/admin/unverify-users/{user}', [UserVerificationController::class, 'inverify'])->name('admin.inverify-user');
@@ -41,8 +44,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pegawai/miss/home', [MissController::class, 'index'])->name('pegawai.miss.home');
     Route::get('/pegawai/pisgor/home', [PisgorController::class, 'index'])->name('pegawai.pisgor.home');
 
-    Route::post('/pegawai/keranjang/add', [MissController::class, 'addToCart'])->name('pegawai.keranjang.add');
-    Route::get('/pegawai/keranjang', [MissController::class, 'viewCart'])->name('pegawai.keranjang.view');
+    Route::post('/pegawai/miss/keranjang/add', [MissController::class, 'addToCart'])->name('pegawai.miss.keranjang.add');
+    Route::get('/pegawai/miss/keranjang', [MissController::class, 'viewCart'])->name('pegawai.miss.keranjang.view');
+    Route::delete('/pegawai/keranjang/{id}', [MissController::class, 'removeFromCart'])->name('pegawai.keranjang.remove');
+    Route::post('/pegawai/keranjang/checkout', [MissController::class, 'checkout'])->name('pegawai.keranjang.checkout');
+
+
+    Route::post('/pegawai/pisgor/keranjang/add', [PisgorController::class, 'addToCart'])->name('pegawai.pisgor.keranjang.add');
+    Route::get('/pegawai/pisgor/keranjang', [PisgorController::class, 'viewCart'])->name('pegawai.pisgor.keranjang.view');
     Route::delete('/pegawai/keranjang/{id}', [MissController::class, 'removeFromCart'])->name('pegawai.keranjang.remove');
     Route::post('/pegawai/keranjang/checkout', [MissController::class, 'checkout'])->name('pegawai.keranjang.checkout');
 });

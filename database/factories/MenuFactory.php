@@ -29,6 +29,7 @@ class MenuFactory extends Factory
             'harga' => fake()->randomElement([10000, 15000, 20000, 25000]),
             'kategori_id' => Category::inRandomOrder()->first()->id ?? Category::factory(),
             'business_id' => Business::inRandomOrder()->first()->id ?? Business::factory(),
+            'super_kategori' => fake()->randomElement(['Smoothies', 'Hotang']),
 
         ];
     }
