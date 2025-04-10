@@ -8,8 +8,10 @@ use App\Http\Controllers\Admin\UserVerificationController;
 
 use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
 use App\Http\Controllers\KeranjangController;
+use App\Http\Controllers\ManageMenuController;
 use App\Http\Controllers\Pegawai\MissController;
 use App\Http\Controllers\Pegawai\PisgorController;
+use App\Models\Category;
 use App\Models\Transaksi;
 
 Route::get('/', function () {
@@ -38,6 +40,17 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::post('/admin/unverify-users/{user}', [UserVerificationController::class, 'inverify'])->name('admin.inverify-user');
     Route::post('/admin/verify-users/{user}', [UserVerificationController::class, 'verify'])->name('admin.verify-user');
     Route::post('/admin/delete-users/{user}', [UserVerificationController::class, 'deleteUser'])->name('admin.delete-user');
+
+    Route::get('/admin/manage-menu', [\App\Http\Controllers\ManageMenuController::class, 'index'])->name('admin.manage-menu');
+    Route::post('/admin/menu/add', [ManageMenuController::class, 'store'])->name('admin.menu.add');
+    Route::post('/admin/kategori/add', [ManageMenuController::class, 'categoryStore'])->name('admin.kategori.add');
+
+    Route::get('/categories/{business_id}', function ($business_id) {
+        $categories = Category::where('business_id', $business_id)->get();
+        return response()->json($categories);
+    });
+
+    Route::get('/admin/kategori/by-business/{id}', [ManageMenuController::class, 'getKategoriByBusiness']);
 });
 
 Route::middleware(['auth'])->group(function () {
