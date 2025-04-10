@@ -180,57 +180,28 @@
                 <div class="flex-auto p-4">
                     <h6 class=" mb-0 ml-2">Tambah Kategori</h6>
 
-                    <form class="max-w-sm mx-auto" action="{{ route('admin.kategori.add') }}" method="POST">
-                        <div class="flex  mt-2">
-                            <button id="dropdown-usaha-kategori-button" data-dropdown-toggle="dropdown-usaha-kategori"
-                                class=" shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 "
-                                type="button">
-                                Usaha <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 10 6">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="m1 1 4 4 4-4" />
-                                </svg>
-                            </button>
-                            <div id="dropdown-usaha-kategori"
-                                class="absolute mt-12 z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-52 ">
-                                <input type="hidden" name="usaha" id="usaha-kategori-value">
+                    <form action="{{ route('admin.kategori.add') }}" method="POST" class="max-w-sm pt-2 mx-auto">
+                        @csrf
+                        <div class="mb-4">
+                            <label for="usaha" class="block mb-1 text-sm">Usaha</label>
+                            <select name="business_id" id="usahaSelect" class="w-full border rounded-lg p-2" required>
+                                <option value="">-- Pilih Usaha --</option>
+                                @foreach ($businesses as $business)
+                                    <option value="{{ $business->id }}">{{ $business->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                                <ul class="py-2 text-sm text-gray-700 " aria-labelledby="dropdown-phone-button">
-                                    <li>
-                                        <button type="button"
-                                            class=" dropdown-usaha-kategori inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
-                                            data-value="United States (+1)">
-                                            <span class="inline-flex items-center">
 
-                                                United States (+1)
-                                            </span>
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button type="button"
-                                            class="dropdown-usaha-kategori inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 "
-                                            data-value="United Kingdom (+44)">
-                                            <span class="inline-flex items-center">
-
-                                                United Kingdom (+44)
-                                            </span>
-                                        </button>
-                                    </li>
-
-                                </ul>
-                            </div>
-                            <label for="phone-input" class="mb-2 text-sm font-medium text-gray-900 sr-only ">Phone
-                                number:</label>
-                            <div class="relative w-full">
-                                <input type="text" id="kategori-input"
-                                    class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-0 border border-gray-300 focus:ring-blue-500 focus:border-blue-500  "
-                                    placeholder="Nama Kategori" required />
-                            </div>
+                        <div class="mb-4">
+                            <label for="nama" class="block mb-1 text-sm">Nama Menu</label>
+                            <input type="text" name="nama" class="w-full border rounded-lg p-2"
+                                placeholder="Nama Kategori" required>
                         </div>
 
                         <button type="submit"
-                            class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-4 me-2 mb-2  focus:outline-none ">Send
-                            verification code</button>
+                            class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-4 me-2 mb-2 ">Tambah
+                            Kategori</button>
                     </form>
 
 
