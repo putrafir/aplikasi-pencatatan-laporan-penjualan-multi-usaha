@@ -35,19 +35,19 @@ class ManageMenuController extends Controller
         return redirect()->back()->with('success', 'Menu berhasil ditambahkan.');
     }
 
-    public function categorStore(Request $request)
+    public function categoryStore(Request $request)
     {
         $request->validate([
             'business_id' => 'required|exists:business,id',
             'nama' => 'required|string|max:255',
         ]);
 
-        Menu::create([
+        Category::create([
             'business_id' => $request->business_id,
             'nama' => $request->nama,
         ]);
 
-        return redirect()->back()->with('success', 'Menu berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Kategori berhasil ditambahkan.');
     }
 
     public function getKategoriByBusiness($id)
