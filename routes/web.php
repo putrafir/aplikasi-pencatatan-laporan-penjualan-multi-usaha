@@ -45,10 +45,7 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::post('/admin/menu/add', [ManageMenuController::class, 'store'])->name('admin.menu.add');
     Route::post('/admin/kategori/add', [ManageMenuController::class, 'categoryStore'])->name('admin.kategori.add');
 
-    Route::get('/categories/{business_id}', function ($business_id) {
-        $categories = Category::where('business_id', $business_id)->get();
-        return response()->json($categories);
-    });
+
 
     Route::get('/admin/kategori/by-business/{id}', [ManageMenuController::class, 'getKategoriByBusiness']);
 });
