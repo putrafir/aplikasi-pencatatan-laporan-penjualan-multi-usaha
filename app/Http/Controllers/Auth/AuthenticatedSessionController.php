@@ -63,6 +63,8 @@ class AuthenticatedSessionController extends Controller
         if ($role === 'pegawai') {
             if ($id_business == 2) {
                 return redirect()->intended(route('pegawai.miss.home') . '?verified=1');
+            } elseif ($id_business == 1) {
+                return redirect()->intended(route('pegawai.pisgor.home') . '?verified=1');
             }
         }
 

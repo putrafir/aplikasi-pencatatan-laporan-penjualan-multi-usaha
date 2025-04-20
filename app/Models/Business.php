@@ -12,10 +12,15 @@ class Business extends Model
 
     protected $table = 'business';
 
-    protected $fillable = ['business_name'];
+    protected $fillable = ['name'];
 
     public function users()
     {
-        return $this->hasMany(User::class, 'id_business', 'id'); 
+        return $this->hasMany(User::class, 'id_business', 'id');
+    }
+
+    public function menus()
+    {
+        return $this->hasMany(Menu::class, 'business_id');
     }
 }
