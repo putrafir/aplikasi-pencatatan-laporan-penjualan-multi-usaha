@@ -19,4 +19,9 @@ class Category extends Model
     {
         return $this->hasMany(SizePrice::class);
     }
+
+    public function superKategori()
+    {
+        return $this->belongsTo(SuperCategory::class, 'super_kategori_id');
+    }
 }
