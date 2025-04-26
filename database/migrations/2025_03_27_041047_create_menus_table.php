@@ -18,7 +18,6 @@ return new class extends Migration
             $table->decimal('harga', 10, 2)->nullable();
             $table->unsignedBigInteger('kategori_id');
             $table->unsignedBigInteger('business_id');
-            $table->string('super_kategori')->nullable();
             $table->foreign('business_id')->references('id')->on('business')->onDelete('cascade');
             $table->foreign('kategori_id')->references('id')->on('categories')->onDelete('cascade');
             $table->timestamps();

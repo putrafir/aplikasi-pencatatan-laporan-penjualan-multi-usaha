@@ -11,11 +11,51 @@ use Illuminate\Support\Facades\Auth;
 
 class MissController extends Controller
 {
-    public function index()
+    public function index(request $request)
     {
         $user = Auth::user();
-        $menus = Menu::where('business_id', 2)->get();
-        return view('pegawai.Miss.index', compact('user', 'menus'));
+        $query = Menu::where('business_id', 2);
+
+        // filter berdasarkan superkategori
+        if ($request->filled('superKategori')) {
+            $query->whereHas('kategori.superKategori', function ($q) use ($request) {
+                $q->where('nama', $request->kategori);
+            });
+        }
+
+        // Filter berdasarkan nama kategori
+        if ($request->filled('kategori_nama')) {
+            $query->whereHas('kategori', function ($q) use ($request) {
+                $q->where('nama', $request->kategori_nama);
+            });
+        }
+
+        // Filter pencarian nama produk
+        if ($request->filled('q')) {
+            $query->where('nama', 'like', '%' . $request->q . '%');
+        }
+
+        $menus = $query->get();
+
+        $jumlah_item = Keranjang::where('business_id', 2)->sum('jumlah');
+
+        $allKategori = Menu::where('business_id', 2)
+            ->with('kategori')
+            ->get()
+            ->pluck('kategori.nama')
+            ->unique()
+            ->sort()
+            ->values();
+
+        $kategoriList = Menu::where('business_id', 2)
+            ->with('kategori')
+            ->get()
+            ->pluck('kategori')
+            ->unique('id')
+            ->values();
+
+
+        return view('pegawai.Miss.index', compact('user', 'menus', 'allKategori', 'jumlah_item', 'kategoriList'));
     }
     public function addToCart(Request $request)
     {
