@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Pegawai;
 
-use App\Http\Controllers\Controller;
-use App\Models\Keranjang;
 use App\Models\Menu;
+use App\Models\Size;
+use App\Models\Category;
+use App\Models\Keranjang;
+use App\Models\SizePrice;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class MissController extends Controller
@@ -17,13 +20,24 @@ class MissController extends Controller
         $query = Menu::where('business_id', 2);
 
         // filter berdasarkan superkategori
-        if ($request->filled('superKategori')) {
+        if ($request->filled('kategori')) {
             $query->whereHas('kategori.superKategori', function ($q) use ($request) {
                 $q->where('nama', $request->kategori);
             });
         }
 
         // Filter berdasarkan nama kategori
+        $kategoriList = [];
+        if ($request->filled('kategori')) {
+            $kategoriList = Category::whereHas('superKategori', function ($q) use ($request) {
+                $q->where('nama', $request->kategori);
+            })->get();
+        } else {
+            // Opsi: Jika tidak ada filter superkategori, tampilkan semua atau kosong
+            $kategoriList = Category::all(); // Atau $kategoriList = [];
+        }
+
+        // Menampilkan menu berdasarkan filter nama kategori
         if ($request->filled('kategori_nama')) {
             $query->whereHas('kategori', function ($q) use ($request) {
                 $q->where('nama', $request->kategori_nama);
@@ -47,12 +61,12 @@ class MissController extends Controller
             ->sort()
             ->values();
 
-        $kategoriList = Menu::where('business_id', 2)
-            ->with('kategori')
-            ->get()
-            ->pluck('kategori')
-            ->unique('id')
-            ->values();
+        // $kategoriList = Menu::where('business_id', 2)
+        //     ->with('kategori')
+        //     ->get()
+        //     ->pluck('kategori')
+        //     ->unique('id')
+        //     ->values();
 
 
         return view('pegawai.Miss.index', compact('user', 'menus', 'allKategori', 'jumlah_item', 'kategoriList'));
@@ -171,5 +185,45 @@ class MissController extends Controller
         Keranjang::where('business_id', Auth::user()->id_business)->delete();
 
         return redirect()->back()->with('success', "Pembayaran berhasil. Uang yang di bayarkan: Rp " . number_format($request->uang_dibayarkan, 0, ',', '.') . ". Kembalian: Rp " . number_format($kembalian, 0, ',', '.'));
+    }
+
+    public function updateQuantity(Request $request, $id)
+    {
+        $keranjang = Keranjang::with('menu')->findOrFail($id);
+
+        $harga = 0;
+
+        if ($keranjang->menu) {
+            if ($keranjang->ukuran) {
+                $size = Size::where('ukuran', $keranjang->ukuran)->first();
+                if ($size) {
+                    $sizePrice = SizePrice::where('menu_id', $keranjang->menu_id)
+                        ->where('size_id', $size->id)
+                        ->first();
+                    if ($sizePrice) {
+                        $harga = $sizePrice->harga;
+                    } else {
+                        $harga = $keranjang->menu->harga;
+                    }
+                } else {
+                    $harga = $keranjang->menu->harga;
+                }
+            } else {
+                $harga = $keranjang->menu->harga;
+            }
+        }
+
+        $keranjang->jumlah += $request->action == 'increment' ? 1 : ($keranjang->jumlah > 1 ? -1 : 0);
+        $keranjang->total_harga = $keranjang->jumlah * $harga;
+        $keranjang->save();
+
+        $totalBayar = Keranjang::sum('total_harga');
+
+        return response()->json([
+            'success' => true,
+            'jumlah_baru' => $keranjang->jumlah,
+            'total_harga_formatted' => number_format($keranjang->total_harga, 0, ',', '.'),
+            'total_bayar_formatted' => number_format($totalBayar, 0, ',', '.')
+        ]);
     }
 }

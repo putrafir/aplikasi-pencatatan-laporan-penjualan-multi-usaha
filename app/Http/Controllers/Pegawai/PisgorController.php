@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Pegawai;
 
-use App\Http\Controllers\Controller;
-use App\Models\Keranjang;
 use App\Models\Menu;
+use App\Models\Size;
+use App\Models\Keranjang;
+use App\Models\SizePrice;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class PisgorController extends Controller
@@ -94,5 +96,45 @@ class PisgorController extends Controller
         $keranjangs = Keranjang::with('menu')->where('business_id', 1)->get();
         $totalBayar = $keranjangs->sum('total_harga');
         return view('pegawai.Pisgor.keranjang', compact('keranjangs', 'totalBayar'));
+    }
+
+    public function updateQuantity(Request $request, $id)
+    {
+        $keranjang = Keranjang::with('menu')->findOrFail($id);
+
+        $harga = 0;
+
+        if ($keranjang->menu) {
+            if ($keranjang->ukuran) {
+                $size = Size::where('ukuran', $keranjang->ukuran)->first();
+                if ($size) {
+                    $sizePrice = SizePrice::where('menu_id', $keranjang->menu_id)
+                        ->where('size_id', $size->id)
+                        ->first();
+                    if ($sizePrice) {
+                        $harga = $sizePrice->harga;
+                    } else {
+                        $harga = $keranjang->menu->harga;
+                    }
+                } else {
+                    $harga = $keranjang->menu->harga;
+                }
+            } else {
+                $harga = $keranjang->menu->harga;
+            }
+        }
+
+        $keranjang->jumlah += $request->action == 'increment' ? 1 : ($keranjang->jumlah > 1 ? -1 : 0);
+        $keranjang->total_harga = $keranjang->jumlah * $harga;
+        $keranjang->save();
+
+        $totalBayar = Keranjang::sum('total_harga');
+
+        return response()->json([
+            'success' => true,
+            'jumlah_baru' => $keranjang->jumlah,
+            'total_harga_formatted' => number_format($keranjang->total_harga, 0, ',', '.'),
+            'total_bayar_formatted' => number_format($totalBayar, 0, ',', '.')
+        ]);
     }
 }

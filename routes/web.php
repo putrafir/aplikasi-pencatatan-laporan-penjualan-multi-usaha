@@ -44,8 +44,7 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::get('/admin/manage-menu', [\App\Http\Controllers\ManageMenuController::class, 'index'])->name('admin.manage-menu');
     Route::post('/admin/menu/add', [ManageMenuController::class, 'store'])->name('admin.menu.add');
     Route::post('/admin/kategori/add', [ManageMenuController::class, 'categoryStore'])->name('admin.kategori.add');
-
-
+    Route::post('/admin/ukuran/add', [ManageMenuController::class, 'ukuranStore'])->name('admin.ukuran.add');
 
     Route::get('/admin/kategori/by-business/{id}', [ManageMenuController::class, 'getKategoriByBusiness']);
 });
@@ -60,6 +59,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/pegawai/keranjang/{id}', [MissController::class, 'removeFromCart'])->name('pegawai.keranjang.remove');
     Route::post('/pegawai/keranjang/checkout', [MissController::class, 'checkout'])->name('pegawai.keranjang.checkout');
     Route::get('/pegawai/miss/menu', [MissController::class, 'index'])->name('pegawai.miss.menu');
+    Route::post('/pegawai/keranjang/update-quantity/{id}', [MissController::class, 'updateQuantity'])->name('pegawai.keranjang.updateQuantity');
 
 
     Route::post('/pegawai/pisgor/keranjang/add', [PisgorController::class, 'addToCart'])->name('pegawai.pisgor.keranjang.add');
@@ -67,6 +67,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/pegawai/keranjang/{id}', [MissController::class, 'removeFromCart'])->name('pegawai.keranjang.remove');
     Route::post('/pegawai/keranjang/checkout', [MissController::class, 'checkout'])->name('pegawai.keranjang.checkout');
     Route::get('/pegawai/pisgor/menu', [PisgorController::class, 'index'])->name('pegawai.pisgor.menu');
+    Route::post('/pegawai/keranjang/update-quantity/{id}', [PisgorController::class, 'updateQuantity'])->name('pegawai.keranjang.updateQuantity');
 });
 
 
