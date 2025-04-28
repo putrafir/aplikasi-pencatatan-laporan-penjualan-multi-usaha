@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Menu;
+use App\Models\Size;
 use App\Models\Business;
 use App\Models\Category;
-use App\Models\Menu;
 use Illuminate\Http\Request;
 
 class ManageMenuController extends Controller
@@ -54,5 +55,25 @@ class ManageMenuController extends Controller
     {
         $categories = Category::where('business_id', $id)->get();
         return response()->json($categories);
+    }
+
+    public function ukuranStore(Request $request)
+    {
+        $request->validate([
+            'menu_id' => 'required|exists:menus,id',
+            'nama' => 'required|string|max:255',
+            'harga' => 'required|numeric|min:0',
+        ]);
+
+        $ukuran = new Size();
+        $ukuran->menu_id = $request->menu_id;
+        $ukuran->nama = $request->nama;
+        $ukuran->harga = $request->harga;
+
+        if ($ukuran->save()) {
+            return redirect()->back()->with('success', 'Ukuran berhasil ditambahkan.');
+        } else {
+            return redirect()->back()->with('error', 'Gagal menambahkan ukuran.');
+        }
     }
 }

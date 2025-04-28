@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('img/apple-icon.png') }}" />
     <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}" />
@@ -27,7 +28,7 @@
         class="fixed top-0 w-full z-50 h-16 bg-gradient-to-l from-purple-700 to-pink-500">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             @if (Auth::user()->id_business == 2)
-                <a href="{{ route('pegawai.miss.home') }}">
+                <a href="{{ route('pegawai.miss.home', ['kategori' => 'Miss Smoothies']) }}">
                     <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor" viewBox="0 0 24 24">
                         <path fill-rule="evenodd"

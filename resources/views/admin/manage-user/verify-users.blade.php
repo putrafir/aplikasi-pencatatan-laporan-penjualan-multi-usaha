@@ -54,7 +54,7 @@
                                         <td
                                             class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                             <p class="mb-0 text-xs leading-tight text-slate-400">
-                                                {{ $item->business->business_name }}</p>
+                                                {{ $item->business->name }}</p>
                                         </td>
                                         @if ($item->is_verified == true)
                                             <td

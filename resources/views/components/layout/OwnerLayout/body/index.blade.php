@@ -54,4 +54,6 @@
 <!-- main script file  -->
 <script src="{{ asset('js/soft-ui-dashboard-tailwind.js') }}" async></script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </html>
