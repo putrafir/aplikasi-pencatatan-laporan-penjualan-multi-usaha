@@ -22,7 +22,7 @@
             </div>
         @endif
 
-        <div class="space-y-4 max-h-[310px] overflow-y-auto mb-4 hide-scrollbar">
+        <div class="space-y-4 overflow-y-auto mb-44 hide-scrollbar">
             <!-- Item -->
             @foreach ($keranjangs as $keranjang)
                 <div class="bg-white p-4 rounded-lg shadow">
@@ -66,7 +66,6 @@
                     </div>
                 </div>
             @endforeach
-
         </div>
 
         <div class="fixed bottom-0 left-0 right-0 bg-white p-4">
