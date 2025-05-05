@@ -386,20 +386,23 @@
     </div>
 
 
-    <div id="detailModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-        <div class="flex items-center justify-center min-h-screen px-4">
-            <div class="relative w-full max-w-lg p-4 bg-white rounded-lg shadow-lg">
-                <div class="flex justify-between items-center pb-3">
-                    <h3 class="text-lg font-semibold">Detail Transaksi</h3>
-                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">&times;</button>
+    <div id="detailModal" class="fixed z-50 inset-0 overflow-y-auto hidden" aria-modal="true" role="dialog">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="relative w-full max-w-sm p-6 bg-white rounded-md shadow-lg">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Detail Transaksi</h3>
+                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 focus:outline-none" aria-label="Tutup modal">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
-                <div id="modalContent" class="text-sm text-gray-700">
-                    <!-- Konten detail transaksi akan dimuat di sini -->
-                </div>
+                <div id="modalContent" class="text-sm text-gray-700 font-mono">
+                    </div>
             </div>
         </div>
     </div>
-
+    
     <script>
         function showDetail(id) {
             fetch(`/admin/transaksi/${id}`)
@@ -411,39 +414,67 @@
                 })
                 .then(data => {
                     const modalContent = document.getElementById('modalContent');
+                    const tanggal = new Date(data.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
+                    const kasir = data.user.name;
+                    const totalBayar = data.total_bayar;
+                    const uangDibayarkan = data.uang_dibayarkan;
+                    const kembalian = data.kembalian;
+    
                     let detailHtml = `
-                <p><strong>Tanggal:</strong> ${data.created_at}</p>
-                <p><strong>Pegawai:</strong> ${data.user.name}</p>
-                <p><strong>Total Bayar:</strong> Rp ${data.total_bayar}</p>
-                <p><strong>Uang yang di bayarkan:</strong> Rp ${data.uang_dibayarkan}</p>
-                <p><strong>Kembalian:</strong> Rp ${data.kembalian}</p>
-                <h4 class="mt-4 font-semibold">Detail Pesanan:</h4>
-                <ul class="list-disc pl-5">
-            `;
-
+                        <hr class="border-t border-gray-500 my-2 border-dashed">
+                        <div class="text-center mb-2">
+                            <h4 class="text-lg font-semibold">MISS</h4>
+                            <p class="text-xs">${tanggal}</p>
+                            <p class="text-xs">Kasir: ${kasir}</p>
+                        </div>
+                        <hr class="border-t border-gray-500 my-2 border-dashed">
+                    `;
+    
                     data.details.forEach(detail => {
+                        const namaProduk = detail.nama + (detail.ukuran ? ` (${detail.ukuran})` : '') + (detail.extra_topping ? ' (Extra)' : '');
+                        const hargaSatuan = formatNumber(detail.harga);
+                        const subtotal = formatNumber(detail.subtotal);
                         detailHtml += `
-                    <li>
-                        <strong>${detail.nama}</strong> - ${detail.jumlah} x Rp ${detail.harga} = Rp ${detail.subtotal}
-                        ${detail.ukuran ? `(Ukuran: ${detail.ukuran})` : ''}
-                        ${detail.extra_topping ? '(Extra Topping)' : ''}
-                    </li>
-                `;
+                            <div class="flex justify-between mb-1">
+                                <span class="truncate">${detail.jumlah} x ${namaProduk}</span>
+                                <span class="text-right">Rp ${subtotal}</span>
+                            </div>
+                        `;
                     });
-
-                    detailHtml += '</ul>';
-
+    
+                    detailHtml += `
+                        <hr class="border-t border-gray-500 my-2 border-dashed">
+                        <div class="flex justify-between font-semibold mb-1">
+                            <span>Total:</span>
+                            <span>Rp ${totalBayar}</span>
+                        </div>
+                        <div class="flex justify-between mb-1">
+                            <span>Bayar:</span>
+                            <span>Rp ${uangDibayarkan}</span>
+                        </div>
+                        <div class="flex justify-between font-semibold">
+                            <span>Kembali:</span>
+                            <span>Rp ${kembalian}</span>
+                        </div>
+                        <hr class="border-t border-gray-500 my-2 border-dashed">
+                        <p class="text-center text-xs">TERIMA KASIH</p>
+                    `;
+    
                     modalContent.innerHTML = detailHtml;
                     document.getElementById('detailModal').classList.remove('hidden');
                 })
                 .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
+                    console.error('Terjadi masalah saat mengambil detail transaksi:', error);
                     alert('Gagal mengambil detail transaksi. Silakan coba lagi.');
                 });
         }
-
+    
         function closeModal() {
             document.getElementById('detailModal').classList.add('hidden');
+        }
+    
+        function formatNumber(number) {
+            return new Intl.NumberFormat('id-ID').format(number);
         }
     </script>
 @endsection
