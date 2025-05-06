@@ -152,36 +152,37 @@
                     onclick="openEditModal('{{ $user->id }}', '{{ $user->name }}', '{{ $user->email }}')">
                     <i class="mr-2 far fa-edit"></i> Edit
                     </button>
-
                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                     <script>
-                    function openEditModal(userId, userName, userEmail) {
-                    Swal.fire({
-                        title: 'Edit User',
-                        html: `
-                            <form id="editForm" method="post" action="{{ route('profile.update') }}">
-                                @csrf
-                                @method('patch')
-                                <div style="text-align: left;">
-                                    <label for="swal-name" class="mb-1 ml-1 font-normal cursor-pointer select-none text-sm text-slate-700">Full Name</label>
-                                    <input id="swal-name" name="name" class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Full Name" value="${userName}" required>
-                                </div>
-                                <div style="text-align: left; margin-top: 10px;">
-                                    <label for="swal-email" class="mb-1 ml-1 font-normal cursor-pointer select-none text-sm text-slate-700">Email</label>
-                                    <input id="swal-email" name="email" class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Email" value="${userEmail}" required>
-                                </div>
-                            </form>
-                        `,
-                        showCancelButton: true,
-                        confirmButtonText: 'Save',
-                        cancelButtonText: 'Cancel',
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        preConfirm: () => {
-                            document.getElementById('editForm').submit();
+                        function openEditModal(userId, userName, userEmail) {
+                            Swal.fire({
+                                title: 'Edit User',
+                                html: `
+                                    <form id="editForm" method="post" action="{{ route('profile.update') }}">
+                                        @csrf
+                                        @method('patch')
+                                        <div style="text-align: left;">
+                                            <label for="swal-name" class="mb-1 ml-1 font-normal cursor-pointer select-none text-sm text-slate-700">Full Name</label>
+                                            <input id="swal-name" name="name" class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Full Name" value="${userName}" required>
+                                        </div>
+                                        <div style="text-align: left; margin-top: 10px;">
+                                            <label for="swal-email" class="mb-1 ml-1 font-normal cursor-pointer select-none text-sm text-slate-700">Email</label>
+                                            <input id="swal-email" name="email" class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Email" value="${userEmail}" required>
+                                        </div>
+                                    </form>
+                                `,
+                                showCancelButton: true,
+                                confirmButtonText: 'Save',
+                                cancelButtonText: 'Cancel',
+                                customClass: {
+                                    confirmButton: 'bg-blue-500 text-white',
+                                    cancelButton: 'bg-red-600 text-white',
+                                },
+                                preConfirm: () => {
+                                    document.getElementById('editForm').submit();
+                                }
+                            });
                         }
-                    });
-                    }
                     </script>
                 </div>
             </div>
@@ -406,7 +407,7 @@
                                     </button>
 
                                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                                   
+
                                 </div>
                             </div>
                         </div>
