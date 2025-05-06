@@ -13,7 +13,8 @@ class SizeController extends Controller
      */
     public function index()
     {
-        //
+        // Logika untuk menampilkan daftar size
+        return view('admin.manage-size.index');
     }
 
     /**

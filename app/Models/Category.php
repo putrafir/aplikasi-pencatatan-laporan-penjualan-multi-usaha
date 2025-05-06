@@ -24,4 +24,9 @@ class Category extends Model
     {
         return $this->belongsTo(SuperCategory::class, 'super_kategori_id');
     }
+    
+    public function business()
+    {
+        return $this->belongsTo(Business::class, 'business_id');
+    }
 }

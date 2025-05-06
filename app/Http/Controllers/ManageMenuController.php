@@ -14,7 +14,9 @@ class ManageMenuController extends Controller
     {
         $businesses = Business::get();
         $categories = Category::get();
-        return view('admin.manage-menu.index', compact('businesses', 'categories'));
+        $menus = Menu::with(['business', 'kategori'])->get();
+
+        return view('admin.manage-menu.index', compact('businesses', 'categories', 'menus'));
     }
 
     public function store(Request $request)
@@ -75,5 +77,28 @@ class ManageMenuController extends Controller
         } else {
             return redirect()->back()->with('error', 'Gagal menambahkan ukuran.');
         }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'harga' => 'required|numeric|min:0',
+        ]);
+
+        $menu = Menu::findOrFail($id);
+        $menu->nama = $request->nama;
+        $menu->harga = $request->harga;
+        $menu->save();
+
+        return redirect()->back()->with('success', 'Menu berhasil diperbarui.');
+    }
+
+    public function destroy($id)
+    {
+        $menu = Menu::findOrFail($id);
+        $menu->delete();
+
+        return redirect()->back()->with('success', 'Menu berhasil dihapus.');
     }
 }

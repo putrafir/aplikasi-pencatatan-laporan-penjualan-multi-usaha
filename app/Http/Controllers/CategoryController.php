@@ -4,16 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Models\Business;
 use App\Models\Category;
+
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
-        //
+        $businesses = Business::get();
+        $categories = Category::with(['business'])->get();
+
+        return view('admin.manage-category.index', compact('businesses', 'categories'));
     }
 
     /**
@@ -59,8 +65,11 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        //
+        $menu = Category::findOrFail($id);
+        $menu->delete();
+
+        return redirect()->back()->with('success', 'Menu berhasil dihapus.');
     }
 }

@@ -5,12 +5,12 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserVerificationController;
-
 use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\ManageMenuController;
 use App\Http\Controllers\Pegawai\MissController;
 use App\Http\Controllers\Pegawai\PisgorController;
+use App\Http\Controllers\SizeController;
 use App\Models\Category;
 use App\Models\Transaksi;
 
@@ -42,10 +42,13 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::post('/admin/delete-users/{user}', [UserVerificationController::class, 'deleteUser'])->name('admin.delete-user');
 
     Route::get('/admin/manage-menu', [\App\Http\Controllers\ManageMenuController::class, 'index'])->name('admin.manage-menu');
+    Route::get('/admin/manage-category', [App\Http\Controllers\CategoryController::class, 'index'])->name('admin.manage-category');
+    Route::get('/admin/manage-size', [SizeController::class, 'index'])->name('admin.manage-size');
+    Route::delete('/admin/menus/{id}', [ManageMenuController::class, 'destroy'])->name('admin.menus.destroy');
+    Route::put('/admin/menus/{id}', [ManageMenuController::class, 'update'])->name('admin.menus.update');
     Route::post('/admin/menu/add', [ManageMenuController::class, 'store'])->name('admin.menu.add');
     Route::post('/admin/kategori/add', [ManageMenuController::class, 'categoryStore'])->name('admin.kategori.add');
     Route::post('/admin/ukuran/add', [ManageMenuController::class, 'ukuranStore'])->name('admin.ukuran.add');
-
     Route::get('/admin/kategori/by-business/{id}', [ManageMenuController::class, 'getKategoriByBusiness']);
 });
 
