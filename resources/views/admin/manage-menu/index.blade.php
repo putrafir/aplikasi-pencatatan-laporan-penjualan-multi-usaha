@@ -27,10 +27,40 @@
             <div class="flex-auto p-4">
                 <div class="flex items-center justify-between mb-4">
                     <h6 class="text-lg font-bold ml-2">Daftar Menu</h6>
-                    <a href="javascript:void(0);" onclick="togglePopup('popup-add')"
-                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 mr-4 rounded">
-                        + Tambah Menu
-                    </a>
+                    <div class="flex items-center gap-2">
+                        <form method="GET" id="usahaForm" action="{{ route('admin.manage-menu') }}">
+                            <input type="hidden" name="kategori_nama" value="{{ request('kategori_nama') }}">
+                            <label for="filter_usaha" class="text-sm mr-1">Filter Usaha:</label>
+                            <select name="usaha_id" id="filter_usaha" class="border rounded-lg p-2"
+                                onchange="document.getElementById('usahaForm').submit();">
+                                <option value="">-- Semua Jenis Usaha --</option>
+                                @foreach ($businesses as $usaha)
+                                    <option value="{{ $usaha->id }}"
+                                        {{ request('usaha_id') == $usaha->id ? 'selected' : '' }}>
+                                        {{ $usaha->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </form>
+                        <form method="GET" action="{{ route('admin.manage-menu') }}">
+                            <input type="hidden" name="usaha_id" value="{{ request('usaha_id') }}">
+                            <label for="filter_kategori" class="text-sm mr-1">Filter Kategori:</label>
+                            <select name="kategori_id" id="filter_kategori" class="border rounded-lg p-2"
+                                onchange="this.form.submit()">
+                                <option value="">-- Semua Kategori --</option>
+                                @foreach ($categories as $kategori)
+                                    <option value="{{ $kategori->id }}"
+                                        {{ request('kategori_id') == $kategori->id ? 'selected' : '' }}>
+                                        {{ $kategori->nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </form>
+                        <a href="javascript:void(0);" onclick="togglePopup('popup-add')"
+                            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+                            + Tambah Menu
+                        </a>
+                    </div>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-white border border-gray-300 text-sm text-left">
@@ -137,7 +167,8 @@
                         placeholder="Harga" required>
                 </div>
                 <div class="mt-4">
-                    <button type="submit" class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-2 me-2">
+                    <button type="submit"
+                        class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-2 me-2">
                         Save
                     </button>
                     <button type="button" onclick="togglePopup('popup-edit')"
