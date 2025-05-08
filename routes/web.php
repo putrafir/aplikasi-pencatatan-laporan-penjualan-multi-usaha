@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserVerificationController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\ManageMenuController;
@@ -48,12 +49,15 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::put('/admin/menus/{id}', [ManageMenuController::class, 'update'])->name('admin.menus.update');
     Route::post('/admin/menu/add', [ManageMenuController::class, 'store'])->name('admin.menu.add');
     Route::post('/admin/kategori/add', [ManageMenuController::class, 'categoryStore'])->name('admin.kategori.add');
+    Route::delete('/admin/kategori/{id}', [CategoryController::class, 'destroy'])->name('admin.kategori.destroy');
+    Route::put('/admin/menus/{id}', [ManageMenuController::class, 'update'])->name('admin.menus.update');
     Route::post('/admin/ukuran/add', [ManageMenuController::class, 'ukuranStore'])->name('admin.ukuran.add');
     Route::get('/admin/kategori/by-business/{id}', [ManageMenuController::class, 'getKategoriByBusiness']);
 });
 
 Route::middleware(['auth'])->group(function () {
-
+    Route::get('/pegawai/update_stoke', [\App\Http\Controllers\Pegawai\DashboardController::class, 'UpdetStok'])->name('pegawai.UpdetStok');
+    Route::get('/pegawai/profile', [\App\Http\Controllers\Pegawai\DashboardController::class, 'profile'])->name('pegawai.profile');
     Route::get('/pegawai/miss/home', [MissController::class, 'index'])->name('pegawai.miss.home');
     Route::get('/pegawai/pisgor/home', [PisgorController::class, 'index'])->name('pegawai.pisgor.home');
 
