@@ -56,7 +56,7 @@
                                     <td class="px-4 py-2 border text-center">
                                         <button type="button"
                                             class="text-red-500 hover:text-red-700 mx-auto block delete-button"
-                                            data-id="{{ $menu->id }}">
+                                            data-id="{{ $menu->id }}" data-nama="{{ $dataName }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline"
                                                 viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd"
@@ -137,7 +137,8 @@
                         placeholder="Harga" required>
                 </div>
                 <div class="mt-4">
-                    <button type="submit" class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-2 me-2">
+                    <button type="submit"
+                        class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-2 me-2">
                         Save
                     </button>
                     <button type="button" onclick="togglePopup('popup-edit')"
@@ -304,35 +305,7 @@
     </script>
 
     {{-- delet --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const deleteButtons = document.querySelectorAll('.delete-button');
 
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const menuId = this.getAttribute('data-id');
-
-                    Swal.fire({
-                        title: 'Yakin ingin menghapus?',
-                        text: "Data menu ini akan dihapus permanen!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#e3342f',
-                        cancelButtonColor: '#6c757d',
-                        confirmButtonText: 'Ya, hapus!',
-                        cancelButtonText: 'Batal',
-                        customClass: {
-                            confirmButton: 'bg-red-600 text-white',
-                            cancelButton: 'bg-gray-300 text-gray-800'
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            document.getElementById('delete-form-' + menuId).submit();
-                        }
-                    });
-                });
-            });
-        });
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- <script src="{{ asset('js/modal/delete/menu.js') }}"></script> --}}
 @endsection

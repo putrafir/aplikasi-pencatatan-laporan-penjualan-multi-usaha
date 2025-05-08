@@ -12,11 +12,12 @@ class ManageMenuController extends Controller
 {
     public function index()
     {
+        $dataName = "Menu";
         $businesses = Business::get();
         $categories = Category::get();
         $menus = Menu::with(['business', 'kategori'])->get();
 
-        return view('admin.manage-menu.index', compact('businesses', 'categories', 'menus'));
+        return view('admin.manage-menu.index', compact('businesses', 'categories', 'menus', "dataName"));
     }
 
     public function store(Request $request)
