@@ -55,5 +55,6 @@
 <script src="{{ asset('js/soft-ui-dashboard-tailwind.js') }}" async></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('js/modal/delet.js')}}"></script>
 
 </html>

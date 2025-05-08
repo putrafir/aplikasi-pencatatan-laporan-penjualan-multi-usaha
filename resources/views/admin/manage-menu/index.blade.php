@@ -134,7 +134,7 @@
         </div>
     </div>
 
-    <!-- modal edit -->
+    <!-- modal edit menu-->
     <div id="popup-edit" class="fixed inset-0 items-center flex justify-center z-50 hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-xl font-semibold mb-4 text-center">Edit Menu</h2>
@@ -180,7 +180,7 @@
         </div>
     </div>
 
-    <!-- modal add -->
+    <!-- modal add menu-->
     <div id="popup-add" class="fixed inset-0 items-center flex justify-center z-50 hidden">
         <div class="w-96 max-w-full px-3 mt-0 mb-6 bg-white rounded-2xl shadow-xl">
             <div class="flex-auto p-4">
@@ -229,6 +229,7 @@
         </div>
     </div>
 
+    {{-- filter --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $('#usahaSelect').on('change', function() {
@@ -334,36 +335,5 @@
         }
     </script>
 
-    {{-- delet --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const deleteButtons = document.querySelectorAll('.delete-button');
-
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const menuId = this.getAttribute('data-id');
-
-                    Swal.fire({
-                        title: 'Yakin ingin menghapus?',
-                        text: "Data menu ini akan dihapus permanen!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#e3342f',
-                        cancelButtonColor: '#6c757d',
-                        confirmButtonText: 'Ya, hapus!',
-                        cancelButtonText: 'Batal',
-                        customClass: {
-                            confirmButton: 'bg-red-600 text-white',
-                            cancelButton: 'bg-gray-300 text-gray-800'
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            document.getElementById('delete-form-' + menuId).submit();
-                        }
-                    });
-                });
-            });
-        });
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection

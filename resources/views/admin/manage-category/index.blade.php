@@ -20,16 +20,17 @@
         </a>
     </div>
 
-    {{-- table menu --}}
+    {{-- table kategori --}}
     <div class="w-full max-w-full px-3 mt-6 lg:mb-0">
         <div
             class="border-black/12.5 shadow-soft-xl relative z-20 flex min-w-0 flex-col break-words rounded-2xl border-0 border-solid bg-white bg-clip-border">
             <div class="flex-auto p-4">
                 <div class="flex items-center justify-between mb-4">
                     <h6 class="text-lg font-bold ml-2">Daftar Kategori</h6>
-                    <a href="" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 mr-4 rounded">
+                    <button onclick="togglePopup('popup-add-kategori')"
+                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 mr-4 rounded">
                         + Tambah Kategori
-                    </a>
+                    </button>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-white border border-gray-300 text-sm text-left">
@@ -51,7 +52,7 @@
                                     <td class="px-4 py-2 border text-center">
                                         <button type="button"
                                             class="text-red-500 hover:text-red-700 mx-auto block delete-button"
-                                            data-id="{{ $category->id }}">
+                                            data-id="{{ $category->id }}" data-nama="{{ $category->datanama }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline"
                                                 viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd"
@@ -62,16 +63,18 @@
                                                     clip-rule="evenodd" />
                                             </svg>
                                         </button>
-                                        <!-- Form tersembunyi -->
                                         <form id="delete-form-{{ $category->id }}"
-                                            action="{{ route('admin.menus.destroy', $category->id) }}" method="POST"
+                                            action="{{ route('admin.kategori.destroy', $category->id) }}" method="POST"
                                             class="hidden">
                                             @csrf
                                             @method('DELETE')
                                         </form>
                                     </td>
                                     <td class="px-4 py-2 border text-center">
-                                        <button type="button" class="text-blue-500 hover:text-blue-700 mx-auto block">
+                                        <button type="button"
+                                            class="text-blue-500 hover:text-blue-700 mx-auto block edit-button"
+                                            data-id="{{ $category->id }}" data-nama="{{ $category->nama }}"
+                                            data-business-id="{{ $category->business_id }}" onclick="openEditPopup(this)">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline"
                                                 viewBox="0 0 20 20" fill="currentColor">
                                                 <path
@@ -95,36 +98,106 @@
         </div>
     </div>
 
-    {{-- delet --}}
+    <!-- modal edit kategori -->
+    <div id="popup-edit" class="fixed inset-0 items-center flex justify-center z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-xl font-semibold mb-4 text-center">Edit Kategori</h2>
+            <form id="editKategoriForm" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="mb-4 text-left">
+                    <label for="edit-kategori-usaha" class="block text-sm mb-1">Usaha</label>
+                    <select id="edit-kategori-usaha" name="business_id" class="w-full border rounded-lg p-2" required>
+                        <option value="">-- Pilih Usaha --</option>
+                        @foreach ($businesses as $business)
+                            <option value="{{ $business->id }}">{{ $business->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-4 text-left">
+                    <label for="edit-kategori-nama" class="block text-sm mb-1">Nama Kategori</label>
+                    <input type="text" id="edit-kategori-nama" name="nama" class="w-full border rounded-lg p-2"
+                        placeholder="Nama Kategori" required>
+                </div>
+                <div class="mt-4">
+                    <button type="submit"
+                        class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-2 me-2">
+                        Simpan
+                    </button>
+                    <button type="button" onclick="togglePopup('popup-edit')"
+                        class="w-full text-gray-800 hover:text-gray-900 font-medium rounded-lg text-sm px-5 py-2.5 mt-2 me-2 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-300">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {{-- popup add kategori --}}
+    <div id="popup-add-kategori" class="fixed inset-0 items-center flex justify-center z-50 hidden">
+        <div class="w-96 max-w-full px-3 mt-0 mb-6 bg-white rounded-2xl shadow-xl">
+            <div class="flex-auto p-4">
+                <h6 class="mb-0 ml-2 text-center">Tambah Kategori</h6>
+                <form action="{{ route('admin.kategori.add') }}" method="POST" class="max-w-sm pt-2 mx-auto">
+                    @csrf
+                    <div class="mb-4">
+                        <label for="usaha" class="block mb-1 text-sm">Usaha</label>
+                        <select name="business_id" id="usahaSelectKategori" class="w-full border rounded-lg p-2" required>
+                            <option value="">-- Pilih Usaha --</option>
+                            @foreach ($businesses as $business)
+                                <option value="{{ $business->id }}">{{ $business->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="nama" class="block mb-1 text-sm">Nama Kategori</label>
+                        <input type="text" name="nama" class="w-full border rounded-lg p-2"
+                            placeholder="Nama Kategori" required>
+                    </div>
+
+                    <button type="submit"
+                        class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-4 me-2 mb-2">
+                        Tambah Kategori
+                    </button>
+                </form>
+
+                <div class="flex justify-center mt-4">
+                    <button onclick="togglePopup('popup-add-kategori')"
+                        class="w-full text-gray-700 hover:text-gray-900 font-semibold py-2 px-4 border rounded-lg bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-300">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const deleteButtons = document.querySelectorAll('.delete-button');
-
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const categoryId = this.getAttribute('data-id');
-
-                    Swal.fire({
-                        title: 'Yakin ingin menghapus?',
-                        text: "Data kategori ini akan dihapus permanen!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#e3342f',
-                        cancelButtonColor: '#6c757d',
-                        confirmButtonText: 'Ya, hapus!',
-                        cancelButtonText: 'Batal',
-                        customClass: {
-                            confirmButton: 'bg-red-600 text-white',
-                            cancelButton: 'bg-gray-300 text-gray-800'
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            document.getElementById('delete-form-' + categoryId).submit();
-                        }
-                    });
-                });
-            });
-        });
+        function togglePopup(id) {
+            const popup = document.getElementById(id);
+            popup.classList.toggle('hidden');
+        }
     </script>
+
+    <script>
+        function openEditPopup(button) {
+            const id = button.getAttribute('data-id');
+            const nama = button.getAttribute('data-nama');
+            const usahaId = button.getAttribute('data-business-id');
+
+            // Isi nilai input
+            document.getElementById('edit-kategori-nama').value = nama;
+            document.getElementById('edit-kategori-usaha').value = usahaId;
+
+            // Set action form
+            const form = document.getElementById('editKategoriForm');
+            form.action = `/admin/kategori/${id}`;
+
+            // Tampilkan popup
+            togglePopup('popup-edit');
+        }
+    </script>
+
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection
