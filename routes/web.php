@@ -51,7 +51,7 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::post('/admin/kategori/add', [ManageMenuController::class, 'categoryStore'])->name('admin.kategori.add');
     Route::delete('/admin/kategori/{id}', [CategoryController::class, 'destroy'])->name('admin.kategori.destroy');
     Route::put('/admin/kategori/{id}', [CategoryController::class, 'update'])->name('admin.kategori.update');
-    Route::post('/admin/ukuran/add', [ManageMenuController::class, 'ukuranStore'])->name('admin.ukuran.add');
+    Route::post('/admin/ukuran/add', [SizeController::class, 'store'])->name('admin.ukuran.add');
     Route::delete('/admin/size/{id}', [sizeController::class, 'destroy'])->name('admin.size.destroy');
     Route::put('/admin/size/{id}', [SizeController::class, 'update'])->name('admin.size.update');
     Route::get('/admin/kategori/by-business/{id}', [ManageMenuController::class, 'getKategoriByBusiness']);

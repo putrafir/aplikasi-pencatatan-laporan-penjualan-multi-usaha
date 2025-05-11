@@ -45,6 +45,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {{-- @dd($sizes) --}}
                             @forelse($sizes as $index => $size)
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-4 py-2 border text-center">{{ $index + 1 }}</td>
@@ -117,24 +118,14 @@
             <form id="editSizeForm" method="POST">
                 @csrf
                 @method('PUT')
-                <div class="mb-4">
-                    <label for="kategori" class="block mb-1 text-sm">Kategori</label>
-                    <select name="category_id" id="kategoriSelectEdit" class="w-full border rounded-lg p-2" required>
-                        <option value="">-- Pilih Kategori --</option>
-                        @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->nama }}</option>
-                        @endforeach
-                    </select>
-                </div>
+
                 <div class="mb-4 text-left">
                     <label for="edit-size-nama" class="block text-sm mb-1">Nama Ukuran</label>
-                    <input type="text" id="edit-size-nama" name="nama" class="w-full border rounded-lg p-2"
-                        placeholder="Contoh: M, L, XL" required>
+                    <input type="text" id="edit-size-nama" name="nama" class="w-full border rounded-lg p-2" required>
                 </div>
                 <div class="mb-4 text-left">
                     <label for="edit-size-harga" class="block text-sm mb-1">Harga Ukuran</label>
-                    <input type="number" id="edit-size-harga" name="harga" class="w-full border rounded-lg p-2"
-                        placeholder="Harga Ukuran" required>
+                    <input type="number" id="edit-size-harga" name="harga" class="w-full border rounded-lg p-2" required>
                 </div>
                 <div class="mt-4">
                     <button type="submit"
@@ -158,13 +149,13 @@
                 <form action="{{ route('admin.ukuran.add') }}" method="POST" class="max-w-sm pt-2 mx-auto">
                     @csrf
                     <div class="mb-4">
-                        <label for="kategori" class="block mb-1 text-sm">Kategori</label>
-                        <select name="category_id" id="kategoriSelect" class="w-full border rounded-lg p-2" required>
+                        {{-- <label for="kategori" class="block mb-1 text-sm">Kategori</label> --}}
+                        {{-- <select name="category_id" id="kategoriSelect" class="w-full border rounded-lg p-2" required>
                             <option value="">-- Pilih Kategori --</option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->nama }}</option>
                             @endforeach
-                        </select>
+                        </select> --}}
                     </div>
                     <div class="mb-4">
                         <label for="ukuran" class="block mb-1 text-sm">Ukuran</label>
@@ -204,13 +195,9 @@
             const id = button.getAttribute('data-id');
             const nama = button.getAttribute('data-nama');
             const harga = button.getAttribute('data-harga');
-            const kategoriId = button.getAttribute('data-kategori-id');
 
             document.getElementById('edit-size-nama').value = nama;
             document.getElementById('edit-size-harga').value = harga;
-
-            const kategoriSelect = document.getElementById('kategoriSelectEdit');
-            if (kategoriId) kategoriSelect.value = kategoriId;
 
             const form = document.getElementById('editSizeForm');
             form.action = `/admin/size/${id}`; // Benar! Kirim ke route PUT
@@ -218,32 +205,32 @@
             togglePopup('popup-edit');
         }
 
-        // Tambahkan untuk pastikan method override 'PUT' dikenali
-        document.getElementById('editSizeForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Hindari submit default
+        // // Tambahkan untuk pastikan method override 'PUT' dikenali
+        // document.getElementById('editSizeForm').addEventListener('submit', function(e) {
+        //     e.preventDefault(); // Hindari submit default
 
-            const form = e.target;
-            const action = form.action;
-            const data = new FormData(form);
+        //     const form = e.target;
+        //     const action = form.action;
+        //     const data = new FormData(form);
 
-            fetch(action, {
-                method: 'POST', // Kirim POST, Laravel akan override ke PUT lewat _method
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-                },
-                body: data
-            }).then(response => {
-                if (response.redirected) {
-                    window.location.href = response.url;
-                } else {
-                    return response.text().then(text => {
-                        alert("Gagal update: " + text);
-                    });
-                }
-            }).catch(err => {
-                alert("Terjadi kesalahan: " + err);
-            });
-        });
+        //     fetch(action, {
+        //         method: 'POST', // Kirim POST, Laravel akan override ke PUT lewat _method
+        //         headers: {
+        //             'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+        //         },
+        //         body: data
+        //     }).then(response => {
+        //         if (response.redirected) {
+        //             window.location.href = response.url;
+        //         } else {
+        //             return response.text().then(text => {
+        //                 alert("Gagal update: " + text);
+        //             });
+        //         }
+        //     }).catch(err => {
+        //         alert("Terjadi kesalahan: " + err);
+        //     });
+        // });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

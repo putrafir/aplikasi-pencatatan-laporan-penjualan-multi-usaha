@@ -36,9 +36,26 @@ class SizeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSizeRequest $request)
+    public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'harga' => 'required|numeric',
+        ]);
+
+
+        $newSize = Size::create([
+            'nama' => $request->nama,
+        ]);
+
+        SizePrice::create([
+            'harga' => $request->harga,
+            'category_id' => 1,
+            'size_id' => $newSize->id,
+        ]);
+
+        return redirect()->back()->with('success', 'Menu berhasil ditambahkan.');
     }
 
     /**
@@ -62,34 +79,34 @@ class SizeController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'harga' => 'required|numeric',
-            'category_id' => 'required|exists:categories,id',
+            'nama' => 'required|string|max:255', // Validasi nama ukuran
+            'harga' => 'required|numeric', // Validasi harga
         ]);
 
         $size = Size::findOrFail($id);
-        $size->nama = $request->nama;
-        $size->save();
 
-        // Ambil entri pertama dari relasi hasMany sizePrices
-        $sizePrice = $size->sizePrices()->first();
+        $size->update([
+            'nama' => $request->nama,
+        ]);
+
+        $sizePrice = SizePrice::where('size_id', $size->id)->first();
 
         if ($sizePrice) {
-            // Update entri pertama
             $sizePrice->update([
                 'harga' => $request->harga,
-                'category_id' => $request->category_id,
+                // 'category_id' => $request->category_id,
             ]);
         } else {
-            // Tambah baru jika belum ada
-            $size->sizePrices()->create([
+            SizePrice::create([
                 'harga' => $request->harga,
-                'category_id' => $request->category_id,
+                // 'category_id' => $request->category_id,
+                'size_id' => $size->id,
             ]);
         }
 
-        return redirect()->back()->with('success', 'Menu berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Ukuran dan harga berhasil diperbarui.');
     }
 
     /**
