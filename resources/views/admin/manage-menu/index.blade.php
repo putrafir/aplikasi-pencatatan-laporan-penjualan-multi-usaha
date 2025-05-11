@@ -86,7 +86,7 @@
                                     <td class="px-4 py-2 border text-center">
                                         <button type="button"
                                             class="text-red-500 hover:text-red-700 mx-auto block delete-button"
-                                            data-id="{{ $menu->id }}">
+                                            data-id="{{ $menu->id }}" data-nama="{{ $datanama }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline"
                                                 viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd"
@@ -196,7 +196,6 @@
                             @endforeach
                         </select>
                     </div>
-
                     <div class="mb-4">
                         <label for="kategori" class="block mb-1 text-sm">Kategori</label>
                         <select name="kategori_id" id="kategoriSelect" class="w-full border rounded-lg p-2" required>

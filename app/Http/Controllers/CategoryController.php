@@ -18,9 +18,9 @@ class CategoryController extends Controller
     {
         $businesses = Business::get();
         $categories = Category::with(['business'])->get();
-        $datanama = ('nama');
+        $datanama = "kategori";
 
-        return view('admin.manage-category.index', compact('businesses', 'categories'));
+        return view('admin.manage-category.index', compact('businesses', 'categories', 'datanama'));
     }
 
     /**
@@ -62,15 +62,13 @@ class CategoryController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:255',
-            'business_id' => 'required|exists:businesses,id',
         ]);
 
-        $category = Category::findOrFail($id);
-        $category->nama = $request->nama;
-        $category->business_id = $request->business_id;
-        $category->save();
+        $kategori = Category::findOrFail($id);
+        $kategori->nama = $request->nama;
+        $kategori->save();
 
-        return redirect()->back()->with('success', 'Kategori berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Menu berhasil diperbarui.');
     }
 
     /**

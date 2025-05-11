@@ -14,12 +14,13 @@ class ManageMenuController extends Controller
     {
         $usahaId = $request->input('usaha_id');
         $kategoriId = $request->input('kategori_id');
+        $datanama = "menu";
 
         $businesses = $this->getAllBusinesses();
         $categories = $this->getCategoriesByBusiness($usahaId);
         $menus = $this->getFilteredMenus($usahaId, $kategoriId);
 
-        return view('admin.manage-menu.index', compact('businesses', 'categories', 'menus', 'usahaId', 'kategoriId'));
+        return view('admin.manage-menu.index', compact('businesses', 'categories', 'menus', 'usahaId', 'kategoriId', 'datanama'));
     }
 
     public function store(Request $request)
