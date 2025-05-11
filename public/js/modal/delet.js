@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             Swal.fire({
                 title: 'Yakin ingin menghapus?',
-                text: "Data $(data-nama) ini akan dihapus permanen!",
+                text: `Data ${this.getAttribute("data-nama")} ini akan dihapus permanen!`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#e3342f',
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 confirmButtonText: 'Ya, hapus!',
                 cancelButtonText: 'Batal',
                 customClass: {
-                    confirmButton: 'bg-red-600 text-white',
+                    confirmButton: 'bg-red-600 text-whitze',
                     cancelButton: 'bg-gray-300 text-gray-800'
                 }
             }).then((result) => {
