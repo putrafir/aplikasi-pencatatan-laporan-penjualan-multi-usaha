@@ -63,25 +63,7 @@ class ManageMenuController extends Controller
         return response()->json($categories);
     }
 
-    public function ukuranStore(Request $request)
-    {
-        $request->validate([
-            'menu_id' => 'required|exists:menus,id',
-            'nama' => 'required|string|max:255',
-            'harga' => 'required|numeric|min:0',
-        ]);
 
-        $ukuran = new Size();
-        $ukuran->menu_id = $request->menu_id;
-        $ukuran->nama = $request->nama;
-        $ukuran->harga = $request->harga;
-
-        if ($ukuran->save()) {
-            return redirect()->back()->with('success', 'Ukuran berhasil ditambahkan.');
-        } else {
-            return redirect()->back()->with('error', 'Gagal menambahkan ukuran.');
-        }
-    }
 
     public function update(Request $request, $id)
     {
