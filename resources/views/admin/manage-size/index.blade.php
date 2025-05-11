@@ -45,7 +45,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @dd($sizes)
+                            {{-- @dd($sizes) --}}
                             @forelse($sizes as $index => $size)
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-4 py-2 border text-center">{{ $index + 1 }}</td>
