@@ -11,17 +11,18 @@ class Menu extends Model
     use HasFactory;
     protected $guarded = [];
 
-    // public function sizes()
-    // {
-    //     return $this->hasMany(MenuSize::class);
-    // }
-
-    public function kategori()
+    public function category()
     {
         return $this->belongsTo(Category::class, 'kategori_id');
     }
+
     public function business()
     {
-        return $this->belongsTo(Business::class, 'business_id');
+        return $this->belongsTo(Business::class);
+    }
+
+    public function sizes()
+    {
+        return $this->hasMany(Size::class);
     }
 }

@@ -19,7 +19,7 @@ class CategoryController extends Controller
     {
         $businesses = Business::get();
         $superCategories = SuperCategory::get();
-        $categories = Category::with(['business','superKategori'])->get();
+        $categories = Category::with(['business','superCategory'])->get();
         $datanama = "kategori";
 
         return view('admin.manage-category.index', compact('businesses', 'categories', 'datanama', 'superCategories'));

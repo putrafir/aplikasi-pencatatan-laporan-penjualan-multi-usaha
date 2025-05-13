@@ -12,9 +12,13 @@ class Keranjang extends Model
     // protected $fillable = ['menu_id', 'jumlah', 'total_harga'];
     protected $guarded = [];
 
-    
     public function menu()
     {
         return $this->belongsTo(Menu::class);
+    }
+
+    public function business()
+    {
+        return $this->belongsTo(Business::class);
     }
 }

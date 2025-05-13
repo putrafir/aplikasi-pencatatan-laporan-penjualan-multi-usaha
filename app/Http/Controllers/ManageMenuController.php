@@ -137,7 +137,7 @@ class ManageMenuController extends Controller
 
     private function getFilteredMenus($usahaId = null, $kategoriId = null)
     {
-        return Menu::with(['business', 'kategori'])
+        return Menu::with(['business', 'category'])
             ->when($usahaId, function ($query) use ($usahaId) {
                 $query->where('business_id', $usahaId);
             })
