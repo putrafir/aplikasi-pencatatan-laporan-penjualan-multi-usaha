@@ -37,4 +37,11 @@ class SuperCategory extends Model
     {
         return $this->hasMany(SizePrice::class);
     }
+    /**
+     * Relasi: SuperCategory punya banyak Category
+     */
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
 }

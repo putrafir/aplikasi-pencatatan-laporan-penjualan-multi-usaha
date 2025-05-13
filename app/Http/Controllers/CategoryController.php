@@ -6,6 +6,7 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Business;
 use App\Models\Category;
+use App\Models\SuperCategory;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -17,10 +18,11 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $businesses = Business::get();
-        $categories = Category::with(['business'])->get();
+        $superCategories = SuperCategory::get();
+        $categories = Category::with(['business','superKategori'])->get();
         $datanama = "kategori";
 
-        return view('admin.manage-category.index', compact('businesses', 'categories', 'datanama'));
+        return view('admin.manage-category.index', compact('businesses', 'categories', 'datanama', 'superCategories'));
     }
 
     /**
@@ -62,10 +64,12 @@ class CategoryController extends Controller
     {
         $request->validate([
             'nama' => 'required|string|max:255',
+            'business_id' => 'required|exists:business,id',
         ]);
 
         $kategori = Category::findOrFail($id);
         $kategori->nama = $request->nama;
+        $kategori->business_id = $request->business_id;
         $kategori->save();
 
         return redirect()->back()->with('success', 'Menu berhasil diperbarui.');
