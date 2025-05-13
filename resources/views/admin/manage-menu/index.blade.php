@@ -67,6 +67,7 @@
                         <thead class="bg-gradient-to-t from-purple-700 to-pink-500 text-white">
                             <tr>
                                 <th class="px-4 py-2 border w-10 text-center">No</th>
+                                <th class="px-4 py-2 border">foto</th>
                                 <th class="px-4 py-2 border">Nama Menu</th>
                                 <th class="px-4 py-2 border">Harga</th>
                                 <th class="px-4 py-2 border">Kategori</th>
@@ -79,6 +80,9 @@
                             @forelse($menus as $index => $menu)
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-4 py-2 border text-center">{{ $index + 1 }}</td>
+                                    <td class="px-4 py-2 border text-center">
+                                        <img src="{{ asset($menu->foto) }}" alt="{{ $menu->nama }}" class="w-6 h-6">
+                                    </td>
                                     <td class="px-4 py-2 border">{{ $menu->nama }}</td>
                                     <td class="px-4 py-2 border">Rp {{ number_format($menu->harga, 0, ',', '.') }}</td>
                                     <td class="px-4 py-2 border">{{ $menu->kategori->nama ?? '-' }}</td>
@@ -138,9 +142,28 @@
     <div id="popup-edit" class="fixed inset-0 items-center flex justify-center z-50 hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-xl font-semibold mb-4 text-center">Edit Menu</h2>
-            <form id="editForm" method="POST">
+            <form id="editForm" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
+                <div class="mb-4">
+                    <div class="flex items-center justify-center w-full">
+                        <label for="dropzone-file"
+                            class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                </svg>
+                                <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to
+                                        upload</span> or drag and drop</p>
+                                <p class="text-xs text-gray-500">SVG, PNG, JPG or HEIC (MAX. 5mb)</p>
+                            </div>
+                            <input id="dropzone-file" name="foto" type="file" class="hidden" />
+                        </label>
+                    </div>
+                </div>
                 <div class="mb-4 text-left">
                     <label for="edit-usaha" class="block text-sm mb-1">Usaha</label>
                     <select id="edit-usaha" name="business_id" class="w-full border rounded-lg p-2" required>
@@ -185,8 +208,28 @@
         <div class="w-96 max-w-full px-3 mt-0 mb-6 bg-white rounded-2xl shadow-xl">
             <div class="flex-auto p-4">
                 <h6 class="mb-0 ml-2 text-center">Tambah Menu</h6>
-                <form action="{{ route('admin.menu.add') }}" method="POST" class="max-w-sm pt-2 mx-auto">
+                <form action="{{ route('admin.menu.add') }}" method="POST" enctype="multipart/form-data"
+                    class="max-w-sm pt-2 mx-auto">
                     @csrf
+                    <div class="mb-4">
+                        <div class="flex items-center justify-center w-full">
+                            <label for="dropzone-file"
+                                class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                    </svg>
+                                    <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to
+                                            upload</span> or drag and drop</p>
+                                    <p class="text-xs text-gray-500">SVG, PNG, JPG or HEIC (MAX. 5mb)</p>
+                                </div>
+                                <input id="dropzone-file" name="foto" type="file" class="hidden" />
+                            </label>
+                        </div>
+                    </div>
                     <div class="mb-4">
                         <label for="usaha" class="block mb-1 text-sm">Usaha</label>
                         <select name="business_id" id="usahaSelect" class="w-full border rounded-lg p-2" required>
@@ -202,7 +245,6 @@
                             <option value="">-- Pilih Kategori --</option>
                         </select>
                     </div>
-
                     <div class="mb-4">
                         <label for="nama" class="block mb-1 text-sm">Nama Menu</label>
                         <input type="text" name="nama" class="w-full border rounded-lg p-2"

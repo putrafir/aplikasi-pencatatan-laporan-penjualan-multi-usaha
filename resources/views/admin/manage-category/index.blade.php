@@ -38,6 +38,7 @@
                             <tr>
                                 <th class="px-4 py-2 border w-10 text-center">No</th>
                                 <th class="px-4 py-2 border">Nama kategori</th>
+                                <th class="px-4 py-2 border">Super kategori</th>
                                 <th class="px-4 py-2 border">Usaha</th>
                                 <th class="px-4 py-2 border w-10 text-center">Delete</th>
                                 <th class="px-4 py-2 border w-10 text-center">Edit</th>
@@ -48,6 +49,9 @@
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-4 py-2 border text-center">{{ $index + 1 }}</td>
                                     <td class="px-4 py-2 border">{{ $category->nama }}</td>
+                                    <td class="px-4 py-2 border">
+                                        {{ $category->superKategori->nama ?? '-' }}
+                                    </td>
                                     <td class="px-4 py-2 border">{{ $category->business->name ?? '-' }}</td>
                                     <td class="px-4 py-2 border text-center">
                                         <button type="button"
@@ -74,7 +78,9 @@
                                         <button type="button"
                                             class="text-blue-500 hover:text-blue-700 mx-auto block edit-button"
                                             data-id="{{ $category->id }}" data-nama="{{ $category->nama }}"
-                                            data-business-id="{{ $category->business_id }}" onclick="openEditPopup(this)">
+                                            data-business-id="{{ $category->business_id }}"
+                                            data-superKategori-id="{{ $category->super_kategori_id }}"
+                                            onclick="openEditPopup(this)">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline"
                                                 viewBox="0 0 20 20" fill="currentColor">
                                                 <path
@@ -114,6 +120,15 @@
                         @endforeach
                     </select>
                 </div>
+                <div class="mb-4">
+                    <label for="edit-kategori-superKategori" class="block mb-1 text-sm">Super Category</label>
+                    <select name="super_kategori_id" id="edit-kategori-superKategori" class="w-full border rounded-lg p-2">
+                        <option value="">-- Pilih SuperCategory --</option>
+                        @foreach ($superCategories as $superKategori)
+                            <option value="{{ $superKategori->id }}">{{ $superKategori->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="mb-4 text-left">
                     <label for="edit-kategori-nama" class="block text-sm mb-1">Nama Kategori</label>
                     <input type="text" id="edit-kategori-nama" name="nama" class="w-full border rounded-lg p-2"
@@ -142,26 +157,33 @@
                     @csrf
                     <div class="mb-4">
                         <label for="usaha" class="block mb-1 text-sm">Usaha</label>
-                        <select name="business_id" id="usahaSelectKategori" class="w-full border rounded-lg p-2" required>
+                        <select name="business_id" id="usahaSelectKategori" class="w-full border rounded-lg p-2"
+                            required>
                             <option value="">-- Pilih Usaha --</option>
                             @foreach ($businesses as $business)
                                 <option value="{{ $business->id }}">{{ $business->name }}</option>
                             @endforeach
                         </select>
                     </div>
-
+                    <div class="mb-4">
+                        <label for="superKategori" class="block mb-1 text-sm">Super Category</label>
+                        <select name="super_kategori_id" id="superCategorySelect" class="w-full border rounded-lg p-2">
+                            <option value="">-- Pilih SuperCategory --</option>
+                            @foreach ($superCategories as $superKategori)
+                                <option value="{{ $superKategori->id }}">{{ $superKategori->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="mb-4">
                         <label for="nama" class="block mb-1 text-sm">Nama Kategori</label>
                         <input type="text" name="nama" class="w-full border rounded-lg p-2"
                             placeholder="Nama Kategori" required>
                     </div>
-
                     <button type="submit"
                         class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-4 me-2 mb-2">
                         Tambah Kategori
                     </button>
                 </form>
-
                 <div class="flex justify-center mt-4">
                     <button onclick="togglePopup('popup-add-kategori')"
                         class="w-full text-gray-700 hover:text-gray-900 font-semibold py-2 px-4 border rounded-lg bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-300">
@@ -173,6 +195,31 @@
     </div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const usahaSelect = document.getElementById("usahaSelectKategori");
+            const superCategorySelect = document.getElementById("superCategorySelect");
+
+            const pisgorId = "1";
+            const kosongId = "";
+
+            function handleSuperCategoryVisibility(selectedValue) {
+                if (selectedValue === pisgorId || selectedValue === kosongId) {
+                    superCategorySelect.parentElement.classList.add('hidden');
+                    superCategorySelect.value = '';
+                } else {
+                    superCategorySelect.parentElement.classList.remove('hidden');
+                }
+            }
+
+            handleSuperCategoryVisibility(usahaSelect.value);
+
+            usahaSelect.addEventListener("change", function() {
+                handleSuperCategoryVisibility(usahaSelect.value);
+            });
+        });
+    </script>
+
+    <script>
         function togglePopup(id) {
             const popup = document.getElementById(id);
             popup.classList.toggle('hidden');
@@ -180,24 +227,43 @@
     </script>
 
     <script>
-        function openEditPopup(button) {
-            const id = button.getAttribute('data-id');
-            const nama = button.getAttribute('data-nama');
-            const usahaId = button.getAttribute('data-business-id');
+        document.addEventListener('DOMContentLoaded', function() {
+            const usahaSelect = document.getElementById("edit-kategori-usaha");
+            const superCategorySelect = document.getElementById("edit-kategori-superKategori");
 
-            // Isi nilai input
-            document.getElementById('edit-kategori-nama').value = nama;
-            document.getElementById('edit-kategori-usaha').value = usahaId;
+            function handleSuperCategoryVisibility(value) {
+                const pisgorId = "1";
+                const kosongId = "";
+                if (value === pisgorId || value === kosongId) {
+                    superCategorySelect.parentElement.classList.add('hidden');
+                    superCategorySelect.value = '';
+                } else {
+                    superCategorySelect.parentElement.classList.remove('hidden');
+                }
+            }
 
-            // Set action form
-            const form = document.getElementById('editKategoriForm');
-            form.action = `/admin/kategori/${id}`;
+            usahaSelect.addEventListener("change", function() {
+                handleSuperCategoryVisibility(usahaSelect.value);
+            });
 
-            // Tampilkan popup
-            togglePopup('popup-edit');
-        }
+            window.openEditPopup = function(button) {
+                const id = button.getAttribute('data-id');
+                const nama = button.getAttribute('data-nama');
+                const usahaId = button.getAttribute('data-business-id');
+                const superKategoriId = button.getAttribute('data-superKategori-id');
+
+                document.getElementById('edit-kategori-nama').value = nama;
+                document.getElementById('edit-kategori-usaha').value = usahaId;
+                document.getElementById('edit-kategori-superKategori').value = superKategoriId;
+
+                document.getElementById('editKategoriForm').action = `/admin/kategori/${id}`;
+
+                handleSuperCategoryVisibility(usahaId);
+
+                togglePopup('popup-edit');
+            };
+        });
     </script>
-
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection
