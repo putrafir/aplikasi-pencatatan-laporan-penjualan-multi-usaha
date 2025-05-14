@@ -9,134 +9,160 @@ use App\Models\Keranjang;
 use App\Models\SizePrice;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use App\Models\SuperCategory;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class MissController extends Controller
 {
-    public function index(request $request)
+    public function index()
     {
-        $user = Auth::user();
-        $query = Menu::where('business_id', 2);
-
-        // filter berdasarkan superkategori
-        if ($request->filled('kategori')) {
-            $query->whereHas('kategori.superKategori', function ($q) use ($request) {
-                $q->where('nama', $request->kategori);
-            });
-        }
-
-        // Filter berdasarkan nama kategori
-        $kategoriList = [];
-        if ($request->filled('kategori')) {
-            $kategoriList = Category::whereHas('superKategori', function ($q) use ($request) {
-                $q->where('nama', $request->kategori);
-            })->get();
-        } else {
-            // Opsi: Jika tidak ada filter superkategori, tampilkan semua atau kosong
-            $kategoriList = Category::all(); // Atau $kategoriList = [];
-        }
-
-        // Menampilkan menu berdasarkan filter nama kategori
-        if ($request->filled('kategori_nama')) {
-            $query->whereHas('kategori', function ($q) use ($request) {
-                $q->where('nama', $request->kategori_nama);
-            });
-        }
-
-        // Filter pencarian nama produk
-        if ($request->filled('q')) {
-            $query->where('nama', 'like', '%' . $request->q . '%');
-        }
-
-        $menus = $query->get();
-
-        $jumlah_item = Keranjang::where('business_id', 2)->sum('jumlah');
-
-        $allKategori = Menu::where('business_id', 2)
-            ->with('kategori')
-            ->get()
-            ->pluck('kategori.nama')
-            ->unique()
-            ->sort()
-            ->values();
-
-        // $kategoriList = Menu::where('business_id', 2)
-        //     ->with('kategori')
-        //     ->get()
-        //     ->pluck('kategori')
-        //     ->unique('id')
-        //     ->values();
-
-
-        return view('pegawai.Miss.index', compact('user', 'menus', 'allKategori', 'jumlah_item', 'kategoriList'));
+        $superCategories = SuperCategory::where('business_id', Auth::user()->id_business)->get();
+        return view('pegawai.Miss.index', compact('superCategories'));
     }
-    public function addToCart(Request $request)
+
+    public function getCategories($superKategoriId)
     {
-        $request->validate([
-            'menu_id' => 'required|exists:menus,id',
-            'ukuran' => 'nullable|string',
+        $categories = Category::where('super_kategori_id', $superKategoriId)->get();
+        return response()->json($categories);
+    }
+
+    public function getMenus($kategoriId)
+    {
+        $menus = Menu::with(['category.sizePrices.size'])
+            ->where('kategori_id', $kategoriId)
+            ->get()
+            ->map(function ($menu) {
+                return [
+                    'id' => $menu->id,
+                    'nama' => $menu->nama,
+                    'deskripsi' => $menu->deskripsi,
+                    'harga' => $menu->harga,
+                    'sizePrices' => $menu->category->sizePrices->map(function ($sp) {
+                        return [
+                            'size' => [
+                                'nama' => $sp->size->nama
+                            ],
+                            'harga' => $sp->harga
+                        ];
+                    })
+                ];
+            });
+
+
+        $sizes = SizePrice::with('size')
+            ->where('category_id', $kategoriId)
+            ->get()
+            ->map(function ($sp) {
+                return [
+                    'nama' => $sp->size->nama,
+                    'harga' => $sp->harga,
+                ];
+            });
+
+        return response()->json([
+            'menus' => $menus,
+            'sizes' => $sizes,
         ]);
+    }
 
-        $menu = Menu::with('kategori.sizePrices.size')->findOrFail($request->menu_id);
-        $businessId = Auth::user()->id_business;
+    public function getMenusBySuperKategori($superKategoriId)
+    {
+        $menus = Menu::whereHas('category', function ($query) use ($superKategoriId) {
+            $query->where('super_kategori_id', $superKategoriId);
+        })->with(['category.sizePrices.size'])->get();
 
-        $isSmoothies = $menu->kategori_id == 1 && $menu->business_id == 2;
-
-        if ($isSmoothies) {
-            $sizePrice = $menu->kategori->sizePrices()
-                ->whereHas('size', function ($q) use ($request) {
-                    $q->where('nama', $request->ukuran);
-                })->first();
-
-            if (!$sizePrice) {
-                return redirect()->back()->with('error', 'Ukuran tidak valid atau tidak ditemukan.');
-            }
-
-            $harga = $sizePrice->harga;
-        } else {
-            $harga = $menu->harga;
-        }
-
-        $keranjang = Keranjang::where('menu_id', $request->menu_id)
-            ->where('business_id', $businessId)
-            ->when($isSmoothies, function ($query) use ($request) {
-                return $query->where('ukuran', $request->ukuran);
-            })
-            ->first();
-
-        if ($keranjang) {
-            $keranjang->jumlah += 1;
-            $keranjang->harga_satuan = $harga;
-            $keranjang->total_harga = $keranjang->jumlah * $harga;
-            $keranjang->save();
-        } else {
-            Keranjang::create([
-                'menu_id' => $request->menu_id,
-                'jumlah' => 1,
-                'harga_satuan' => $harga,
-                'total_harga' => $harga,
-                'business_id' => $businessId,
-                'ukuran' => $isSmoothies ? $request->ukuran : null,
-            ]);
-        }
-
-        return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang.');
+        return response()->json(['menus' => $menus]);
     }
 
     public function viewCart()
     {
-        $keranjangs = Keranjang::with('menu')->where('business_id', 2)->get();
+        $businessId = Auth::user()->id_business;
+
+        $keranjangs = Keranjang::with('menu')->where('business_id', $businessId)->get();
         $totalBayar = $keranjangs->sum('total_harga');
+
         return view('pegawai.Miss.keranjang', compact('keranjangs', 'totalBayar'));
+    }
+
+    public function addToCart(Request $request)
+    {
+        try {
+            $user = Auth::user();
+
+            if (!$user) {
+                return response()->json(['success' => false, 'message' => 'Pengguna tidak terautentikasi.'], 401);
+            }
+
+            $businessId = $user->id_business;
+
+            $request->validate([
+                'menu_id' => 'required|exists:menus,id',
+                'jumlah' => 'required|integer|min:1',
+                'harga_satuan' => 'required|numeric|min:0',
+                'ukuran' => 'nullable|string|max:255',
+                'total_harga' => 'required|numeric|min:0',
+            ]);
+
+            $keranjangItem = Keranjang::where('menu_id', $request->menu_id)
+                ->where('business_id', $businessId)
+                ->where('ukuran', $request->ukuran)
+                ->first();
+
+            if ($keranjangItem) {
+                $keranjangItem->jumlah += $request->jumlah;
+                $keranjangItem->total_harga = $keranjangItem->jumlah * $keranjangItem->harga_satuan;
+                $keranjangItem->save();
+            } else {
+                $keranjang = new Keranjang();
+                $keranjang->menu_id = $request->menu_id;
+                $keranjang->business_id = $businessId;
+                $keranjang->jumlah = $request->jumlah;
+                $keranjang->harga_satuan = $request->harga_satuan;
+                $keranjang->total_harga = $request->jumlah * $request->harga_satuan;
+                $keranjang->ukuran = $request->ukuran;
+                $keranjang->save();
+                $keranjangItem = $keranjang;
+            }
+
+            $totalBayarSekarang = Keranjang::where('business_id', $businessId)->sum('total_harga');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Item berhasil ditambahkan ke keranjang.',
+                'data' => $keranjangItem,
+                'total_bayar' => $totalBayarSekarang,
+                'total_bayar_formatted' => number_format($totalBayarSekarang, 0, ',', '.'),
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['success' => false, 'message' => 'Validasi gagal.', 'errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 
     public function removeFromCart($id)
     {
-        $keranjang = Keranjang::findOrFail($id);
+        $user = Auth::user();
+
+        if (!$user) {
+            abort(401, 'Pengguna tidak terautentikasi.');
+        }
+
+        $keranjang = Keranjang::where('id', $id)
+            ->where('business_id', $user->id_business)
+            ->firstOrFail();
+
         $keranjang->delete();
 
-        return redirect()->back()->with('success', 'Produk berhasil dihapus dari keranjang.');
+        $totalBayarSekarang = Keranjang::where('business_id', $user->id_business)->sum('total_harga');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Item berhasil dihapus dari keranjang.',
+            'total_bayar' => $totalBayarSekarang,
+            'total_bayar_formatted' => number_format($totalBayarSekarang, 0, ',', '.'),
+        ]);
     }
 
     public function checkout(Request $request)
@@ -184,46 +210,57 @@ class MissController extends Controller
 
         Keranjang::where('business_id', Auth::user()->id_business)->delete();
 
-        return redirect()->back()->with('success', "Pembayaran berhasil. Uang yang di bayarkan: Rp " . number_format($request->uang_dibayarkan, 0, ',', '.') . ". Kembalian: Rp " . number_format($kembalian, 0, ',', '.'));
+        return redirect()->route('pegawai.miss.home')->with('success', "Pembayaran berhasil. Uang yang di bayarkan: Rp " . number_format($request->uang_dibayarkan, 0, ',', '.') . ". Kembalian: Rp " . number_format($kembalian, 0, ',', '.'));
     }
 
     public function updateQuantity(Request $request, $id)
     {
         $keranjang = Keranjang::with('menu')->findOrFail($id);
 
-        $harga = 0;
+        // Update berdasarkan aksi (increment/decrement)
+        if ($request->has('action')) {
+            if ($request->action == 'increment') {
+                $keranjang->jumlah += 1;
+            } elseif ($request->action == 'decrement') {
+                $keranjang->jumlah = max(1, $keranjang->jumlah - 1);
+            }
+        } else {
+            // Jika tidak ada action, fallback ke validasi jumlah
+            $request->validate([
+                'jumlah' => 'required|integer|min:1',
+            ]);
+            $keranjang->jumlah = $request->jumlah;
+        }
 
-        if ($keranjang->menu) {
-            if ($keranjang->ukuran) {
-                $size = Size::where('ukuran', $keranjang->ukuran)->first();
-                if ($size) {
-                    $sizePrice = SizePrice::where('menu_id', $keranjang->menu_id)
-                        ->where('size_id', $size->id)
-                        ->first();
-                    if ($sizePrice) {
-                        $harga = $sizePrice->harga;
-                    } else {
-                        $harga = $keranjang->menu->harga;
-                    }
-                } else {
-                    $harga = $keranjang->menu->harga;
+        // Harga berdasarkan ukuran
+        $harga = $keranjang->menu->harga; // default fallback
+
+        if ($keranjang->ukuran && $keranjang->menu) {
+            $size = Size::where('nama', $keranjang->ukuran)->first();
+
+            if ($size) {
+                $sizePrice = SizePrice::where('menu_id', $keranjang->menu_id)
+                    ->where('size_id', $size->id)
+                    ->first();
+
+                if ($sizePrice && $sizePrice->harga !== null) {
+                    $harga = $sizePrice->harga;
                 }
-            } else {
-                $harga = $keranjang->menu->harga;
             }
         }
 
-        $keranjang->jumlah += $request->action == 'increment' ? 1 : ($keranjang->jumlah > 1 ? -1 : 0);
+
+        $keranjang->harga_satuan = $harga;
         $keranjang->total_harga = $keranjang->jumlah * $harga;
         $keranjang->save();
 
-        $totalBayar = Keranjang::sum('total_harga');
+        $totalBayarSekarang = Keranjang::where('business_id', Auth::user()->id_business)->sum('total_harga');
 
         return response()->json([
             'success' => true,
             'jumlah_baru' => $keranjang->jumlah,
             'total_harga_formatted' => number_format($keranjang->total_harga, 0, ',', '.'),
-            'total_bayar_formatted' => number_format($totalBayar, 0, ',', '.')
+            'total_bayar_formatted' => number_format($totalBayarSekarang, 0, ',', '.'),
         ]);
     }
 }

@@ -19,6 +19,8 @@ class CategorySeeder extends Seeder
             ['nama' => 'Other', 'business_id' => 2, 'super_kategori_id' => 1],
             ['nama' => 'Pisgor', 'business_id' => 1, 'super_kategori_id' => null],
             ['nama' => 'Cemilans', 'business_id' => 1, 'super_kategori_id' => null],
+            ['nama' => 'Original', 'business_id' => 2, 'super_kategori_id' => 2],
+            ['nama' => 'Hotang', 'business_id' => 2, 'super_kategori_id' => 2],
         ]);
     }
 }

@@ -11,16 +11,18 @@ class Category extends Model
     use HasFactory;
 
     protected $guarded = [];
+    
     public function menus()
     {
         return $this->hasMany(Menu::class, 'kategori_id');
     }
+    
     public function sizePrices()
     {
         return $this->hasMany(SizePrice::class);
     }
 
-    public function superKategori()
+    public function superCategory()
     {
         return $this->belongsTo(SuperCategory::class, 'super_kategori_id');
     }

@@ -51,7 +51,7 @@
                                     @if ($menu->business_id == 2 && $menu->kategori_id == 1)
                                         <select name="ukuran" id="ukuran" required
                                             class="block w-2/3 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-center">
-                                            @foreach ($menu->kategori->sizePrices as $sizePrice)
+                                            @foreach ($menu->category->sizePrices as $sizePrice)
                                                 <option value="{{ $sizePrice->size->nama }}">
                                                     {{ $sizePrice->size->nama }} - @php echo number_format($sizePrice->harga, 0, ',', '.'); @endphp
                                                 </option>

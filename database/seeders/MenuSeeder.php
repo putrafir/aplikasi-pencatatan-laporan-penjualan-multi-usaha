@@ -98,5 +98,20 @@ class MenuSeeder extends Seeder
         foreach ($menus_pisgor as $menu_pisgor) {
             Menu::create($menu_pisgor);
         }
+
+        $menus_hotang = [
+            // Original
+            ['nama' => 'Full Sosis',                'harga' => 10000, 'kategori_id' => 6, 'business_id' => 2],
+            ['nama' => 'Sosis Mix Mozza',           'harga' => 13000, 'kategori_id' => 6, 'business_id' => 2],
+
+            // Hotang
+            ['nama' => 'Full Sosis',                'harga' => 13000, 'kategori_id' => 7, 'business_id' => 2],
+            ['nama' => 'Full Mozza',                'harga' => 15000, 'kategori_id' => 7, 'business_id' => 2],
+            ['nama' => 'Sosis Mix Mozza',           'harga' => 15000, 'kategori_id' => 7, 'business_id' => 2],
+        ];
+
+        foreach ($menus_hotang as $menu_hotang) {
+            Menu::create($menu_hotang);
+        }
     }
 }

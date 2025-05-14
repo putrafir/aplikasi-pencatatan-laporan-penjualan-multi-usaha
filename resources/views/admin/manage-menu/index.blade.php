@@ -85,7 +85,7 @@
                                     </td>
                                     <td class="px-4 py-2 border">{{ $menu->nama }}</td>
                                     <td class="px-4 py-2 border">Rp {{ number_format($menu->harga, 0, ',', '.') }}</td>
-                                    <td class="px-4 py-2 border">{{ $menu->kategori->nama ?? '-' }}</td>
+                                    <td class="px-4 py-2 border">{{ $menu->category->nama ?? '-' }}</td>
                                     <td class="px-4 py-2 border">{{ $menu->business->name ?? '-' }}</td>
                                     <td class="px-4 py-2 border text-center">
                                         <button type="button"

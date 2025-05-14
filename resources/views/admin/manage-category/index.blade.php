@@ -50,7 +50,7 @@
                                     <td class="px-4 py-2 border text-center">{{ $index + 1 }}</td>
                                     <td class="px-4 py-2 border">{{ $category->nama }}</td>
                                     <td class="px-4 py-2 border">
-                                        {{ $category->superKategori->nama ?? '-' }}
+                                        {{ $category->superCategory->nama ?? '-' }}
                                     </td>
                                     <td class="px-4 py-2 border">{{ $category->business->name ?? '-' }}</td>
                                     <td class="px-4 py-2 border text-center">

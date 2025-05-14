@@ -19,7 +19,7 @@ class PisgorController extends Controller
 
          // Filter berdasarkan nama kategori
         if ($request->filled('kategori_nama')) {
-            $query->whereHas('kategori', function ($q) use ($request) {
+            $query->whereHas('category', function ($q) use ($request) {
                 $q->where('nama', $request->kategori_nama);
             });
         }
@@ -34,17 +34,17 @@ class PisgorController extends Controller
         $jumlah_item = Keranjang::where('business_id', 1)->sum('jumlah');
 
         $allKategori = Menu::where('business_id', 1)
-            ->with('kategori')
+            ->with('category')
             ->get()
-            ->pluck('kategori.nama')
+            ->pluck('category.nama')
             ->unique()
             ->sort()
             ->values();
 
         $kategoriList = Menu::where('business_id', 1)
-            ->with('kategori')
+            ->with('category')
             ->get()
-            ->pluck('kategori')
+            ->pluck('category')
             ->unique('id')
             ->values();
 

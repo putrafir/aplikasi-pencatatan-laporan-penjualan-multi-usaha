@@ -2,9 +2,8 @@
 @section('pegawai')
     <div class="container mx-auto">
         <div class="mt-1 justify-between flex mb-3">
-            <h1 class="font-bold">Keranjang Belanja</h1>
+            <h1 class="font-bold">Keranjang Pesanan</h1>
         </div>
-        <!-- Summary -->
         <div class="bg-white p-4 rounded-lg shadow space-y-2 text-sm mb-4">
             <div class="flex justify-between font-semibold text-base">
                 <span>Total: </span>
@@ -23,15 +22,18 @@
         @endif
 
         <div class="space-y-4 overflow-y-auto mb-44 hide-scrollbar">
-            <!-- Item -->
             @foreach ($keranjangs as $keranjang)
-                <div class="bg-white p-4 rounded-lg shadow">
+                {{-- Tambahkan ID unik pada div item keranjang --}}
+                <div class="bg-white p-4 rounded-lg shadow cart-item" id="cart-item-{{ $keranjang->id }}">
                     <div class="flex justify-between items-center">
                         <div class="flex items-center space-x-4">
                             <img src="https://via.placeholder.com/60" alt="{{ $keranjang->menu->nama }}"
                                 class="w-16 h-16 rounded object-cover">
                             <div>
-                                <div class="text-sm font-semibold">{{ $keranjang->menu->nama }}</div>
+                                <div class="text-sm font-semibold">
+                                    {{-- Cek jika menu ada, untuk menghindari error jika menu sudah dihapus --}}
+                                    {{ $keranjang->menu ? $keranjang->menu->nama : 'Menu Tidak Ditemukan' }}
+                                </div>
                                 <div class="text-xs text-gray-500">
                                     @if ($keranjang->ukuran)
                                         (Ukuran: {{ $keranjang->ukuran }})
@@ -52,17 +54,14 @@
                             <button onclick="updateQuantity('{{ $keranjang->id }}', 'increment')"
                                 class="border rounded-full w-7 h-7 flex items-center justify-center text-xl">+</button>
                         </div>
-                        <form action="{{ route('pegawai.keranjang.remove', $keranjang->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button class="text-red-500">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor" class="w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </button>
-                        </form>
+                        {{-- Hapus elemen <form> dan ganti dengan <button> biasa --}}
+                        <button type="button" class="text-red-500 remove-item-btn" data-id="{{ $keranjang->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
             @endforeach
@@ -104,12 +103,63 @@
                         document.getElementById('total-harga-' + keranjangId).textContent = data.total_harga_formatted;
                         document.getElementById('total-bayar').textContent = data.total_bayar_formatted;
                     } else {
-                        alert('Gagal update keranjang.');
+                        alert('Gagal update keranjang: ' + (data.message || 'Terjadi kesalahan.'));
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    console.log('Error:', error);
+                    alert('Terjadi kesalahan jaringan atau server.');
                 });
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const removeButtons = document.querySelectorAll('.remove-item-btn');
+
+            removeButtons.forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event
+                .preventDefault();
+
+                    const keranjangId = this.dataset.id;
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]')
+                        .getAttribute('content');
+
+                    const url = `/pegawai/keranjang/${keranjangId}`;
+
+                    fetch(url, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const cartItemElement = document.getElementById('cart-item-' +
+                                    keranjangId);
+                                if (cartItemElement) {
+                                    cartItemElement.remove();
+                                }
+
+                                document.getElementById('total-bayar').textContent = data
+                                    .total_bayar_formatted;
+
+                                alert(data.message);
+
+                            } else {
+                                alert('Gagal menghapus item: ' + (data.message ||
+                                    'Terjadi kesalahan yang tidak diketahui.'));
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert(
+                            'Terjadi kesalahan jaringan atau server saat menghapus item.');
+                        });
+                });
+            });
+        });
     </script>
 @endsection
