@@ -3,79 +3,28 @@
     <div>
         <!-- Search -->
         <div class="p-4">
-            <form method="GET" action="{{ route('pegawai.pisgor.menu') }}">
-                <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari Produk"
-                    class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </form>
+            <input type="text" id="search-input" placeholder="Cari Produk"
+                class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
 
         <!-- Dropdown Filter Kategori -->
-        <div class="p-4 mb-4">
-            <label for="filter_kategori" class="block mb-1 text-sm">Filter Kategori</label>
-            <form method="GET" action="{{ route('pegawai.pisgor.menu') }}">
-                @if (request('kategori'))
-                    <input type="hidden" name="kategori" value="{{ request('kategori') }}">
-                @endif
-                <select name="kategori_nama" id="filter_kategori" class="w-full border rounded-lg p-2"
-                    onchange="this.form.submit()">
-                    <option value="">-- Semua Kategori --</option>
-                    @foreach ($kategoriList as $kategori)
-                        <option value="{{ $kategori->nama }}"
-                            {{ request('kategori_nama') == $kategori->nama ? 'selected' : '' }}>
-                            {{ $kategori->nama }}
-                        </option>
-                    @endforeach
-                </select>
-            </form>
+        <div class="px-4 mb-4">
+            <label for="dropdown-kategori" class="block mb-1 text-sm">Pilih Kategori</label>
+            <select id="dropdown-kategori" class="w-full border rounded-lg p-2" onchange="loadMenus(this.value)">
+                <option value="">-- Pilih Kategori --</option>
+                @foreach ($categories as $category)
+                    <option id="symbol" value="{{ $category->id }}">{{ $category->nama }}</option>
+                @endforeach
+            </select>
         </div>
 
-        <div class="grid grid-cols-2 gap-4 px-4 justify-items-center">
-            @foreach ($menus as $menu)
-                <div
-                    class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col justify-between items-center text-center">
-                    <a href="#">
-                        <img class="p-8 rounded-t-lg" src="/docs/images/products/apple-watch.png" alt="product image" />
-                    </a>
-                    <div class="px-2 mb-5 flex flex-col justify-between flex-grow items-center">
-                        <a href="#">
-                            <h5 class="font-semibold text-3 tracking-tight text-gray-900">
-                                {{ $menu->nama }}
-                            </h5>
-                        </a>
-                        <div class="flex flex-col justify-between flex-grow items-center">
-                            <form action="{{ route('pegawai.pisgor.keranjang.add', $menu->id) }}" method="POST"
-                                class="flex flex-col justify-between flex-grow items-center">
-                                @csrf
-                                <input type="hidden" name="menu_id" value="{{ $menu->id }}">
-                                <div class="flex flex-col gap-2 mt-4 items-center">
-                                    @if ($menu->business_id == 2 && $menu->kategori_id == 1)
-                                        <select name="ukuran" id="ukuran" required
-                                            class="block w-2/3 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-center">
-                                            @foreach ($menu->category->sizePrices as $sizePrice)
-                                                <option value="{{ $sizePrice->size->nama }}">
-                                                    {{ $sizePrice->size->nama }} - @php echo number_format($sizePrice->harga, 0, ',', '.'); @endphp
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    @else
-                                        <span class="text-m text-gray-900">
-                                            @php echo number_format($menu->harga, 0, ',', '.'); @endphp
-                                        </span>
-                                    @endif
-                                    <button type="submit"
-                                        class="text-white bg-gradient-to-b from-blue-600 to-purple-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                                        Tambah
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
+        <!-- Daftar Menu -->
+        <div id="menu-list" class="grid grid-cols-2 gap-4 px-4 justify-items-center">
+            <!-- Menu akan di-load dengan AJAX -->
         </div>
 
         <!-- Tombol Keranjang -->
-        <div
+        <div id="floating-cart"
             class="fixed ring-2 ring-white bottom-12 right-4 w-14 h-14 rounded-full bg-gradient-to-tl from-purple-700 to-pink-500 shadow-lg flex items-center justify-center z-50">
             <a href="{{ route('pegawai.pisgor.keranjang.view') }}"
                 class="flex items-center justify-center w-full h-full relative">
@@ -85,14 +34,158 @@
                         clip-rule="evenodd" />
                 </svg>
 
-                {{-- Badge hanya ditampilkan jika jumlah item > 0 --}}
-                @if ($jumlah_item > 0)
-                    <span
-                        class="absolute top-0 right-0 w-5 h-5 text-xs text-white bg-red-500 rounded-full flex items-center justify-center">
-                        {{ $jumlah_item }}
-                    </span>
-                @endif
+                <!-- Badge jumlah item -->
+                <span id="cart-badge"
+                    class="absolute top-0 right-0 w-5 h-5 text-xs text-white bg-red-500 rounded-full flex items-center justify-center hidden">
+                    0
+                </span>
             </a>
         </div>
     </div>
+
+    <script>
+        function loadMenus(kategoriId) {
+            // setActiveButton('kategori-buttons', kategoriId);
+
+            fetch(`/pegawai/pisgor/get-menus/${kategoriId}`)
+                .then(res => res.json())
+                .then(response => {
+                    const menuList = document.getElementById('menu-list');
+                    menuList.innerHTML = '';
+
+                    const {
+                        menus
+                    } = response;
+
+                    if (menus.length === 0) {
+                        menuList.innerHTML = '<p>Tidak ada menu dalam kategori ini.</p>';
+                        return;
+                    }
+
+                    menus.forEach(menu => {
+                        let html = `
+                    <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col justify-between items-center text-center">
+                        <a href="#">
+                            <img class="p-8 rounded-t-lg" src="/docs/images/products/apple-watch.png" alt="product image" />
+                        </a>
+                        <div class="px-2 mb-5 flex flex-col justify-between flex-grow items-center">
+                            <h5 class="font-semibold text-3 tracking-tight text-gray-900">${menu.nama}</h5>
+                            <p class="text-sm text-gray-600">${menu.deskripsi || ''}</p>
+                            <p class="font-bold mt-3 text-gray-800">Rp ${parseInt(menu.harga).toLocaleString('id-ID')}</p>
+                            <button onclick="tambahKeKeranjang(${menu.id}, ${menu.business_id}, ${menu.harga})" class="mt-4 text-white bg-gradient-to-b from-blue-600 to-purple-500 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                Tambah
+                            </button>
+                        </div>
+                    </div>`;
+
+                        menuList.innerHTML += html;
+                    });
+                });
+        }
+
+        function updateHarga(selectEl) {
+            const harga = selectEl.value;
+            const hargaDisplay = selectEl.parentElement.querySelector('.harga-display');
+            if (harga) {
+                hargaDisplay.textContent = `Rp ${parseInt(harga).toLocaleString('id-ID')}`;
+            } else {
+                hargaDisplay.textContent = 'Rp -';
+            }
+        }
+
+        document.getElementById('search-input').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const menuItems = document.querySelectorAll('#menu-list > div');
+
+            menuItems.forEach(item => {
+                const nama = item.querySelector('h5').textContent.toLowerCase();
+                if (nama.includes(query)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('/pegawai/pisgor/get-all-menus')
+                .then(res => res.json())
+                .then(response => {
+                    const menuList = document.getElementById('menu-list');
+                    menuList.innerHTML = '';
+
+                    const menus = response.menus;
+
+                    if (menus.length === 0) {
+                        menuList.innerHTML = '<p>Tidak ada menu untuk bisnis Pisgor.</p>';
+                        return;
+                    }
+
+                    menus.forEach(menu => {
+                        let html = `
+                <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col justify-between items-center text-center">
+                    <a href="#">
+                        <img class="p-8 rounded-t-lg" src="/docs/images/products/apple-watch.png" alt="product image" />
+                    </a>
+                    <div class="px-2 mb-5 flex flex-col justify-between flex-grow items-center">
+                        <h5 class="font-semibold text-3 tracking-tight text-gray-900">${menu.nama}</h5>
+                        <p class="text-sm text-gray-600">${menu.deskripsi || ''}</p>
+                        <p class="font-bold mt-3 text-gray-800">Rp ${parseInt(menu.harga).toLocaleString('id-ID')}</p>
+                        <button onclick="tambahKeKeranjang(${menu.id}, ${menu.business_id}, ${menu.harga})" class="mt-4 text-white bg-gradient-to-b from-blue-600 to-purple-500 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                            Tambah
+                        </button>
+                    </div>
+                </div>`;
+                        menuList.innerHTML += html;
+                    });
+                });
+        });
+
+        let jumlahItemDiKeranjang = 0;
+        let keranjang = [];
+
+        function tambahKeKeranjang(menuId, businessId, hargaSatuan) {
+            const parentDiv = event.target.closest(".w-full.max-w-sm");
+            const selectEl = parentDiv.querySelector("select");
+            const ukuran = selectEl ? selectEl.value : null;
+            const hargaText = selectEl ? selectEl.selectedOptions[0].textContent : hargaSatuan;
+            const hargaParsed = selectEl ? parseInt(hargaText.replace(/[^\d]/g, '')) : hargaSatuan;
+
+            const dataKeranjang = {
+                menu_id: menuId,
+                business_id: businessId,
+                jumlah: 1,
+                harga_satuan: hargaParsed,
+                ukuran: ukuran,
+                total_harga: hargaParsed * 1
+            };
+
+            fetch('/pegawai/pisgor/keranjang/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify(dataKeranjang)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        jumlahItemDiKeranjang++;
+                        const badge = document.getElementById('cart-badge');
+                        badge.textContent = jumlahItemDiKeranjang;
+                        badge.classList.remove('hidden');
+                        console.log('Item ditambahkan ke keranjang:', data);
+                    } else {
+                        alert('Gagal menambahkan item ke keranjang: ' + (data.message ?? ''));
+                        if (data.errors) {
+                            console.error('Error validasi:', data.errors);
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error saat menambahkan ke keranjang:', error);
+                });
+        }
+    </script>
 @endsection

@@ -68,7 +68,7 @@
         </div>
 
         <div class="fixed bottom-0 left-0 right-0 bg-white p-4">
-            <form action="{{ route('pegawai.keranjang.checkout') }}" method="POST">
+            <form action="{{ route('pegawai.miss.keranjang.checkout') }}" method="POST">
                 @csrf
                 <div class="mb-4">
                     <label for="uang_dibayarkan" class="block text-sm font-medium text-gray-700">Jumlah Uang
@@ -86,7 +86,7 @@
 
     <script>
         function updateQuantity(keranjangId, action) {
-            fetch(`/pegawai/keranjang/update-quantity/${keranjangId}`, {
+            fetch(`/pegawai/miss/keranjang/update-quantity/${keranjangId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
