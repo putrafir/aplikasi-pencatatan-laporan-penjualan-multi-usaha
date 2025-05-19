@@ -23,4 +23,9 @@ class Business extends Model
     {
         return $this->hasMany(Menu::class, 'business_id');
     }
+
+    public function stocks()
+    {
+        return $this->hasMany(Stock::class, 'business_id');
+    }
 }
