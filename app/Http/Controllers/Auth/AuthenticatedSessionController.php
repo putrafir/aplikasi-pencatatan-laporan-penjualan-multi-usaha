@@ -62,9 +62,9 @@ class AuthenticatedSessionController extends Controller
 
         if ($role === 'pegawai') {
             if ($id_business == 2) {
-                return redirect()->intended(route('pegawai.miss.home') . '?kategori=Miss%20Smoothies');
+                return redirect()->intended(route('pegawai.miss.home'));
             } elseif ($id_business == 1) {
-                return redirect()->intended(route('pegawai.pisgor.home') . '?kategori=Pisgor');
+                return redirect()->intended(route('pegawai.pisgor.home'));
             }
         }
 
