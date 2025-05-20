@@ -8,7 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\ManageMenuController;
-use App\Http\Controllers\ManageStokController;
+use App\Http\Controllers\ManageStockController;
 use App\Http\Controllers\Pegawai\MissController;
 use App\Http\Controllers\Pegawai\PisgorController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -63,10 +63,7 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::put('/admin/size/{id}', [SizeController::class, 'update'])->name('admin.size.update');
 
     // Management Stock
-    Route::get('/admin/manage-bahan', [ManageStokController::class, 'index'])->name('admin.manage-bahan');
-    Route::delete('/admin/bahan/{id}', [ManageStokController::class, 'destroy'])->name('admin.bahan.destroy');
-    Route::put('/admin/bahan/{id}', [ManageStokController::class, 'update'])->name('admin.bahan.update');
-    Route::post('/admin/bahan/add', [ManageStokController::class, 'store'])->name('admin.bahan.add');
+    Route::get('/admin/manage-stock', [ManageStockController::class, 'index'])->name('admin.manage-stock');
 });
 
 Route::middleware(['auth'])->group(function () {
