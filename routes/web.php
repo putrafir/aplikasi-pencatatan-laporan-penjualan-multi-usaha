@@ -73,7 +73,7 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::post('/items/stock/store/jumlah-stock', [ManageStockController::class, 'increaseStock'])->name('admin.stock.store.jumlah_stok');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['pegawai', 'auth'])->group(function () {
     Route::get('/pegawai/update_stoke', [\App\Http\Controllers\Pegawai\DashboardController::class, 'UpdetStok'])->name('pegawai.UpdetStok');
     Route::get('/pegawai/profile', [\App\Http\Controllers\Pegawai\DashboardController::class, 'profile'])->name('pegawai.profile');
 
