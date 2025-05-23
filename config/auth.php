@@ -43,6 +43,10 @@ return [
         'owner' => [
             'driver' => 'session',
             'provider' => 'owners',
+        ],
+        'pegawai' => [
+            'driver' => 'session',
+            'provider' => 'pegawais',
         ]
     ],
 
@@ -69,6 +73,10 @@ return [
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
         'owners' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', App\Models\User::class),
+        ],
+        'pegawais' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
