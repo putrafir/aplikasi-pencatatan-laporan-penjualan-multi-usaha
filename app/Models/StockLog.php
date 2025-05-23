@@ -10,6 +10,7 @@ class StockLog extends Model
     /** @use HasFactory<\Database\Factories\CategoryFactory> */
     use HasFactory;
 
+    protected $table = 'stock_log';
     protected $guarded = [];
 
     public function stocks()
