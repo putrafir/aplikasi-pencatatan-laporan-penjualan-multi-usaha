@@ -2,12 +2,106 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Business;
+use App\Models\Stock;
+use App\Models\StockLog;
 use Illuminate\Http\Request;
 
 class ManageStockController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('admin.manage-stock.index');
+        $business_id = $request->get('business_id');
+
+        $stocks = Stock::when($business_id, function ($query, $business_id) {
+            return $query->where('business_id', $business_id);
+        })->get();
+
+        $businesses = Business::all();
+
+        $datanama = "data master";
+
+        return view('admin.manage-stock.index', compact('stocks', 'businesses', 'datanama', 'business_id'));
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'nama' => 'required|string|max:255',
+            'jumlah_stok' => 'nullable|integer|min:0',
+            'business_id' => 'required|exists:business,id',
+            'satuan' => 'required|string|max:50',
+        ]);
+
+        $validated['jumlah_stok'] = $validated['jumlah_stok'] ?? 0;
+
+        Stock::create($validated);
+
+        return redirect()->back()->with('success', 'Data stok berhasil ditambahkan');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama' => 'required|string',
+            'satuan' => 'required|string',
+        ]);
+
+        $stock = Stock::findOrFail($id);
+
+        $stock->update([
+            'nama' => $request->nama,
+            'satuan' => $request->satuan,
+        ]);
+
+        return redirect()->back()->with('success', 'Data stok berhasil diperbarui.');
+    }
+
+
+    public function destroy($id)
+    {
+        $stock = Stock::findOrFail($id);
+        $stock->delete();
+        return redirect()->back()->with('success', 'Data stok berhasil dihapus');
+    }
+
+    public function addJumlahStok(Request $request)
+    {
+        $business_id = $request->query('business_id');
+
+        if (!$business_id) {
+            return redirect()->back()->with('error', 'Business ID tidak ditemukan.');
+        }
+
+        $stocks = Stock::where('business_id', $business_id)->get();
+
+        return view('admin.manage-stock.add-jumlah-stok', compact('stocks', 'business_id'));
+    }
+
+    public function increaseStock(Request $request)
+    {
+        $business_id = $request->get('business_id');
+
+        $validated = $request->validate([
+            'jumlah_stok' => 'required|array',
+            'jumlah_stok.*' => 'nullable|integer|min:0',
+        ]);
+
+        foreach ($validated['jumlah_stok'] as $itemId => $jumlah) {
+            if ($jumlah > 0) {
+                $stock = Stock::findOrFail($itemId);
+                $stock->jumlah_stok += $jumlah;
+                $stock->save();
+
+                StockLog::create([
+                    'stock_id' => $stock->id,
+                    'type' => 'masuk',
+                    'quantity' => $jumlah,
+                    'deskripsi' => 'Stok bertambah',
+                ]);
+            }
+        }
+
+        return redirect()->route('admin.manage-stock', compact('business_id'))->with('success', 'Stok berhasil diperbarui.');
     }
 }

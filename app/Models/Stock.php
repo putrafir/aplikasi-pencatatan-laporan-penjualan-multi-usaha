@@ -10,6 +10,7 @@ class Stock extends Model
     /** @use HasFactory<\Database\Factories\CategoryFactory> */
     use HasFactory;
 
+    protected $table = 'stock';
     protected $guarded = [];
 
     public function business()
