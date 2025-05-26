@@ -104,4 +104,36 @@ class ManageStockController extends Controller
 
         return redirect()->route('admin.manage-stock', compact('business_id'))->with('success', 'Stok berhasil diperbarui.');
     }
+    public function reduceStock(Request $request)
+    {
+        $validated = $request->validate([
+            'jumlah_stok' => 'required|array',
+            'jumlah_stok.*' => 'nullable|integer|min:0',
+        ]);
+
+        foreach ($validated['jumlah_stok'] as $stockId => $remainingStock) {
+            if (is_null($remainingStock)) {
+                continue;
+            }
+
+            $stock = Stock::findOrFail($stockId);
+
+            $quantityOut = $stock->jumlah_stok - $remainingStock;
+
+            if ($quantityOut < 0) {
+                continue;
+            }
+
+            $stock->jumlah_stok = $remainingStock;
+            $stock->save();
+
+            StockLog::create([
+                'stock_id' => $stock->id,
+                'type' => 'keluar',
+                'quantity' => $quantityOut,
+                'deskripsi' => 'Stok keluar',
+            ]);
+        }
+        return redirect()->back()->with('success', 'Sisa stok berhasil diperbarui.');
+    }
 }

@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CatatanTransaksiController;
 use App\Http\Controllers\Admin\UserVerificationController;
 use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
+use App\Models\Stock;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -74,7 +75,7 @@ Route::middleware(['owner', 'auth'])->group(function () {
 });
 
 Route::middleware(['pegawai', 'auth'])->group(function () {
-    Route::get('/pegawai/update_stoke', [\App\Http\Controllers\Pegawai\DashboardController::class, 'UpdetStok'])->name('pegawai.UpdetStok');
+    Route::get('/pegawai/update_stoke', [\App\Http\Controllers\Pegawai\DashboardController::class, 'updetStok'])->name('pegawai.UpdetStok');
     Route::get('/pegawai/profile', [\App\Http\Controllers\Pegawai\DashboardController::class, 'profile'])->name('pegawai.profile');
 
     // Management Usaha Miss
@@ -88,6 +89,8 @@ Route::middleware(['pegawai', 'auth'])->group(function () {
     Route::delete('/pegawai/keranjang/{id}', [MissController::class, 'removeFromCart'])->name('pegawai.keranjang.remove');
     Route::post('/pegawai/miss/keranjang/checkout', [MissController::class, 'checkout'])->name('pegawai.miss.keranjang.checkout');
     Route::post('/pegawai/miss/keranjang/update-quantity/{id}', [MissController::class, 'updateQuantity']);
+
+    Route::post('/items/stock/store/input-sisa-stock', [ManageStockController::class, 'reduceStock'])->name('pegawai.update.stock');
 
     // Management Usaha Pisgor
     Route::get('/pegawai/pisgor/home', [PisgorController::class, 'index'])->name('pegawai.pisgor.home');
