@@ -3,12 +3,12 @@
 @section('admin')
     {{-- Halaman Management Stok --}}
     <div class="flex justify-between px-4 mb-4 space-x-2">
-        <a href="{{ route('admin.manage-stock', ['business_id' => 1]) }}"
-            class="flex-1 px-3 py-2 border rounded-md text-sm {{ $business_id == 1 ? 'bg-purple-500 text-white' : '' }}">
-            Stock Miss
-        </a>
         <a href="{{ route('admin.manage-stock', ['business_id' => 2]) }}"
             class="flex-1 px-3 py-2 border rounded-md text-sm {{ $business_id == 2 ? 'bg-purple-500 text-white' : '' }}">
+            Stock Miss
+        </a>
+        <a href="{{ route('admin.manage-stock', ['business_id' => 1]) }}"
+            class="flex-1 px-3 py-2 border rounded-md text-sm {{ $business_id == 1 ? 'bg-purple-500 text-white' : '' }}">
             Stock Pisgor
         </a>
     </div>

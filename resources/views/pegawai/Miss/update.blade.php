@@ -1,10 +1,10 @@
-@extends('components.layout.PegawaiLayout.body.index')
+{{-- @extends('components.layout.PegawaiLayout.body.index')
 @section('pegawai')
     <div class="p-6">
         <div class="bg-white rounded-lg shadow-lg p-6 w-full">
             <h2 class="text-xl font-bold mb-6 text-white p-4 rounded-t-lg text-center"
                 style="background: linear-gradient(to right, #ff0066, #8000ff);">
-                Update Sisa Jumlah Stok
+                Tambah Jumlah Stok
             </h2>
 
             <form action="{{ route('pegawai.update.stock') }}" method="POST">
@@ -33,4 +33,4 @@
             </form>
         </div>
     </div>
-@endsection
+@endsection --}}
