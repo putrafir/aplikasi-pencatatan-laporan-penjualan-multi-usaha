@@ -28,4 +28,9 @@ class Business extends Model
     {
         return $this->hasMany(Stock::class, 'business_id');
     }
+
+    public function transaksis()
+    {
+        return $this->hasMany(Transaksi::class, 'business_id', 'id'); // Relasi ke tabel transaksis
+    }
 }

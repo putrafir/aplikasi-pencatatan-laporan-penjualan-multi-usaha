@@ -17,4 +17,9 @@ class Transaksi extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function business()
+    {
+        return $this->belongsTo(Business::class, 'business_id', 'id'); // Relasi ke tabel businesses
+    }
 }

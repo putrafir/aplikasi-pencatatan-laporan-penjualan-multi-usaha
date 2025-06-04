@@ -8,16 +8,30 @@ use Illuminate\Http\Request;
 
 class CatatanTransaksiController extends Controller
 {
-    public function missView()
+
+    public function index()
     {
-        $transaksis = Transaksi::with('user')->where('business_id', 2)->get();
-        return view('admin.Miss.index', compact('transaksis'));
+        // Ambil transaksi dari bisnis Miss
+        $missTransaksis = Transaksi::with('user')->where('business_id', 2)->get();
+
+        // Ambil transaksi dari bisnis Pisgor
+        $pisgorTransaksis = Transaksi::with('user')->where('business_id', 1)->get();
+
+        // Kirim data ke view
+        return view('admin.Miss.index', compact('missTransaksis', 'pisgorTransaksis'));
     }
+    // public function missView()
+    // {
+    //     $transaksis = Transaksi::with('user')->where('business_id', 2)->get();
+    //     return view('admin.Miss.index', compact('transaksis'));
+    // }
     public function pisgorView()
     {
         $transaksis = Transaksi::with('user')->where('business_id', 1)->get();
         return view('admin.Pisgor.index', compact('transaksis'));
     }
+
+
 
     public function getTransaksiDetail($id)
     {
