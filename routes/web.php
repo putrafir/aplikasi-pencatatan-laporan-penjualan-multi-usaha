@@ -36,7 +36,7 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('owner.dashboard');
     Route::get('/admin/verify-users', [UserVerificationController::class, 'index'])->name('admin.verify-users');
     Route::get('/admin/profile', [DashboardController::class, 'profile'])->name('admin.profile');
-    Route::get('/admin/miss/laporan', [CatatanTransaksiController::class, 'missView'])->name('admin.miss');
+    Route::get('/admin/miss/laporan', [CatatanTransaksiController::class, 'index'])->name('admin.miss');
     Route::get('/admin/pisgor/laporan', [CatatanTransaksiController::class, 'pisgorView'])->name('admin.pisgor');
 
     // Management Users
