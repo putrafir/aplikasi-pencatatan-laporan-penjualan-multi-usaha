@@ -14,6 +14,9 @@ class RiwayatStockController extends Controller
         $stockId = $request->input('stock_id');
         $search = $request->input('search');
 
+        $sortBy = $request->input('sort_by', 'created_at');
+        $sortDir = $request->input('sort_dir', 'desc');
+
         $stocks = Stock::with('business')->get();
 
         $stocksLog = StockLog::with(['stocks.business']);
@@ -38,11 +41,10 @@ class RiwayatStockController extends Controller
             });
         }
 
-        $stocksLog = $stocksLog->get();
+        $stocksLog = $stocksLog->orderBy($sortBy, $sortDir)->get();
 
         return view('admin.riwayat-stock.index', compact('stocks', 'stocksLog', 'businessId', 'stockId', 'search'));
     }
-
 
     public function show($id)
     {
