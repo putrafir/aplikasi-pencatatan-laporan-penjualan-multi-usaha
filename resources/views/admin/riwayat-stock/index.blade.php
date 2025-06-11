@@ -60,7 +60,22 @@
                             <tr>
                                 <th class="px-4 py-2 border w-10 text-center">No</th>
                                 <th class="px-4 py-2 border w-12 text-center">id Stok</th>
-                                <th class="px-4 py-2 border">Tanggal</th>
+                                <th class="px-4 py-2 border">
+                                    <a href="{{ request()->fullUrlWithQuery([
+                                        'sort_by' => 'created_at',
+                                        'sort_dir' => request('sort_by') === 'created_at' && request('sort_dir') === 'asc' ? 'desc' : 'asc',
+                                    ]) }}"
+                                        class="flex items-center gap-1">
+                                        Tanggal
+                                        @if (request('sort_by') === 'created_at')
+                                            @if (request('sort_dir') === 'asc')
+                                                ▲
+                                            @else
+                                                ▼
+                                            @endif
+                                        @endif
+                                    </a>
+                                </th>
                                 <th class="px-4 py-2 border">Nama Stock</th>
                                 <th class="px-4 py-2 border">deskripsi</th>
                                 <th class="px-4 py-2 border w-10 text-center">Jumlah</th>
