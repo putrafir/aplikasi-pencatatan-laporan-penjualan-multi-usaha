@@ -8,6 +8,7 @@ use App\Models\Transaksi;
 use App\Models\Stock;
 use App\Models\StockLog;
 use App\Models\StokLog;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -46,7 +47,7 @@ class DashboardController extends Controller
 
                 foreach ($details as $detail) {
                     $menuName = $detail['nama'] ?? 'Unknown Menu';
-                    $size = $detail['ukuran'];
+                    $size = $detail['ukuran'] ?? 'Unknown';
                     $quantity = $detail['jumlah'] ?? 0;
                     $price = $detail['harga'] ?? 0;
 
@@ -69,7 +70,38 @@ class DashboardController extends Controller
             ];
         });
 
-        return view('admin.dashboard', compact('businessData', 'stocksAddedToday', 'remainingStocks'));
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
+
+        $totalPendapatanHariIni = $todayTransactions->sum(function ($trx) {
+            $details = json_decode($trx->details, true);
+            return collect($details)->sum(function ($detail) {
+                return ($detail['jumlah'] ?? 0) * ($detail['harga'] ?? 0);
+            });
+        });
+
+        $totalPendapatanMingguIni = Transaksi::whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->get()
+            ->sum(function ($trx) {
+                $details = json_decode($trx->details, true);
+                return collect($details)->sum(function ($detail) {
+                    return ($detail['jumlah'] ?? 0) * ($detail['harga'] ?? 0);
+                });
+            });
+
+        $totalPendapatanBulanIni = Transaksi::whereBetween('created_at', [$startOfMonth, $endOfMonth])
+            ->get()
+            ->sum(function ($trx) {
+                $details = json_decode($trx->details, true);
+                return collect($details)->sum(function ($detail) {
+                    return ($detail['jumlah'] ?? 0) * ($detail['harga'] ?? 0);
+                });
+            });
+
+        return view('admin.dashboard', compact('businessData', 'stocksAddedToday', 'remainingStocks', 'totalPendapatanHariIni', 'totalPendapatanMingguIni', 'totalPendapatanBulanIni'));
     }
 
     public function profile()
