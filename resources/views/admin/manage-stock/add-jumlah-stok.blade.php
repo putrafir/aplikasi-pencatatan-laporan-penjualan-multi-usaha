@@ -16,9 +16,9 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     @foreach ($stocks as $stock)
                         <div class="border border-gray-300 rounded-lg bg-gray-50 shadow p-4">
-                            <label class="block text-md font-semibold text-gray-700 mb-2">{{ $stock->nama }}</label>
+                            <label for="jumlah_stok_{{ $stock->id }}" class="block text-md font-semibold text-gray-700 mb-2">{{ $stock->nama }}</label>
                             <div class="flex items-center gap-2">
-                                <input type="number" name="jumlah_stok[{{ $stock->id }}]" placeholder="Jumlah"
+                                <input id="jumlah_stok_{{ $stock->id }}" type="number" name="jumlah_stok[{{ $stock->id }}]" placeholder="Jumlah"
                                     class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                 <span class="text-gray-600 font-medium">{{ $stock->satuan }}</span>
                             </div>

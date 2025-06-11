@@ -11,8 +11,7 @@ class ManageStockController extends Controller
 {
     public function index(Request $request)
     {
-        $business_id = $request->get('business_id');
-
+        $business_id = $request->get('business_id', 2);
         $stocks = Stock::when($business_id, function ($query, $business_id) {
             return $query->where('business_id', $business_id);
         })->get();
@@ -28,7 +27,7 @@ class ManageStockController extends Controller
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
-            'jumlah_stok' => 'nullable|integer|min:0',
+            'jumlah_stok' => 'nullable|integer',
             'business_id' => 'required|exists:business,id',
             'satuan' => 'required|string|max:50',
         ]);

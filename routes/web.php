@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CatatanTransaksiController;
 use App\Http\Controllers\Admin\UserVerificationController;
 use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
+use App\Http\Controllers\RiwayatStockController;
 use App\Models\Stock;
 
 Route::get('/', function () {
@@ -68,6 +69,9 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::post('/admin/stock/add', [ManageStockController::class, 'store'])->name('admin.stock.add');
     Route::put('/admin/stock/{id}', [ManageStockController::class, 'update'])->name('admin.stock.update');
     Route::delete('/admin/stock/{id}', [ManageStockController::class, 'destroy'])->name('admin.stock.destroy');
+
+    //riwywatan stock
+    Route::get('/admin/riwayat-stock', [RiwayatStockController::class, 'index'])->name('admin.riwayat-stock');
 
     // Management Jumlah Stock
     Route::get('/items/stock/add/jumlah-stock', [ManageStockController::class, 'addJumlahStok'])->name('admin.stock.add.jumlah_stok');
