@@ -7,10 +7,7 @@
                     <script>
                         document.write(new Date().getFullYear() + ",");
                     </script>
-                    made with <i class="fa fa-heart"></i> by
-                    <a href="https://www.creative-tim.com" class="font-semibold text-slate-700" target="_blank">
-                        Tim 4</a>
-                    for a better web.
+                    made with <i class="fa fa-heart"></i> by softech.
                 </div>
             </div>
         </div>

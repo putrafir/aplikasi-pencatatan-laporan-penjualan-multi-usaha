@@ -14,10 +14,10 @@
     </div>
 
     <div class="flex items-center px-3 mt-6 lg:mb-0">
-        <a href="javascript:void(0);" onclick="togglePopup('popup-add')"
+        <button type="button" onclick="togglePopup('popup-add')"
             class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
             + Tambah Data Master
-        </a>
+        </button>
     </div>
 
     {{-- table stock --}}
