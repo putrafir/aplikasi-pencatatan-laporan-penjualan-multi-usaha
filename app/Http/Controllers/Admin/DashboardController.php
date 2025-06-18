@@ -47,7 +47,7 @@ class DashboardController extends Controller
 
                 foreach ($details as $detail) {
                     $menuName = $detail['nama'] ?? 'Unknown Menu';
-                    $size = $detail['ukuran'] ?? 'Unknown';
+                    $size = $detail['ukuran'] ?? '';
                     $quantity = $detail['jumlah'] ?? 0;
                     $price = $detail['harga'] ?? 0;
 
