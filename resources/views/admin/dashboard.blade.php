@@ -1,7 +1,7 @@
 @extends('components.layout.OwnerLayout.body.index')
 @section('title', 'Dashboard')
 @section('admin')
-    <div class="flex flex-wrap -mx-3 mb-3">
+    <div class="flex flex-wrap justify-between -mx-3 mb-3">
         <!-- card1 -->
         <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 xl:w-1/4">
             <div class="relative flex flex-col min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
@@ -64,26 +64,27 @@
 
         <!-- card4: datepicker -->
         <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 xl:w-1/4">
-            <div class="relative flex items-center space-x-3 p-4 bg-white shadow-soft-xl rounded-2xl">
-                <input id="datepicker-actions" type="text" datepicker datepicker-buttons datepicker-autoselect-today
-                    class="flex-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
-                    placeholder="Select date">
-                <div
-                    class="w-12 h-12 text-center rounded-lg bg-gradient-to-tl from-purple-700 to-pink-500 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                    </svg>
-                </div>
-            </div>
+            <label for="tanggal" class="text-sm font-semibold text-gray-700">Filter Tanggal:</label>
+
+            <form method="GET" action="{{ url()->current() }}" class="flex items-center gap-2 mb-6">
+                <input type="date" id="tanggal" name="tanggal" value="{{ request('tanggal') }}"
+                    class="border border-purple-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-purple-400 focus:border-purple-500 transition">
+                <button type="submit"
+                    class="bg-gradient-to-tl from-purple-700 to-pink-500 text-white px-4 py-2 rounded-lg font-semibold shadow hover:opacity-90 transition">
+                    Filter
+                </button>
+                @if (request('tanggal'))
+                    <a href="{{ url()->current() }}"
+                        class="ml-2 text-sm text-red-500 hover:underline font-semibold transition">Reset</a>
+                @endif
+            </form>
         </div>
     </div>
 
     <div class="flex flex-wrap -mx-3">
         @foreach ($businessData as $business)
             <!-- Card untuk setiap bisnis -->
-            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-2/4">
+            <div class="w-full h-72 justify-between flex-col max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-2/4">
                 <div
                     class="relative flex h-full flex-col min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
                     <div class="flex-auto p-4">
@@ -124,7 +125,7 @@
                                 <tbody>
                                     @if (count($business['transactions']) > 0)
                                         @foreach ($business['transactions'] as $transaction)
-                                            <tr class="bg-white  hover:bg-gray-50 ">
+                                            <tr class="bg-white hover:bg-gray-50 ">
                                                 <th scope="row" class=" font-medium text-sm ">
                                                     {{ $transaction['quantity'] }} x {{ $transaction['menu_name'] }}
                                                     @if (!empty($transaction['size']))
@@ -148,8 +149,9 @@
                                 </tbody>
                             </table>
                         </div>
+
                         <!-- Bagian total pendapatan -->
-                        <h5 class="mt-4 bottom-0 font-bold">
+                        <h5 class="mt-4  bottom-0 font-bold">
                             Total Pendapatan: Rp {{ number_format($business['total_profit'], 0, ',', '.') }}
                         </h5>
                     </div>
