@@ -11,11 +11,11 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Font Awesome Icons -->
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-    <!-- Nucleo Icons -->
+    {{-- <!-- Nucleo Icons -->
     <link href="{{ asset('css/nucleo-icons.css') }}" rel="stylesheet" />
-    <link href="{{ asset('css/nucleo-svg.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/nucleo-svg.css') }}" rel="stylesheet" /> --}}
     <!-- Popper -->
-    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    {{-- <script src="https://unpkg.com/@popperjs/core@2"></script> --}}
     <!-- Main Styling -->
     <link href="{{ asset('css/soft-ui-dashboard-tailwind.css') }}" rel="stylesheet" />
     @vite('resources/css/app.css')
@@ -25,9 +25,15 @@
     <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
 </head>
 
-<body class="m-0 font-sans antialiased font-normal text-base leading-default bg-gray-50 text-slate-500">
+<body x-data="{ sidebarOpen: false }"
+    class="m-0 font-sans antialiased font-normal text-base leading-default bg-gray-50 text-slate-500">
     <!-- sidenav  -->
     @include('components.layout.OwnerLayout.body.sidebar')
+
+    <div x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+        @click="sidebarOpen = false">
+    </div>
+
     <!-- end sidenav -->
 
     <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
@@ -36,15 +42,17 @@
         <!-- end Navbar -->
 
         <!-- body -->
-        <div class="w-full px-6 py-6 mx-auto">
+        <div class="w-full px-4 py-6 mx-auto">
             @yield('admin')
 
-            @include('components.layout.OwnerLayout.body.footer')
+            {{-- @include('components.layout.OwnerLayout.body.footer') --}}
         </div>
         <!-- end body -->
 
     </main>
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <!-- plugin for charts  -->
 <script src="{{ asset('js/plugins/chartjs.min.js') }}" async></script>
 <!-- plugin for scrollbar  -->
@@ -55,6 +63,6 @@
 <script src="{{ asset('js/soft-ui-dashboard-tailwind.js') }}" async></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{ asset('js/modal/delet.js')}}"></script>
+<script src="{{ asset('js/modal/delet.js') }}"></script>
 
 </html>
