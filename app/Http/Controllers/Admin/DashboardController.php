@@ -15,29 +15,29 @@ use Illuminate\Support\Facades\Auth;
 class DashboardController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-
         $businesses = Business::with('transaksis')->get();
 
-        // Ambil semua transaksi hari ini
-        $todayTransactions = Transaksi::whereDate('created_at', now()->toDateString())->with('business')->get();
+        $tanggal = $request->input('tanggal');
+        $filterDate = $tanggal ?? now()->toDateString();
 
-        // Ambil stok yang dimasukkan hari ini berdasarkan tabel stok_log
-        $stocksAddedToday = StockLog::whereDate('created_at', now()->toDateString())
-            ->where('type', 'masuk') // Filter stok masuk
-            ->with('stocks.business') // Relasi ke bisnis melalui stok
+        // Ambil transaksi sesuai tanggal filter
+        $filteredTransactions = Transaksi::whereDate('created_at', $filterDate)->with('business')->get();
+
+        // Ambil stok yang dimasukkan sesuai tanggal filter
+        $stocksAddedToday = StockLog::whereDate('created_at', $filterDate)
+            ->where('type', 'masuk')
+            ->with('stocks.business')
             ->get()
             ->groupBy('stocks.business_id');
 
-        // Ambil stok yang habis hari ini berdasarkan tabel stok_log
-        $remainingStocks = Stock::with('business') // Relasi ke bisnis
-            ->get()
-            ->groupBy('business_id');
+        // Ambil stok yang habis (tidak perlu filter tanggal)
+        $remainingStocks = Stock::with('business')->get()->groupBy('business_id');
 
         // Kelompokkan transaksi berdasarkan bisnis
-        $businessData = $businesses->map(function ($business) use ($todayTransactions) {
-            $transactions = $todayTransactions->where('business_id', $business->id);
+        $businessData = $businesses->map(function ($business) use ($filteredTransactions) {
+            $transactions = $filteredTransactions->where('business_id', $business->id);
 
             $transactionDetails = [];
             $totalProfit = 0;
@@ -70,18 +70,19 @@ class DashboardController extends Controller
             ];
         });
 
-        $startOfWeek = Carbon::now()->startOfWeek();
-        $endOfWeek = Carbon::now()->endOfWeek();
-
-        $startOfMonth = Carbon::now()->startOfMonth();
-        $endOfMonth = Carbon::now()->endOfMonth();
-
-        $totalPendapatanHariIni = $todayTransactions->sum(function ($trx) {
+        // Hitung total pendapatan hari ini (atau tanggal filter)
+        $totalPendapatanHariIni = $filteredTransactions->sum(function ($trx) {
             $details = json_decode($trx->details, true);
             return collect($details)->sum(function ($detail) {
                 return ($detail['jumlah'] ?? 0) * ($detail['harga'] ?? 0);
             });
         });
+
+        // Perbaiki: Awal dan akhir minggu/bulan berdasarkan tanggal filter
+        $startOfWeek = \Carbon\Carbon::parse($filterDate)->startOfWeek();
+        $endOfWeek = \Carbon\Carbon::parse($filterDate)->endOfWeek();
+        $startOfMonth = \Carbon\Carbon::parse($filterDate)->startOfMonth();
+        $endOfMonth = \Carbon\Carbon::parse($filterDate)->endOfMonth();
 
         $totalPendapatanMingguIni = Transaksi::whereBetween('created_at', [$startOfWeek, $endOfWeek])
             ->get()
@@ -101,12 +102,27 @@ class DashboardController extends Controller
                 });
             });
 
-        return view('admin.dashboard', compact('businessData', 'stocksAddedToday', 'remainingStocks', 'totalPendapatanHariIni', 'totalPendapatanMingguIni', 'totalPendapatanBulanIni'));
+        return view('admin.dashboard', compact(
+            'businessData',
+            'stocksAddedToday',
+            'remainingStocks',
+            'totalPendapatanHariIni',
+            'totalPendapatanMingguIni',
+            'totalPendapatanBulanIni'
+        ));
     }
 
     public function profile()
     {
         $user = Auth::user();
         return view('admin.profile', compact('user'));
+    }
+
+    public function filterTanggal(Request $request)
+    {
+
+
+
+        return view('admin.Miss.index', compact('missTransaksis', 'pisgorTransaksis'));
     }
 }
