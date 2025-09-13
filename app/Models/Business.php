@@ -33,4 +33,9 @@ class Business extends Model
     {
         return $this->hasMany(Transaksi::class, 'business_id', 'id'); // Relasi ke tabel transaksis
     }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class, 'business_id', 'id'); // Relasi ke tabel categories
+    }
 }

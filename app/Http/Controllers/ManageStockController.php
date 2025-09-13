@@ -28,9 +28,11 @@ class ManageStockController extends Controller
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'jumlah_stok' => 'nullable|integer',
+            'harga' => 'nullable|integer',
             'business_id' => 'required|exists:business,id',
             'satuan' => 'required|string|max:50',
         ]);
+
 
         $validated['jumlah_stok'] = $validated['jumlah_stok'] ?? 0;
 

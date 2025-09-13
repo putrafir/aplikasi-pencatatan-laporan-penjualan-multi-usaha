@@ -14,9 +14,10 @@
 
                 <div class="pl-[12rem] text-white mr-auto z-10">
                     <h2 class="text-4xl text-white font-bold ">{{ $bisnis->name }}</h2>
-                    <p class="text-sm ">2 Pegawai</p>
-                    <p class="text-sm ">10 Menu</p>
-                    <x-button-inside class="mt-4"> Kelola</x-button-inside>
+                    <p class="text-sm ">{{ $bisnis->users_count }} Pegawai</p>
+                    <p class="text-sm ">{{ $bisnis->menus_count }} Menu</p>
+                    <x-button-inside onclick="window.location='{{ route('admin.kelola-bisnis.kelola', $bisnis->id) }}'"
+                        class="mt-4"> Kelola</x-button-inside>
                 </div>
                 {{-- onclick="window.location='{{ route('admin.kelola-bisnis.show', $bisnis->id) }}'"> --}}
             </div>

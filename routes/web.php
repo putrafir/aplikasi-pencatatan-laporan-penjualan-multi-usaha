@@ -41,6 +41,7 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::get('/admin/profile', [DashboardController::class, 'profile'])->name('admin.profile');
     Route::get('/admin/miss/laporan', [CatatanTransaksiController::class, 'index'])->name('admin.miss');
     Route::get('/admin/kelola-bisnis', [KelolaBisnisController::class, 'index'])->name('admin.kelola-bisnis');
+    Route::get('/admin/kelola-bisnis/{id}', [KelolaBisnisController::class, 'kelola'])->name('admin.kelola-bisnis.kelola');
     Route::get('/admin/pisgor/laporan', [CatatanTransaksiController::class, 'pisgorView'])->name('admin.pisgor');
 
     // Management Users
