@@ -46,6 +46,7 @@ class DatabaseSeeder extends Seeder
             MenuSeeder::class,
             SizeSeeder::class,
             SizePriceSeeder::class,
+            StockSeeder::class,
         ]);
     }
 }

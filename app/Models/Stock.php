@@ -22,4 +22,9 @@ class Stock extends Model
     {
         return $this->hasMany(StockLog::class, 'stock_id');
     }
+
+    public function getHargaFormattedAttribute()
+    {
+        return number_format($this->harga, 0, ',', '.');
+    }
 }
