@@ -15,7 +15,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CatatanTransaksiController;
 use App\Http\Controllers\Admin\KelolaBisnisController;
 use App\Http\Controllers\Admin\UserVerificationController;
-
+use App\Http\Controllers\ManageCategoryController;
 use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
 use App\Http\Controllers\RiwayatStockController;
 use App\Models\Stock;
@@ -57,7 +57,7 @@ Route::middleware(['owner', 'auth'])->group(function () {
 
     // Management Kategori
     Route::get('/admin/manage-category', [CategoryController::class, 'index'])->name('admin.manage-category');
-    Route::post('/admin/kategori/add', [ManageMenuController::class, 'categoryStore'])->name('admin.kategori.add');
+    Route::post('/admin/kategori/add', [ManageCategoryController::class, 'store'])->name('admin.category.add');
     Route::delete('/admin/kategori/{id}', [CategoryController::class, 'destroy'])->name('admin.kategori.destroy');
     Route::put('/admin/kategori/{id}', [CategoryController::class, 'update'])->name('admin.kategori.update');
     Route::get('/admin/kategori/by-business/{id}', [ManageMenuController::class, 'getKategoriByBusiness']);

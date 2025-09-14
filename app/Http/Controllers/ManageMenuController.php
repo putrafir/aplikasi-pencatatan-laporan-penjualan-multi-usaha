@@ -28,50 +28,34 @@ class ManageMenuController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'business_id' => 'required|exists:business,id',
-            'nama' => 'required|string|max:255',
-            'kategori_id' => 'required|exists:categories,id',
-            'foto' => 'required|image|mimes:jpeg,png,jpg,heic|max:5120',
+            'business_id' => 'required|exists:business,id', // cek nama tabelnya
+            'nama'        => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'harga'       => 'required|numeric|min:0',
+            'foto'        => 'required|image|mimes:jpeg,png,jpg,heic|max:5120',
         ]);
 
         $foto = $request->file('foto');
         $namaMenu = Str::slug($request->nama);
         $namaFile = $namaMenu . '-' . time() . '.' . $foto->getClientOriginalExtension();
-        $fotoPath = $foto->move(public_path('img/upload'), $namaFile);
 
+        // simpan file
+        $foto->move(public_path('img/upload'), $namaFile);
+        $fotoPath = 'img/upload/' . $namaFile;
+
+        // simpan ke DB
         Menu::create([
             'business_id' => $request->business_id,
-            'nama' => $request->nama,
-            'kategori_id' => $request->kategori_id,
-            'harga' => $request->harga,
-            'foto' => 'img/upload/' . $namaFile,
+            'nama'        => $request->nama,
+            'kategori_id' => $request->category_id, // kalau di DB pakai kolom kategori_id
+            'harga'       => $request->harga,
+            'foto'        => $fotoPath,
         ]);
 
         return redirect()->back()->with('success', 'Menu berhasil ditambahkan.');
     }
 
-    public function categoryStore(Request $request)
-    {
-        $request->validate([
-            'business_id' => 'required|exists:business,id',
-            'super_kategori_id' => 'nullable|exists:super_categories,id',
-            'nama' => 'required|string|max:255',
-        ]);
 
-        Category::create([
-            'business_id' => $request->business_id,
-            'super_kategori_id' => $request->super_kategori_id,
-            'nama' => $request->nama,
-        ]);
-
-        return redirect()->back()->with('success', 'Kategori berhasil ditambahkan.');
-    }
-
-    public function getKategoriByBusiness($id)
-    {
-        $categories = Category::where('business_id', $id)->get();
-        return response()->json($categories);
-    }
 
 
 
