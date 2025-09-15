@@ -56,13 +56,13 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::post('/admin/menu/add', [ManageMenuController::class, 'store'])->name('admin.menu.add');
 
     // Management Kategori
-    // Route::get('/admin/manage-category', [CategoryController::class, 'index'])->name('admin.manage-category');
-    // Route::post('/admin/kategori/add', [ManageCategoryController::class, 'store'])->name('admin.category.add');
-    // Route::delete('/admin/kategori/{id}', [CategoryController::class, 'destroy'])->name('admin.kategori.destroy');
-    // Route::put('/admin/kategori/{id}', [CategoryController::class, 'update'])->name('admin.kategori.update');
-    // Route::get('/admin/kategori/by-business/{id}', [ManageMenuController::class, 'getKategoriByBusiness']);
+    Route::get('/admin/manage-category', [CategoryController::class, 'index'])->name('admin.manage-category');
+    Route::post('/admin/kategori/add', [ManageCategoryController::class, 'store'])->name('admin.category.add');
+    Route::delete('/admin/kategori/{id}', [CategoryController::class, 'destroy'])->name('admin.kategori.destroy');
+    Route::put('/admin/kategori/{id}', [CategoryController::class, 'update'])->name('admin.kategori.update');
+    Route::get('/admin/kategori/by-business/{id}', [ManageMenuController::class, 'getKategoriByBusiness']);
 
-    // // Management Size/Ukuran
+    // Management Size/Ukuran
     Route::get('/admin/manage-size', [SizeController::class, 'index'])->name('admin.manage-size');
     Route::post('/admin/ukuran/add', [SizeController::class, 'store'])->name('admin.ukuran.add');
     Route::delete('/admin/size/{id}', [sizeController::class, 'destroy'])->name('admin.size.destroy');
