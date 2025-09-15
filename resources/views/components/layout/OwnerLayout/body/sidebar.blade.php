@@ -83,11 +83,11 @@
                 </svg>
             </x-sidebar-item>
 
-            <x-sidebar-item route="admin.miss" label="Transaksi" />
+            {{-- <x-sidebar-item route="admin.miss" label="Transaksi" />
 
             <x-sidebar-item route="admin.manage-menu" label="Menu & Kategori" />
 
-            <x-sidebar-item route="admin.manage-stock" label="Stok" />
+            <x-sidebar-item route="admin.manage-stock" label="Stok" /> --}}
         </ul>
     </div>
 </aside>
