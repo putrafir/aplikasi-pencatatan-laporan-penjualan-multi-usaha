@@ -88,6 +88,17 @@
             <x-sidebar-item route="admin.manage-menu" label="Menu & Kategori" />
 
             <x-sidebar-item route="admin.manage-stock" label="Stok" />
+
+            <li class="mt-auto absolute my-3 bottom-0 left-0 w-full px-4">
+                <form method="POST" action="{{ route('logout') }}" id="logoutForm">
+                    @csrf
+                    <button type="submit"
+                        class="w-full text-xs font-bold text-white uppercase text-center transition-all border-0 rounded-lg select-none shadow-soft-md bg-gradient-to-tl from-purple-700 to-pink-500 hover:shadow-soft-2xl py-3"
+                        id="logoutBtn">
+                        Logout
+                    </button>
+                </form>
+            </li>
         </ul>
     </div>
 </aside>
