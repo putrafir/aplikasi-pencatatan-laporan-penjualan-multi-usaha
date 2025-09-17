@@ -6,7 +6,11 @@ export default {
     content: [
         "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
         "./storage/framework/views/*.php",
+        "./resources/**/*.js",
+        "./resources/**/*.vue",
         "./resources/views/**/*.blade.php",
+        "./node_modules/flowbite-datepicker/**/*.js",
+        "./node_modules/flowbite/**/*.js",
     ],
 
     theme: {
@@ -1429,5 +1433,5 @@ export default {
         "disabled",
     ],
 
-    plugins: [forms],
+    plugins: [forms, require("flowbite/plugin")],
 };

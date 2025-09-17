@@ -391,18 +391,20 @@
             <div class="relative w-full max-w-sm p-6 bg-white rounded-md shadow-lg">
                 <div class="flex justify-between items-start mb-4">
                     <h3 class="text-lg font-semibold text-gray-800">Detail Transaksi</h3>
-                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 focus:outline-none" aria-label="Tutup modal">
+                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                        aria-label="Tutup modal">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
                 <div id="modalContent" class="text-sm text-gray-700 font-mono">
-                    </div>
+                </div>
             </div>
         </div>
     </div>
-    
+
     <script>
         function showDetail(id) {
             fetch(`/admin/transaksi/${id}`)
@@ -414,12 +416,18 @@
                 })
                 .then(data => {
                     const modalContent = document.getElementById('modalContent');
-                    const tanggal = new Date(data.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
+                    const tanggal = new Date(data.created_at).toLocaleDateString('id-ID', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric'
+                    });
                     const kasir = data.user.name;
                     const totalBayar = data.total_bayar;
                     const uangDibayarkan = data.uang_dibayarkan;
                     const kembalian = data.kembalian;
-    
+
                     let detailHtml = `
                         <hr class="border-t border-gray-500 my-2 border-dashed">
                         <div class="text-center mb-2">
@@ -429,9 +437,10 @@
                         </div>
                         <hr class="border-t border-gray-500 my-2 border-dashed">
                     `;
-    
+
                     data.details.forEach(detail => {
-                        const namaProduk = detail.nama + (detail.ukuran ? ` (${detail.ukuran})` : '') + (detail.extra_topping ? ' (Extra)' : '');
+                        const namaProduk = detail.nama + (detail.ukuran ? ` (${detail.ukuran})` : '') + (detail
+                            .extra_topping ? ' (Extra)' : '');
                         const hargaSatuan = formatNumber(detail.harga);
                         const subtotal = formatNumber(detail.subtotal);
                         detailHtml += `
@@ -441,7 +450,7 @@
                             </div>
                         `;
                     });
-    
+
                     detailHtml += `
                         <hr class="border-t border-gray-500 my-2 border-dashed">
                         <div class="flex justify-between font-semibold mb-1">
@@ -459,7 +468,7 @@
                         <hr class="border-t border-gray-500 my-2 border-dashed">
                         <p class="text-center text-xs">TERIMA KASIH</p>
                     `;
-    
+
                     modalContent.innerHTML = detailHtml;
                     document.getElementById('detailModal').classList.remove('hidden');
                 })
@@ -468,11 +477,11 @@
                     alert('Gagal mengambil detail transaksi. Silakan coba lagi.');
                 });
         }
-    
+
         function closeModal() {
             document.getElementById('detailModal').classList.add('hidden');
         }
-    
+
         function formatNumber(number) {
             return new Intl.NumberFormat('id-ID').format(number);
         }
