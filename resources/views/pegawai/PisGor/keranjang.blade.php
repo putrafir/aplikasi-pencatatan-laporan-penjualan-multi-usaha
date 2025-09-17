@@ -1,77 +1,63 @@
 @extends('components.layout.PegawaiLayout.body.index')
 @section('pegawai')
-    <div class="container mx-auto">
-        <div class="mt-1 justify-between flex mb-3">
-            <h1 class="font-bold">Keranjang Belanja</h1>
-        </div>
-        <!-- Summary -->
-        <div class="bg-white p-4 rounded-lg shadow space-y-2 text-sm mb-4">
-            <div class="flex justify-between font-semibold text-base">
-                <span>Total: </span>
-                <span id="total-bayar">@php echo number_format($totalBayar, 0, ',', '.'); @endphp</span>
+    <div class="container mx-auto space-y-4">
+        {{-- Judul --}}
+        <div class="flex justify-between items-center">
+            <div>
+                <h2 class="text-lg font-bold">Keranjang Belanja</h2>
             </div>
         </div>
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-        @if (session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
 
-        <div class="space-y-4 overflow-y-auto mb-44 hide-scrollbar">
+        {{-- List Keranjang --}}
+        <div class="space-y-4 overflow-y-auto pb-56 hide-scrollbar">
             @foreach ($keranjangs as $keranjang)
-                {{-- Tambahkan ID unik pada div item keranjang --}}
-                <div class="bg-white p-4 rounded-lg shadow cart-item" id="cart-item-{{ $keranjang->id }}">
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center space-x-4">
-                            <img src="https://via.placeholder.com/60" alt="{{ $keranjang->menu->nama }}"
-                                class="w-16 h-16 rounded object-cover">
-                            <div>
-                                <div class="text-sm font-semibold">
-                                    {{-- Cek jika menu ada, untuk menghindari error jika menu sudah dihapus --}}
-                                    {{ $keranjang->menu ? $keranjang->menu->nama : 'Menu Tidak Ditemukan' }}
-                                </div>
-                                <div class="text-xs text-gray-500">
-                                    @if ($keranjang->ukuran)
-                                        (Ukuran: {{ $keranjang->ukuran }})
-                                    @endif
-                                </div>
-                            </div>
+                <div class="bg-white rounded-xl shadow p-3 flex gap-3" id="cart-item-{{ $keranjang->id }}">
+                    @if ($keranjang->menu && $keranjang->menu->foto)
+                        <img class="rounded-lg w-16 h-16 object-cover" src="{{ asset($keranjang->menu->foto) }}"
+                            alt="" />
+                    @else
+                        <img class="rounded-lg w-16 h-16 object-cover" src="{{ asset('img/illustrations/no-image.png') }}"
+                            alt="" />
+                    @endif
+                    <div class="flex-1">
+                        <p class="text-sm font-semibold">
+                            {{ $keranjang->menu ? $keranjang->menu->nama : 'Menu Tidak Ditemukan' }}
+                        </p>
+                        <div id="total-harga-{{ $keranjang->id }}" class="text-purple-700 font-semibold text-sm mt-1">
+                            @php echo 'Rp '.number_format($keranjang->total_harga, 0, ',', '.'); @endphp
                         </div>
-                        <div id="total-harga-{{ $keranjang->id }}" class="text-md font-semibold">
-                            @php echo number_format($keranjang->total_harga, 0, ',', '.'); @endphp
-                        </div>
-
                     </div>
-                    <div class="mt-4 flex items-center justify-between">
-                        <div class="flex items-center space-x-2">
-                            <button onclick="updateQuantity('{{ $keranjang->id }}', 'decrement')"
-                                class="border rounded-full w-7 h-7 flex items-center justify-center text-xl">-</button>
-                            <span class="w-6 text-center" id="jumlah-{{ $keranjang->id }}">{{ $keranjang->jumlah }}</span>
-                            <button onclick="updateQuantity('{{ $keranjang->id }}', 'increment')"
-                                class="border rounded-full w-7 h-7 flex items-center justify-center text-xl">+</button>
-                        </div>
-                        {{-- Hapus elemen <form> dan ganti dengan <button> biasa --}}
-                        <button type="button" class="text-red-500 remove-item-btn" data-id="{{ $keranjang->id }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                        </button>
+                    {{-- Hapus elemen <form> dan ganti dengan <button> biasa --}}
+                    <button type="button" class="text-red-500 remove-item-btn" data-id="{{ $keranjang->id }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </button>
+                    <div class="flex flex-col items-center justify-between">
+                        <button onclick="updateQuantity('{{ $keranjang->id }}', 'increment')"
+                            class="bg-gray-200 w-6 h-6 flex items-center justify-center rounded">+</button>
+                        <span id="jumlah-{{ $keranjang->id }}" class="text-sm">{{ $keranjang->jumlah }}</span>
+                        <button onclick="updateQuantity('{{ $keranjang->id }}', 'decrement')"
+                            class="bg-gray-200 w-6 h-6 flex items-center justify-center rounded">-</button>
                     </div>
                 </div>
             @endforeach
         </div>
 
-        <div class="fixed bottom-0 left-0 right-0 bg-white p-4">
+        <div class="fixed bottom-0 left-0 right-0 bg-gray-50 p-4 z-10">
+            {{-- Ringkasan --}}
+            <div class="bg-white rounded-xl shadow p-4 space-y-2">
+                <div class="flex justify-between text-base font-bold">
+                    <span>Total</span>
+                    <span id="total-bayar">Rp.@php echo number_format($totalBayar, 0, ',', '.'); @endphp</span>
+                </div>
+            </div>
+            {{-- Tombol Pesan --}}
             <form action="{{ route('pegawai.pisgor.keranjang.checkout') }}" method="POST">
                 @csrf
-                <div class="mb-4">
+                <div class="my-4">
                     <label for="uang_dibayarkan" class="block text-sm font-medium text-gray-700">Jumlah Uang
                         Dibayarkan</label>
                     <input type="number" name="uang_dibayarkan" id="uang_dibayarkan" required
@@ -85,6 +71,7 @@
         </div>
     </div>
 
+    {{-- script lama tetap jalan --}}
     <script>
         function updateQuantity(keranjangId, action) {
             fetch(`/pegawai/pisgor/keranjang/update-quantity/${keranjangId}`, {
@@ -117,13 +104,11 @@
 
             removeButtons.forEach(button => {
                 button.addEventListener('click', function(event) {
-                    event
-                .preventDefault();
+                    event.preventDefault();
 
                     const keranjangId = this.dataset.id;
                     const csrfToken = document.querySelector('meta[name="csrf-token"]')
                         .getAttribute('content');
-
                     const url = `/pegawai/keranjang/${keranjangId}`;
 
                     fetch(url, {
@@ -142,24 +127,46 @@
                                 if (cartItemElement) {
                                     cartItemElement.remove();
                                 }
-
                                 document.getElementById('total-bayar').textContent = data
                                     .total_bayar_formatted;
 
-                                alert(data.message);
+                                // Show popup notification
+                                showPopup(data.message);
 
                             } else {
-                                alert('Gagal menghapus item: ' + (data.message ||
+                                showPopup('Gagal menghapus item: ' + (data.message ||
                                     'Terjadi kesalahan yang tidak diketahui.'));
                             }
                         })
                         .catch(error => {
                             console.error('Error:', error);
-                            alert(
-                            'Terjadi kesalahan jaringan atau server saat menghapus item.');
+                            showPopup(
+                                'Terjadi kesalahan jaringan atau server saat menghapus item.'
+                                );
                         });
                 });
             });
+
+            // Popup function
+            function showPopup(message) {
+                let popup = document.createElement('div');
+                popup.textContent = message;
+                popup.style.position = 'fixed';
+                popup.style.bottom = '80px';
+                popup.style.left = '50%';
+                popup.style.transform = 'translateX(-50%)';
+                popup.style.background = '#4F46E5';
+                popup.style.color = '#fff';
+                popup.style.padding = '12px 24px';
+                popup.style.borderRadius = '8px';
+                popup.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
+                popup.style.zIndex = '9999';
+                popup.style.textAlign = 'center';
+                document.body.appendChild(popup);
+                setTimeout(() => {
+                    popup.remove();
+                }, 2000);
+            }
         });
     </script>
 @endsection
