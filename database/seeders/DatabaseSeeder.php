@@ -47,6 +47,7 @@ class DatabaseSeeder extends Seeder
             SizeSeeder::class,
             SizePriceSeeder::class,
             StockSeeder::class,
+            TransaksiSeeder::class,
         ]);
     }
 }

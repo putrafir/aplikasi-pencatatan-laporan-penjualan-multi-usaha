@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CatatanTransaksiController;
 use App\Http\Controllers\Admin\KelolaBisnisController;
 use App\Http\Controllers\Admin\UserVerificationController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ManageCategoryController;
 use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
 use App\Http\Controllers\RiwayatStockController;
@@ -24,9 +25,9 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -80,7 +81,12 @@ Route::middleware(['owner', 'auth'])->group(function () {
     // Management Jumlah Stock
     Route::get('/items/stock/add/jumlah-stock', [ManageStockController::class, 'addJumlahStok'])->name('admin.stock.add.jumlah_stok');
     Route::post('/items/stock/store/jumlah-stock', [ManageStockController::class, 'increaseStock'])->name('admin.stock.store.jumlah_stok');
+
+
+    Route::get('/admin/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
+    Route::get('/admin/laporan/data', [LaporanController::class, 'getData'])->name('laporan.data');
 });
+
 
 Route::middleware(['pegawai', 'auth'])->group(function () {
     Route::get('/pegawai/update_stoke', [\App\Http\Controllers\Pegawai\DashboardController::class, 'updetStok'])->name('pegawai.UpdetStok');
