@@ -5,8 +5,15 @@
         <i class="absolute top-0 right-0 hidden p-4 opacity-50 cursor-pointer fas fa-times text-slate-400 xl:hidden"
             sidenav-close></i>
         <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap text-slate-700">
-            <img src="{{ asset('img/logo-ct.png') }}"
-                class="inline h-full max-w-full transition-all duration-200 ease-nav-brand max-h-8" alt="main_logo" />
+            {{-- <img src="{{ asset('img/logo-ct.png') }}"
+                class="inline h-full max-w-full transition-all duration-200 ease-nav-brand max-h-8" alt="main_logo" /> --}}
+            <svg class="w-6 h-6 inline h-full max-w-full transition-all duration-200 ease-nav-brand max-h-8 text-gray-800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 211.01 237.38"
+                fill="currentColor">
+                <g>
+                    <path
+                        d="m211.01,131.88c0,9.11-1.16,17.95-3.33,26.38-11.71,45.51-53.02,79.13-102.17,79.13S15.03,203.76,3.33,158.26c-2.17-8.43-3.33-17.27-3.33-26.38h26.38c0,9.25,1.59,18.13,4.5,26.38,9.45,26.72,32.84,46.86,61.44,51.66,4.29.72,8.69,1.09,13.19,1.09s8.9-.37,13.19-1.09c9.47-1.59,18.37-4.86,26.38-9.5,16.18-9.36,28.74-24.29,35.06-42.16h-87.82v-52.75H0c0-9.11,1.16-17.95,3.33-26.38,2.41-9.36,6.06-18.22,10.79-26.38C32.36,21.22,66.45,0,105.5,0s73.15,21.22,91.39,52.75c4.73,8.16,8.38,17.02,10.79,26.38,2.17,8.43,3.33,17.27,3.33,26.38h-26.38c0-9.25-1.59-18.13-4.5-26.38-3.48-9.83-8.84-18.77-15.66-26.38-5.58-6.24-12.12-11.57-19.41-15.78-8.01-4.64-16.91-7.91-26.38-9.5-4.29-.72-8.69-1.09-13.19-1.09s-8.9.37-13.19,1.09c-18.08,3.03-34.08,12.2-45.78,25.28-6.82,7.61-12.18,16.55-15.66,26.38h61.44v-26.38h26.38v26.38h26.38v26.38h-26.38v26.38h92.32Z" />
+                </g>
+            </svg>
             <span class="ml-1 font-semibold transition-all duration-200 ease-nav-brand">Owner Page</span>
         </a>
     </div>
@@ -83,9 +90,8 @@
                 </svg>
             </x-sidebar-item>
             <x-sidebar-item route="admin.laporan" label="Laporan">
-                <svg class="w-12 h-12 {{ Request::routeIs('admin.laporan') ? '' : 'fill-slate-800' }}"
-                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                    viewBox="0 0 24 24">
+                <svg class="w-4 h-4 {{ Request::routeIs('admin.laporan') ? '' : 'fill-slate-800' }}" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M5 19V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v13H7a2 2 0 0 0-2 2Zm0 0a2 2 0 0 0 2 2h12M9 3v14m7 0v4" />
                 </svg>
@@ -93,11 +99,11 @@
             </x-sidebar-item>
 
 
-            <x-sidebar-item route="admin.miss" label="Transaksi" />
+            {{-- <x-sidebar-item route="admin.miss" label="Transaksi" />
 
             <x-sidebar-item route="admin.manage-menu" label="Menu & Kategori" />
 
-            <x-sidebar-item route="admin.manage-stock" label="Stok" />
+            <x-sidebar-item route="admin.manage-stock" label="Stok" /> --}}
 
             <li class="mt-auto absolute my-3 bottom-0 left-0 w-full px-4">
                 <form method="POST" action="{{ route('logout') }}" id="logoutForm">

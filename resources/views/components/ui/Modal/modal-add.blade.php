@@ -3,7 +3,7 @@
     'title' => 'Default Title',
     'action' => '#',
     'method' => 'POST',
-    'inputs' => [], // array dinamis untuk input
+    'inputs' => [],
 ])
 
 <div id="{{ $id }}" class="fixed inset-0 z-50 hidden flex items-center justify-center">
