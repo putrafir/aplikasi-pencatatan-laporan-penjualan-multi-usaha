@@ -24,9 +24,12 @@ use App\Models\Menu;
 use App\Models\Stock;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+// Route::middleware('guest')->group(function () {
+//     Route::get('/login', function () {
+//         return view('auth.login');
+//     });
+// });
+
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
