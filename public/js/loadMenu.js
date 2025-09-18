@@ -97,7 +97,7 @@ function tambahKeKeranjang(event, menuId, businessId, hargaSatuan) {
         total_harga: hargaParsed,
     };
 
-    fetch("/pegawai/pisgor/keranjang/add", {
+    fetch("/pegawai/keranjang/add", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

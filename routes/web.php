@@ -6,10 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\ManageMenuController;
 use App\Http\Controllers\ManageStockController;
-use App\Http\Controllers\Pegawai\MissController;
 use App\Http\Controllers\Pegawai\PisgorController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CatatanTransaksiController;
@@ -17,7 +15,7 @@ use App\Http\Controllers\Admin\KelolaBisnisController;
 use App\Http\Controllers\Admin\UserVerificationController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ManageCategoryController;
-use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
+use App\Http\Controllers\Pegawai\KeranjangController;
 use App\Http\Controllers\Pegawai\PegawaiTransaksiController;
 use App\Http\Controllers\RiwayatStockController;
 use App\Models\Menu;
@@ -100,21 +98,21 @@ Route::middleware(['pegawai', 'auth'])->group(function () {
     Route::get('/pegawai/profile', [\App\Http\Controllers\Pegawai\DashboardController::class, 'profile'])->name('pegawai.profile');
 
     // Management Usaha Miss
-    Route::get('/pegawai/miss/home', [MissController::class, 'index'])->name('pegawai.miss.home');
-    Route::get('/pegawai/miss/get-categories/{superKategoriId}', [MissController::class, 'getCategories']);
-    Route::get('/pegawai/miss/get-menus/{kategoriId}', [MissController::class, 'getMenus']);
-    Route::get('/pegawai/miss/get-menus-super/{superKategoriId}', [MissController::class, 'getMenusBySuperKategori']);
+    // Route::get('/pegawai/miss/home', [MissController::class, 'index'])->name('pegawai.miss.home');
+    // Route::get('/pegawai/miss/get-categories/{superKategoriId}', [MissController::class, 'getCategories']);
+    // Route::get('/pegawai/miss/get-menus/{kategoriId}', [MissController::class, 'getMenus']);
+    // Route::get('/pegawai/miss/get-menus-super/{superKategoriId}', [MissController::class, 'getMenusBySuperKategori']);
 
-    Route::post('/pegawai/miss/keranjang/add', [MissController::class, 'addToCart'])->name('pegawai.miss.keranjang.add');
-    Route::get('/pegawai/miss/keranjang', [MissController::class, 'viewCart'])->name('pegawai.miss.keranjang.view');
-    Route::delete('/pegawai/keranjang/{id}', [MissController::class, 'removeFromCart'])->name('pegawai.keranjang.remove');
-    Route::post('/pegawai/miss/keranjang/checkout', [MissController::class, 'checkout'])->name('pegawai.miss.keranjang.checkout');
-    Route::post('/pegawai/miss/keranjang/update-quantity/{id}', [MissController::class, 'updateQuantity']);
+    // Route::post('/pegawai/miss/keranjang/add', [MissController::class, 'addToCart'])->name('pegawai.miss.keranjang.add');
+    // Route::get('/pegawai/miss/keranjang', [MissController::class, 'viewCart'])->name('pegawai.miss.keranjang.view');
+    // Route::delete('/pegawai/keranjang/{id}', [MissController::class, 'removeFromCart'])->name('pegawai.keranjang.remove');
+    // Route::post('/pegawai/miss/keranjang/checkout', [MissController::class, 'checkout'])->name('pegawai.miss.keranjang.checkout');
+    // Route::post('/pegawai/miss/keranjang/update-quantity/{id}', [MissController::class, 'updateQuantity']);
 
     Route::post('/items/stock/store/input-sisa-stock', [ManageStockController::class, 'reduceStock'])->name('pegawai.update.stock');
 
     // Management Usaha Pisgor
-    Route::get('/pegawai/pisgor/home', [PisgorController::class, 'index'])->name('pegawai.pisgor.home');
+    // Route::get('/pegawai/pisgor/home', [PisgorController::class, 'index'])->name('pegawai.pisgor.home');
     // Route::get('/pegawai/pisgor/get-menus/{kategoriId}', [PisgorController::class, 'getMenus']);
     // Route::get('/pegawai/pisgor/get-all-menus', [PisgorController::class, 'getAllMenusPisgor']);
 
@@ -125,13 +123,18 @@ Route::middleware(['pegawai', 'auth'])->group(function () {
     Route::get('/pegawai/get-menus/{categoryId}', [PegawaiTransaksiController::class, 'getMenus']);
 
 
-    Route::post('/pegawai/pisgor/keranjang/add', [PisgorController::class, 'addToCart'])->name('pegawai.pisgor.keranjang.add');
-    Route::get('/pegawai/pisgor/keranjang', [PisgorController::class, 'viewCart'])->name('pegawai.pisgor.keranjang.view');
-    Route::delete('/pegawai/keranjang/{id}', [PisgorController::class, 'removeFromCart'])->name('pegawai.keranjang.remove');
-    Route::post('/pegawai/pisgor/keranjang/checkout', [PisgorController::class, 'checkout'])->name('pegawai.pisgor.keranjang.checkout');
-    Route::post('/pegawai/pisgor/keranjang/update-quantity/{id}', [PisgorController::class, 'updateQuantity']);
+    // Route::post('/pegawai/pisgor/keranjang/add', [PisgorController::class, 'addToCart'])->name('pegawai.pisgor.keranjang.add');
+    // Route::get('/pegawai/pisgor/keranjang', [PisgorController::class, 'viewCart'])->name('pegawai.pisgor.keranjang.view');
+    // Route::delete('/pegawai/keranjang/{id}', [PisgorController::class, 'removeFromCart'])->name('pegawai.keranjang.remove');
+    // Route::post('/pegawai/pisgor/keranjang/checkout', [PisgorController::class, 'checkout'])->name('pegawai.pisgor.keranjang.checkout');
+    // Route::post('/pegawai/pisgor/keranjang/update-quantity/{id}', [PisgorController::class, 'updateQuantity']);
 
     Route::get('/pegawai/transaksi', [PegawaiTransaksiController::class, 'index'])->name('pegawai.transaksi.index');
+    Route::post('/pegawai/keranjang/add', [KeranjangController::class, 'addToCart'])->name('pegawai.keranjang.add');
+    Route::post('/pegawai/keranjang/update-quantity/{id}', [KeranjangController::class, 'updateQuantity'])->name('pegawai.keranjang.update-quantity');
+    Route::delete('/pegawai/keranjang/{id}', [KeranjangController::class, 'removeFromCart'])->name('pegawai.keranjang.remove');
+    Route::get('/pegawai/keranjang', [KeranjangController::class, 'viewCart'])->name('pegawai.keranjang');
+    Route::post('/pegawai/keranjang/checkout', [KeranjangController::class, 'checkout'])->name('pegawai.keranjang.checkout');
 });
 
 
