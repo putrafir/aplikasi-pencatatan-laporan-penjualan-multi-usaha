@@ -27,6 +27,7 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $user = Auth::user();
 
+
         if (!$user->is_verified) {
             Auth::logout();
             return back()->with('warning', 'Akun anda belum diverifikasi oleh pemilik usaha.');
@@ -48,7 +49,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/login');
     }
 
     /**
@@ -56,16 +57,10 @@ class AuthenticatedSessionController extends Controller
      */
     protected function redirectBasedOnRole(string $role, ?int $id_business = null)
     {
-        
+
         if ($role === 'owner') {
             return redirect()->intended(route('owner.dashboard') . '?verified=1');
         } elseif ($role === 'pegawai') {
-            // if ($id_business == 2) {
-            //     return redirect()->intended(route('pegawai.miss.home'));
-            // } elseif ($id_business == 1) {
-            //     return redirect()->intended(route('pegawai.pisgor.home'));
-            // }
-
             return redirect()->intended(route('pegawai.transaksi.index'));
         }
 
