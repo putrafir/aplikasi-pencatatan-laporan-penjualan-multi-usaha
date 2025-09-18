@@ -18,8 +18,11 @@ use App\Http\Controllers\Admin\UserVerificationController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ManageCategoryController;
 use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
+use App\Http\Controllers\Pegawai\PegawaiTransaksiController;
 use App\Http\Controllers\RiwayatStockController;
+use App\Models\Menu;
 use App\Models\Stock;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -49,6 +52,7 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::post('/admin/unverify-users/{user}', [UserVerificationController::class, 'inverify'])->name('admin.inverify-user');
     Route::post('/admin/verify-users/{user}', [UserVerificationController::class, 'verify'])->name('admin.verify-user');
     Route::post('/admin/delete-users/{user}', [UserVerificationController::class, 'deleteUser'])->name('admin.delete-user');
+    Route::post('/admin/add-users', [UserVerificationController::class, 'addUser'])->name('admin.add-user');
 
     // Management Menu
     Route::get('/admin/manage-menu', [ManageMenuController::class, 'index'])->name('admin.manage-menu');
@@ -108,14 +112,23 @@ Route::middleware(['pegawai', 'auth'])->group(function () {
 
     // Management Usaha Pisgor
     Route::get('/pegawai/pisgor/home', [PisgorController::class, 'index'])->name('pegawai.pisgor.home');
-    Route::get('/pegawai/pisgor/get-menus/{kategoriId}', [PisgorController::class, 'getMenus']);
-    Route::get('/pegawai/pisgor/get-all-menus', [PisgorController::class, 'getAllMenusPisgor']);
+    // Route::get('/pegawai/pisgor/get-menus/{kategoriId}', [PisgorController::class, 'getMenus']);
+    // Route::get('/pegawai/pisgor/get-all-menus', [PisgorController::class, 'getAllMenusPisgor']);
+
+    // Semua menu sesuai business pegawai login
+    Route::get('/pegawai/get-all-menus', [PegawaiTransaksiController::class, 'getAllMenus']);
+
+    // Menu berdasarkan kategori
+    Route::get('/pegawai/get-menus/{categoryId}', [PegawaiTransaksiController::class, 'getMenus']);
+
 
     Route::post('/pegawai/pisgor/keranjang/add', [PisgorController::class, 'addToCart'])->name('pegawai.pisgor.keranjang.add');
     Route::get('/pegawai/pisgor/keranjang', [PisgorController::class, 'viewCart'])->name('pegawai.pisgor.keranjang.view');
     Route::delete('/pegawai/keranjang/{id}', [PisgorController::class, 'removeFromCart'])->name('pegawai.keranjang.remove');
     Route::post('/pegawai/pisgor/keranjang/checkout', [PisgorController::class, 'checkout'])->name('pegawai.pisgor.keranjang.checkout');
     Route::post('/pegawai/pisgor/keranjang/update-quantity/{id}', [PisgorController::class, 'updateQuantity']);
+
+    Route::get('/pegawai/transaksi', [PegawaiTransaksiController::class, 'index'])->name('pegawai.transaksi.index');
 });
 
 

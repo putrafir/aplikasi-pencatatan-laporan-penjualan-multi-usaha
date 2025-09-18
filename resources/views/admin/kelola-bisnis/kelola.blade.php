@@ -45,6 +45,8 @@
         </x-slot>
     </x-table>
 
+    
+
     <x-section-header title="Kategori" buttonAction="togglePopup('popup-add-kategori')" />
 
     <x-modal-add id="popup-add-kategori" title="Tambah Kategori" action="{{ route('admin.category.add') }}" method="POST"

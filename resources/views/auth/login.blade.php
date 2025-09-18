@@ -57,14 +57,15 @@
                                 <div class="flex-auto p-6">
                                     <form method="POST" action="{{ route('login') }}">
                                         @csrf
-                                        <x-input-label for="email" :value="__('Email')"/>
+                                        <x-input-label for="email" :value="__('Email')" />
                                         <div class="mb-4">
-                                            <x-text-input type="email" name="email" id="email" :value="old('email')" required
-                                                placeholder="Email" aria-label="Email" aria-describedby="email-addon" />
+                                            <x-text-input type="email" name="email" id="email" :value="old('email')"
+                                                required placeholder="Email" aria-label="Email"
+                                                aria-describedby="email-addon" />
                                             <x-input-error :messages="$errors->get('email')" class="mt-2" />
                                             @include('components.ui.Message.warning')
                                         </div>
-                                        <x-input-label for="password" :value="__('Password')"/>
+                                        <x-input-label for="password" :value="__('Password')" />
                                         <div class="mb-4">
                                             <x-text-input type="password" name="password" id="password" required
                                                 placeholder="Password" aria-label="Password"
@@ -78,7 +79,7 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div
+                                {{-- <div
                                     class="p-6 px-1 pt-0 text-center bg-transparent border-t-0 border-t-solid rounded-b-2xl lg:px-2">
                                     <p class="mx-auto mb-6 leading-normal text-sm">
                                         Don't have an account?
@@ -86,7 +87,7 @@
                                             class="relative z-10 font-semibold text-transparent bg-gradient-to-tl from-blue-600 to-cyan-400 bg-clip-text">Sign
                                             up</a>
                                     </p>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <div class="w-full max-w-full px-3 lg:flex-0 shrink-0 md:w-6/12">
