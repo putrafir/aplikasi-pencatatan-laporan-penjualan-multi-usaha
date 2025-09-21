@@ -6,9 +6,24 @@ use App\Models\Business;
 use App\Models\Stock;
 use App\Models\StockLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ManageStockController extends Controller
 {
+
+
+    public function pegawaiView(Request $request)
+    {
+        $user = Auth::user();
+        $business = Business::find($user->id_business);
+
+        $stocks = Stock::where('business_id', $business->id)->get();
+
+        return view('pegawai.UpdateStok', compact('user', 'stocks', 'business'));
+    }
+
+
+
     public function index(Request $request)
     {
         $business_id = $request->get('business_id', 2);

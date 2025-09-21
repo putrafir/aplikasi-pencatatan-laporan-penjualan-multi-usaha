@@ -21,7 +21,7 @@
                 @if (!in_array(strtoupper($method), ['GET', 'POST']))
                     @method($method)
                 @endif
-                
+
                 @foreach ($inputs as $input)
                     <div class="mb-4">
                         {{-- Label tampil kecuali kalau hidden --}}
@@ -31,25 +31,30 @@
                             </label>
                         @endif
 
-                        @if (($input['type'] ?? 'text') === 'select')
-                            <select name="{{ $input['name'] }}" id="{{ $input['name'] }}"
+                        @php
+                            $inputName = $input['name'];
+                            $inputType = $input['type'] ?? 'text';
+                            $inputValue = old($inputName, $input['value'] ?? '');
+                        @endphp
+
+                        @if ($inputType === 'select')
+                            <select name="{{ $inputName }}" id="{{ $inputName }}"
                                 class="w-full border rounded-lg p-2" {{ !empty($input['required']) ? 'required' : '' }}>
-                                <option value="">-- Pilih {{ $input['label'] ?? ucfirst($input['name']) }} --
+                                <option value="">-- Pilih {{ $input['label'] ?? ucfirst($inputName) }} --
                                 </option>
                                 @foreach ($input['options'] ?? [] as $option)
                                     <option value="{{ $option['value'] }}"
-                                        {{ isset($input['value']) && $input['value'] == $option['value'] ? 'selected' : '' }}>
+                                        {{ $inputValue == $option['value'] ? 'selected' : '' }}>
                                         {{ $option['label'] }}
                                     </option>
                                 @endforeach
                             </select>
-                        @elseif (($input['type'] ?? 'text') === 'hidden')
-                            <input type="hidden" name="{{ $input['name'] }}" value="{{ $input['value'] ?? '' }}">
+                        @elseif ($inputType === 'hidden')
+                            <input type="hidden" name="{{ $inputName }}" value="{{ $inputValue }}">
                         @else
-                            <input type="{{ $input['type'] ?? 'text' }}" name="{{ $input['name'] }}"
-                                id="{{ $input['name'] }}" class="w-full border rounded-lg p-2"
-                                placeholder="{{ $input['placeholder'] ?? '' }}" value="{{ $input['value'] ?? '' }}"
-                                {{ !empty($input['required']) ? 'required' : '' }}>
+                            <input type="{{ $inputType }}" name="{{ $inputName }}" id="{{ $inputName }}"
+                                class="w-full border rounded-lg p-2" placeholder="{{ $input['placeholder'] ?? '' }}"
+                                value="{{ $inputValue }}" {{ !empty($input['required']) ? 'required' : '' }}>
                         @endif
                     </div>
                 @endforeach
@@ -67,8 +72,6 @@
         </div>
     </div>
 </div>
-
-
 
 <script>
     function togglePopup(popupId) {
