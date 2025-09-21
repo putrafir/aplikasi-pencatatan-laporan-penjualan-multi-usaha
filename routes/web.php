@@ -75,15 +75,14 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::delete('/admin/size/{id}', [sizeController::class, 'destroy'])->name('admin.size.destroy');
     Route::put('/admin/size/{id}', [SizeController::class, 'update'])->name('admin.size.update');
 
-    // Management Stock
+    // Management laporan
     Route::get('/admin/business/{id}/stocks', [LaporanController::class, 'getStocks']);
     Route::get('/admin/manage-stock', [ManageStockController::class, 'index'])->name('admin.manage-stock');
     Route::post('/admin/stock/add', [ManageStockController::class, 'store'])->name('admin.stock.add');
     Route::put('/admin/stock/{id}', [ManageStockController::class, 'update'])->name('admin.stock.update');
     Route::delete('/admin/stock/{id}', [ManageStockController::class, 'destroy'])->name('admin.stock.destroy');
-
-    //detail laporan
-    Route::get('/admin/laporan/{id}', [BusinessController::class, 'detailLaporan'])->name('admin.laporan.detailLaporan');
+    Route::get('/admin/laporan/{id}/detail', [LaporanController::class, 'detailLaporan'])->name('admin.laporan.detailLaporan');
+    Route::get('/admin/laporan/pegawai/{id}', [LaporanController::class, 'laporanPegawai'])->name('admin.laporan.pegawai');
 
     //riwywatan stock
     Route::get('/admin/riwayat-stock', [RiwayatStockController::class, 'index'])->name('admin.riwayat-stock');
