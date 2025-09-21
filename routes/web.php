@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BusinessController;
 use App\Models\Category;
 use App\Models\Transaksi;
 use Illuminate\Support\Facades\Route;
@@ -70,10 +71,14 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::put('/admin/size/{id}', [SizeController::class, 'update'])->name('admin.size.update');
 
     // Management Stock
+    Route::get('/admin/business/{id}/stocks', [LaporanController::class, 'getStocks']);
     Route::get('/admin/manage-stock', [ManageStockController::class, 'index'])->name('admin.manage-stock');
     Route::post('/admin/stock/add', [ManageStockController::class, 'store'])->name('admin.stock.add');
     Route::put('/admin/stock/{id}', [ManageStockController::class, 'update'])->name('admin.stock.update');
     Route::delete('/admin/stock/{id}', [ManageStockController::class, 'destroy'])->name('admin.stock.destroy');
+
+    //detail laporan
+    Route::get('/admin/laporan/{id}', [BusinessController::class, 'detailLaporan'])->name('admin.laporan.detailLaporan');
 
     //riwywatan stock
     Route::get('/admin/riwayat-stock', [RiwayatStockController::class, 'index'])->name('admin.riwayat-stock');

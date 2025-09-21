@@ -29,12 +29,16 @@ class LaporanController extends Controller
         // Ambil query string ?date=YYYY-MM-DD
         $date = $request->query('date', now()->toDateString());
 
-        $businesses = Business::withCount(['stocks' => function ($q) use ($date) {
-            $q->whereDate('created_at', $date);
-        }])
-            ->with(['transaksis' => function ($q) use ($date) {
+        $businesses = Business::withCount([
+            'stocks' => function ($q) use ($date) {
                 $q->whereDate('created_at', $date);
-            }])
+            }
+        ])
+            ->with([
+                'transaksis' => function ($q) use ($date) {
+                    $q->whereDate('created_at', $date);
+                }
+            ])
             ->get();
 
         $data = $businesses->map(function ($b) {
@@ -49,4 +53,11 @@ class LaporanController extends Controller
 
         return response()->json($data);
     }
+
+    public function getStocks($id)
+    {
+        $usaha = Business::with('stocks')->findOrFail($id);
+        return response()->json($usaha->stocks);
+    }
+
 }
