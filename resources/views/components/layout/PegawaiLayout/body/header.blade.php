@@ -33,7 +33,7 @@
                      <x-dropdown-link :href="route('pegawai.profile')">
                          {{ __('Profile') }}
                      </x-dropdown-link>
-                     <x-dropdown-link :href="route('pegawai.UpdetStok')">
+                     <x-dropdown-link :href="route('pegawai.update_stoke')">
                          {{ __('Update Stok') }}
                      </x-dropdown-link>
                      <!-- Authentication -->

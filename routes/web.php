@@ -99,7 +99,7 @@ Route::middleware(['owner', 'auth'])->group(function () {
 
 
 Route::middleware(['pegawai', 'auth'])->group(function () {
-    Route::get('/pegawai/update_stoke', [\App\Http\Controllers\Pegawai\DashboardController::class, 'updetStok'])->name('pegawai.UpdetStok');
+    Route::get('/pegawai/update_stoke', [ManageStockController::class, 'pegawaiView'])->name('pegawai.update_stoke');
     Route::get('/pegawai/profile', [\App\Http\Controllers\Pegawai\DashboardController::class, 'profile'])->name('pegawai.profile');
 
     // Management Usaha Miss

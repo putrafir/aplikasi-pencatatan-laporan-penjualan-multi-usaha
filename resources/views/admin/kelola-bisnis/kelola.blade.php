@@ -39,13 +39,36 @@
         'Nama' => 'nama',
         'Harga' => 'harga_formatted',
         'Satuan' => 'satuan',
-    ]" :rows="$stocks" :total="$total" :perPage="$perPage" :currentPage="$currentPage">
-        <x-slot name="actions">
-            <x-partials.table-action :stocks="$business->stocks" />
-        </x-slot>
-    </x-table>
+    ]" :rows="$stocks" :total="$total" data-id="{{ $stocks->pluck('id') }}" :perPage="$perPage"
+        :currentPage="$currentPage">
+        {{-- <x-slot name="actions"> --}}
+        {{-- <x-partials.table-action buttonAction="togglePopup('popup-edit-stock')" :stocks="$business->stocks" /> --}}
 
+
+        {{-- </x-slot> --}}
+
+
+    </x-table>
+    <x-modal-add id="popup-edit-stock" title="Edit Stok" method="PUT" :inputs="[
+        [
+            'label' => 'Nama',
+            'name' => 'nama',
+            'type' => 'text',
+            'placeholder' => 'Nama Stok',
+            'required' => true,
+        ],
     
+        ['label' => 'Harga', 'name' => 'harga', 'type' => 'number', 'placeholder' => 'Harga'],
+        [
+            'label' => 'Satuan',
+            'name' => 'satuan',
+            'type' => 'text',
+            'placeholder' => 'Contoh: pcs, kg, bungkus',
+            'required' => true,
+        ],
+        ['label' => '', 'name' => 'stock_id', 'type' => 'hidden'],
+    ]" />
+
 
     <x-section-header title="Kategori" buttonAction="togglePopup('popup-add-kategori')" />
 
@@ -136,5 +159,26 @@
         @endif
     @endforeach
 
+    <script>
+        function openEditStockPopup(button) {
+            const stockId = button.getAttribute('data-id');
+            const nama = button.getAttribute('data-nama');
+            const jumlah_stok = button.getAttribute('data-jumlah_stok');
+            const harga = button.getAttribute('data-harga');
+            const satuan = button.getAttribute('data-satuan');
 
+            const modal = document.getElementById('popup-edit-stock');
+            const form = modal.querySelector('form');
+
+            // form.action = `/admin/stock/${stockId}/edit`;
+
+            form.querySelector('input[name="nama"]').value = nama ?? '';
+            // form.querySelector('input[name="jumlah_stok"]').value = jumlah_stok ?? '';
+            form.querySelector('input[name="harga"]').value = harga ?? '';
+            form.querySelector('input[name="satuan"]').value = satuan ?? '';
+            // form.querySelector('input[name="stock_id"]').value = stockId ?? '';
+
+            togglePopup('popup-edit-stock');
+        }
+    </script>
 @endsection
