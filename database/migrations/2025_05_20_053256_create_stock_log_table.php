@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('stock_log', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('stock_id');
-            $table->enum('type', ['masuk', 'keluar']);
-            $table->integer('quantity');
-            $table->text('deskripsi')->nullable();
+            $table->integer('stok_awal');
+            $table->integer('stok_akhir');
             $table->foreign('stock_id')->references('id')->on('stock')->onDelete('cascade');
             $table->timestamps();
         });

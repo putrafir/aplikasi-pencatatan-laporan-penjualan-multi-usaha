@@ -3,20 +3,24 @@
     <div class="p-6">
         <div class="relative overflow-hidden max-w-sm h-full bg-gray-100 rounded-2xl shadow-md flex items-center p-4">
 
-            <img src="{{ asset('img/illustrations/toko.svg') }}" class="w-50 absolute bottom-0" alt="" srcset="">
+            <img src="{{ asset('img/illustrations/pegawai.svg') }}" class="w-30 absolute bottom-0" alt=""
+                srcset="">
             <x-right-motif />
 
             <x-left-motif />
 
-            <div class="pl-[12rem] text-white mr-auto z-10">
+            <div class="pl-[12rem] text-white mr-auto pb-5 z-10">
                 <h2 class="text-2xl text-white font-bold ">{{ $user->name }}</h2>
-                <p class="text-sm ">{{ $business->users_count }} Pegawai</p>
-                <p class="text-sm ">{{ $business->menus_count }} Menu</p>
-             
+                <p class="text-sm ">Usaha {{ $business->name }}</p>
+                <p class="text-sm ">{{ $transaksi->count() }} Transaksi</p>
             </div>
             {{-- onclick="window.location='{{ route('admin.kelola-bisnis.show', $bisnis->id) }}'"> --}}
         </div>
-        <div class="bg-white rounded-lg shadow-lg p-6 w-full">
+
+        <x-section-header title=Stok :business_id="$business->id" />
+
+
+        {{-- <div class="bg-white rounded-lg shadow-lg p-6 w-full">
             <h2 class="text-xl font-bold mb-6 text-white p-4 rounded-t-lg text-center"
                 style="background: linear-gradient(to right, #ff0066, #8000ff);">
                 Update Sisa Jumlah Stok
@@ -46,6 +50,6 @@
                     </button>
                 </div>
             </form>
-        </div>
+        </div> --}}
     </div>
 @endsection
