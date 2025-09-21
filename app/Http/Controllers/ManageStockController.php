@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Business;
 use App\Models\Stock;
 use App\Models\StockLog;
+use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,10 +17,15 @@ class ManageStockController extends Controller
     {
         $user = Auth::user();
         $business = Business::find($user->id_business);
+        $transaksi = Transaksi::where('business_id', $business->id)
+            ->where('user_id', $user->id)
+            ->whereDate('created_at', now()->toDateString())
+            ->get();
 
         $stocks = Stock::where('business_id', $business->id)->get();
 
-        return view('pegawai.UpdateStok', compact('user', 'stocks', 'business'));
+
+        return view('pegawai.UpdateStok', compact('user', 'stocks', 'business','transaksi'));
     }
 
 
