@@ -22,10 +22,21 @@ class ManageStockController extends Controller
             ->whereDate('created_at', now()->toDateString())
             ->get();
 
-        $stocks = Stock::where('business_id', $business->id)->get();
+        // $stocks = Stock::where('business_id', $business->id)->get();
+
+        $stocks = StockLog::with('stocks')
+            ->whereHas('stocks', function ($query) use ($business) {
+                $query->where('business_id', $business->id);
+            })
+            ->get();
+
+        $perPage = 5;
+        $currentPage = request()->get('page', 1); // ambil query string ?page=...
+        $total = $stocks->count();
+        $stocks = $stocks->slice(($currentPage - 1) * $perPage, $perPage)->values();
 
 
-        return view('pegawai.UpdateStok', compact('user', 'stocks', 'business','transaksi'));
+        return view('pegawai.UpdateStok', compact('user', 'stocks', 'business', 'transaksi', 'total', 'perPage', 'currentPage'));
     }
 
 
@@ -104,6 +115,8 @@ class ManageStockController extends Controller
     {
         $business_id = $request->get('business_id');
 
+
+
         $validated = $request->validate([
             'jumlah_stok' => 'required|array',
             'jumlah_stok.*' => 'nullable|integer|min:0',
@@ -112,19 +125,17 @@ class ManageStockController extends Controller
         foreach ($validated['jumlah_stok'] as $itemId => $jumlah) {
             if ($jumlah > 0) {
                 $stock = Stock::findOrFail($itemId);
-                $stock->jumlah_stok += $jumlah;
+                $stock->jumlah_stok = $jumlah;
                 $stock->save();
 
                 StockLog::create([
                     'stock_id' => $stock->id,
-                    'type' => 'masuk',
-                    'quantity' => $jumlah,
-                    'deskripsi' => 'Stok bertambah',
+                    'stok_awal' => $jumlah,
                 ]);
             }
         }
 
-        return redirect()->route('admin.manage-stock', compact('business_id'))->with('success', 'Stok berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Stok berhasil ditambahkan.');
     }
     public function reduceStock(Request $request)
     {

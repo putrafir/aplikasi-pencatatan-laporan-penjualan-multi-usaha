@@ -19,6 +19,16 @@
 
         <x-section-header title=Stok :business_id="$business->id" />
 
+        <x-table :headers="[
+            'Nama' => 'nama',
+            'Stok Awal' => 'stok_awal',
+            'Stok Akhir' => 'stok_akhir',
+        ]" :rows="$stocks" :total="$total" data-id="{{ $stocks->pluck('id') }}"
+            :perPage="$perPage" :currentPage="$currentPage">
+            <x-slot name="actions">
+                <x-partials.table-action buttonAction="togglePopup('popup-edit-stock')" :stocks="$business->stocks" />
+            </x-slot>
+        </x-table>
 
         {{-- <div class="bg-white rounded-lg shadow-lg p-6 w-full">
             <h2 class="text-xl font-bold mb-6 text-white p-4 rounded-t-lg text-center"
