@@ -75,6 +75,9 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::delete('/admin/size/{id}', [sizeController::class, 'destroy'])->name('admin.size.destroy');
     Route::put('/admin/size/{id}', [SizeController::class, 'update'])->name('admin.size.update');
 
+    // Management Business
+    Route::post('/admin/kelola-bisnis/add', [KelolaBisnisController::class, 'store'])->name('admin.kelola-bisnis.add');
+    
     // Management Stock
     Route::get('/admin/business/{id}/stocks', [LaporanController::class, 'getStocks']);
     Route::get('/admin/manage-stock', [ManageStockController::class, 'index'])->name('admin.manage-stock');
