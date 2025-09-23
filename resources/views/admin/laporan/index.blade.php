@@ -25,7 +25,7 @@
                         class="bg-white px-4 py-1 rounded-full shadow text-sm font-medium">
                         Masukkan Stok
                     </button>
-                    <a href="{{ route('admin.laporan.detailLaporan', $usaha->id) }}" class="bg-white px-4 py-1 rounded-full shadow text-sm font-medium">
+                    <a href="{{ route('admin.laporan.detailLaporan', $usaha->id) }}?date={{ $tanggal }}" class="bg-white px-4 py-1 rounded-full shadow text-sm font-medium">
                         Lihat
                     </a>
                 </div>
