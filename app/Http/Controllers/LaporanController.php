@@ -78,13 +78,20 @@ class LaporanController extends Controller
         return view('admin.laporan.detailLaporan', compact('business', 'tanggal'));
     }
 
-    public function laporanPegawai($id)
+    public function laporanPegawai($id, Request $request)
     {
+        $tanggal = $request->query('date', now()->toDateString());
+
         $pegawai = \App\Models\User::findOrFail($id);
-        $transaksis = \App\Models\Transaksi::where('user_id', $id)->get();
+
+        $transaksis = \App\Models\Transaksi::with(['business', 'user'])
+            ->where('user_id', $id)
+            ->whereDate('created_at', $tanggal)
+            ->get();
+
         $jumlahTransaksi = $transaksis->count();
 
-        return view('admin.laporan.laporanPegawai', compact('pegawai', 'transaksis', 'jumlahTransaksi'));
+        return view('admin.laporan.laporanPegawai', compact('pegawai', 'transaksis', 'jumlahTransaksi', 'tanggal'));
     }
 
 }

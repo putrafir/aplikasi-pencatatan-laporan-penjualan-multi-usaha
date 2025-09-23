@@ -55,10 +55,10 @@
                 $jumlahTransaksi = $business->transaksis->where('user_id', $pegawai->id)->count();
             @endphp
 
-            <a href="{{ route('admin.laporan.pegawai', $pegawai->id) }}">
+            <a href="{{ route('admin.laporan.pegawai', $pegawai->id) }}?date={{ $tanggal }}">
                 <div class="flex items-center justify-between bg-white rounded-2xl shadow p-4">
                     <div class="flex items-center space-x-3">
-                        <img src="{{ $pegawai->avatar ?? asset('img/illustrations/user.svg') }}"
+                        <img src="{{ $pegawai->avatar ?? asset('img/illustrations/Group 1.svg') }}"
                             class="w-12 h-12 rounded-full" alt="">
                         <div>
                             <p class="font-bold">{{ $pegawai->name }}</p>
