@@ -25,6 +25,8 @@ class KelolaBisnisController extends Controller
 
         $total = $allStocks->count();
         $stocks = $allStocks->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        
         return view('admin.kelola-bisnis.kelola', compact('business', 'stocks', 'total', 'perPage',  'currentPage'));
     }
 }
