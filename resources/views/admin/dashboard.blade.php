@@ -1,7 +1,7 @@
 @extends('components.layout.OwnerLayout.body.index')
 @section('title', 'Dashboard')
 @section('admin')
-    <div class="flex flex-wrap justify-between -mx-3 mb-3">
+    {{-- <div class="flex flex-wrap justify-between -mx-3 mb-3">
         <!-- card1 -->
         <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 xl:w-1/4">
             <div class="relative flex flex-col min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
@@ -79,141 +79,185 @@
                 @endif
             </form>
         </div>
-    </div>
+    </div> --}}
 
     <div class="flex flex-wrap -mx-3">
-        @foreach ($businessData as $business)
-            <!-- Card untuk setiap bisnis -->
-            <div class="w-full h-72 justify-between flex-col max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-2/4">
+
+        <div class="max-w-sm w-full bg-white rounded-lg shadow-sm dark:bg-gray-800">
+            <div class="flex justify-between p-4 md:p-6 pb-0 md:pb-0">
+                <div>
+                    <h5 class="leading-none text-3xl font-bold text-gray-900 dark:text-white pb-2">$12,423</h5>
+                    <p class="text-base font-normal text-gray-500 dark:text-gray-400">Sales this week</p>
+                </div>
                 <div
-                    class="relative flex h-full flex-col min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <h5 class="mb-0 font-bold">{{ $business['business_name'] }}</h5>
-                        <!-- Bagian transaksi dengan scroll -->
-                        {{-- <div class="mt-4 overflow-y-auto max-h-40">
-
-                            <ul>
-                                @if (count($business['transactions']) > 0)
-                                    @foreach ($business['transactions'] as $transaction)
-                                        <li class="mb-2">
-                                            <p class="text-sm">
-                                                {{ $transaction['quantity'] }} x {{ $transaction['menu_name'] }}
-                                                @if (!empty($transaction['size']))
-                                                    ({{ $transaction['size'] }})
-                                                @endif
-
-
-                                                Rp {{ number_format($transaction['subtotal'], 0, ',', '.') }}
-                                            </p>
-
-
-
-
-
-                                        </li>
-                                    @endforeach
-                                @else
-                                    <li class="mb-2 h-40 flex items-center justify-center">
-                                        <p class="text-sm text-gray-500">Belum ada pembeli hari ini</p>
-                                    </li>
-                                @endif
-                            </ul>
-                        </div> --}}
-                        <div class="relative overflow-y-auto  max-h-40 border-b border-gray-200">
-                            <table class="w-full text-sm text-left rtl:text-right ">
-
-                                <tbody>
-                                    @if (count($business['transactions']) > 0)
-                                        @foreach ($business['transactions'] as $transaction)
-                                            <tr class="bg-white hover:bg-gray-50 ">
-                                                <th scope="row" class=" font-medium text-sm ">
-                                                    {{ $transaction['quantity'] }} x {{ $transaction['menu_name'] }}
-                                                    @if (!empty($transaction['size']))
-                                                        ({{ $transaction['size'] }})
-                                                    @endif
-                                                </th>
-
-                                                <td class="px-6 py-2">
-                                                    Rp {{ number_format($transaction['subtotal'], 0, ',', '.') }}
-                                                </td>
-
-                                            </tr>
-                                        @endforeach
-                                    @else
-                                        <li class="mb-2 h-40  flex items-center justify-center">
-                                            <p class="text-sm text-gray-500">Belum ada pembeli hari ini</p>
-                                        </li>
-                                    @endif
-
-
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Bagian total pendapatan -->
-                        <h5 class="mt-4  bottom-0 font-bold">
-                            Total Pendapatan: Rp {{ number_format($business['total_profit'], 0, ',', '.') }}
-                        </h5>
-                    </div>
+                    class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 dark:text-green-500 text-center">
+                    23%
+                    <svg class="w-3 h-3 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 10 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5 13V1m0 0L1 5m4-4 4 4" />
+                    </svg>
                 </div>
             </div>
-        @endforeach
-
-
-        <div class="w-full max-w-full mt-4 px-3 mb-6 ">
+            <div id="labels-chart" class="px-2.5"></div>
             <div
-                class="relative flex h-full flex-col min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
-                <div class="flex-auto p-4">
-                    <!-- Stok yang dimasukkan hari ini -->
-                    <h5 class=" mb-2 font-bold ">Stok yang Dimasukkan Hari Ini</h5>
-                    <div class=" flex pb-4 border-b border-gray-200">
-                        @foreach ($stocksAddedToday as $businessId => $stocks)
-                            <div class="w-1/2">
-                                <h6 class="font-semibold">
-                                    {{ $stocks->first()->stocks->business->name ?? 'Unknown Business' }}
-                                </h6>
-                                <ul>
-                                    @foreach ($stocks as $stock)
-                                        <li class="mb-2">
-                                            <p class="text-sm">
-                                                {{ $stock->stocks->nama }}: {{ $stock->quantity }} unit
-                                            </p>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endforeach
+                class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between mt-5 p-4 md:p-6 pt-0 md:pt-0">
+                <div class="flex justify-between items-center pt-5">
+                    <!-- Button -->
+                    <button id="dropdownDefaultButton" data-dropdown-toggle="lastDaysdropdown"
+                        data-dropdown-placement="bottom"
+                        class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-white"
+                        type="button">
+                        Last 7 days
+                        <svg class="w-2.5 m-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 4 4 4-4" />
+                        </svg>
+                    </button>
+                    <!-- Dropdown menu -->
+                    <div id="lastDaysdropdown"
+                        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                            <li>
+                                <a href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Yesterday</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Today</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last
+                                    7 days</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last
+                                    30 days</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Last
+                                    90 days</a>
+                            </li>
+                        </ul>
                     </div>
-
-                    <!-- Stok yang habis hari ini -->
-
-                    <h5 class="my-2 font-bold">Sisa Stok</h5>
-
-                    <div class=" flex ">
-                        @foreach ($remainingStocks as $businessId => $stocks)
-                            <div class="w-1/2">
-
-                                <h6 class="font-semibold">{{ $stocks->first()->business->name ?? 'Unknown Business' }}
-                                </h6>
-                                <ul>
-                                    @foreach ($stocks as $stock)
-                                        <li class="mb-2">
-                                            <p class="text-sm">
-                                                {{ $stock->nama }}: {{ $stock->jumlah_stok }} unit
-                                            </p>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endforeach
-                    </div>
-
+                    <a href="#"
+                        class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
+                        Sales Report
+                        <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 9 4-4-4-4" />
+                        </svg>
+                    </a>
                 </div>
             </div>
         </div>
+
+
+
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flowbite-datepicker@1.2.2/dist/datepicker.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const options = {
+                // set the labels option to true to show the labels on the X and Y axis
+                xaxis: {
+                    show: true,
+                    categories: ['01 Feb', '02 Feb', '03 Feb', '04 Feb', '05 Feb', '06 Feb', '07 Feb'],
+                    labels: {
+                        show: true,
+                        style: {
+                            fontFamily: "Inter, sans-serif",
+                            cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                        }
+                    },
+                    axisBorder: {
+                        show: false,
+                    },
+                    axisTicks: {
+                        show: false,
+                    },
+                },
+                yaxis: {
+                    show: true,
+                    labels: {
+                        show: true,
+                        style: {
+                            fontFamily: "Inter, sans-serif",
+                            cssClass: 'text-xs font-normal fill-gray-500 dark:fill-gray-400'
+                        },
+                        formatter: function(value) {
+                            return '$' + value;
+                        }
+                    }
+                },
+                series: [{
+                        name: "Developer Edition",
+                        data: [150, 141, 145, 152, 135, 125],
+                        color: "#1A56DB",
+                    },
+                    {
+                        name: "Designer Edition",
+                        data: [43, 13, 65, 12, 42, 73],
+                        color: "#7E3BF2",
+                    },
+                ],
+                chart: {
+                    sparkline: {
+                        enabled: false
+                    },
+                    height: "100%",
+                    width: "100%",
+                    type: "area",
+                    fontFamily: "Inter, sans-serif",
+                    dropShadow: {
+                        enabled: false,
+                    },
+                    toolbar: {
+                        show: false,
+                    },
+                },
+                tooltip: {
+                    enabled: true,
+                    x: {
+                        show: false,
+                    },
+                },
+                fill: {
+                    type: "gradient",
+                    gradient: {
+                        opacityFrom: 0.55,
+                        opacityTo: 0,
+                        shade: "#1C64F2",
+                        gradientToColors: ["#1C64F2"],
+                    },
+                },
+                dataLabels: {
+                    enabled: false,
+                },
+                stroke: {
+                    width: 6,
+                },
+                legend: {
+                    show: false
+                },
+                grid: {
+                    show: false,
+                },
+            }
+
+            if (document.getElementById("labels-chart") && typeof ApexCharts !== 'undefined') {
+                const chart = new ApexCharts(document.getElementById("labels-chart"), options);
+                chart.render();
+            }
+        });
+    </script>
+
+
 
 @endsection
