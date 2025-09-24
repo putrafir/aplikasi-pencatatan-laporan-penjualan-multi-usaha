@@ -27,16 +27,10 @@ class ManageStockController extends Controller
         $stocks = StockLog::with('stocks')
             ->whereHas('stocks', function ($query) use ($business) {
                 $query->where('business_id', $business->id);
-            })
+            })->whereDate('created_at', today())
             ->get();
 
-        $perPage = 5;
-        $currentPage = request()->get('page', 1); // ambil query string ?page=...
-        $total = $stocks->count();
-        $stocks = $stocks->slice(($currentPage - 1) * $perPage, $perPage)->values();
-
-
-        return view('pegawai.UpdateStok', compact('user', 'stocks', 'business', 'transaksi', 'total', 'perPage', 'currentPage'));
+        return view('pegawai.UpdateStok', compact('user', 'stocks', 'business', 'transaksi',));
     }
 
 
@@ -139,34 +133,37 @@ class ManageStockController extends Controller
     }
     public function reduceStock(Request $request)
     {
+
         $validated = $request->validate([
             'jumlah_stok' => 'required|array',
             'jumlah_stok.*' => 'nullable|integer|min:0',
         ]);
 
+        $businessId = $request->input('business_id');
+
         foreach ($validated['jumlah_stok'] as $stockId => $remainingStock) {
-            if (is_null($remainingStock)) {
-                continue;
-            }
+            if (is_null($remainingStock)) continue;
 
-            $stock = Stock::findOrFail($stockId);
+            $stock = Stock::where('id', $stockId)
+                ->where('business_id', $businessId)
+                ->first();
 
-            $quantityOut = $stock->jumlah_stok - $remainingStock;
-
-            if ($quantityOut < 0) {
-                continue;
-            }
+            if (!$stock) continue;
 
             $stock->jumlah_stok = $remainingStock;
             $stock->save();
 
-            StockLog::create([
-                'stock_id' => $stock->id,
-                'type' => 'keluar',
-                'quantity' => $quantityOut,
-                'deskripsi' => 'Stok keluar',
+
+            $lastLog = StockLog::where('stock_id', $stock->id)
+                ->latest('created_at')
+                ->first();
+
+            $lastLog->update([
+                'stok_akhir' => $remainingStock, 
             ]);
         }
+
+
         return redirect()->back()->with('success', 'Sisa stok berhasil diperbarui.');
     }
 }

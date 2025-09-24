@@ -22,11 +22,13 @@
                     {{ number_format($usaha->transaksis->sum('total_bayar') ?? 0, 0, ',', '.') }}</p>
                 <div class="flex space-x-3">
                     <button onclick="openModal('{{ $usaha->id }}')"
-                        class="bg-white px-4 py-1 rounded-full shadow text-sm font-medium">
+                        class="bg-white px-4 py-1 rounded-full shadow text-sm font-medium  {{ \Carbon\Carbon::parse($tanggal)->lt(now()->startOfDay()) ? ' text-slate-200 cursor-not-allowed' : '' }}"
+                        {{ \Carbon\Carbon::parse($tanggal)->lt(now()->startOfDay()) ? 'disabled' : '' }}>
                         Masukkan Stok
                     </button>
 
-                    <a href="{{ route('admin.laporan.detailLaporan', $usaha->id) }}?date={{ $tanggal }}" class="bg-white px-4 py-1 rounded-full shadow text-sm font-medium">
+                    <a href="{{ route('admin.laporan.detailLaporan', $usaha->id) }}?date={{ $tanggal }}"
+                        class="bg-white px-4 py-1 rounded-full shadow text-sm font-medium">
 
                         Lihat
                     </a>

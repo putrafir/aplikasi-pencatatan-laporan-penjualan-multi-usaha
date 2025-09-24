@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Business;
+use App\Models\StockLog;
 use Illuminate\Http\Request;
 
 class LaporanController extends Controller
@@ -64,18 +65,27 @@ class LaporanController extends Controller
     {
         $tanggal = $request->query('date', now()->toDateString());
 
+        // Ambil data business + transaksinya di tanggal tersebut
         $business = Business::with([
             'transaksis' => function ($q) use ($tanggal) {
                 $q->whereDate('created_at', $tanggal);
-            },
-
-            'stocks' => function ($q) use ($tanggal) {
-                $q->whereDate('created_at', $tanggal);
-            },
-            'users',
+            }
         ])->findOrFail($id);
 
-        return view('admin.laporan.detailLaporan', compact('business', 'tanggal'));
+        // Ambil stock log berdasarkan business
+        $stocks = StockLog::with('stocks')
+            ->whereHas('stocks', function ($query) use ($business) {
+                $query->where('business_id', $business->id);
+            })->whereDate('created_at', $tanggal)
+            ->get();
+
+        // Pagination manual
+        $perPage = 5;
+        $currentPage = $request->get('page', 1);
+        $total = $stocks->count();
+        $stocks = $stocks->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        return view('admin.laporan.detailLaporan', compact('business', 'tanggal', 'stocks', 'total', 'currentPage', 'perPage'));
     }
 
     public function laporanPegawai($id, Request $request)
@@ -93,5 +103,4 @@ class LaporanController extends Controller
 
         return view('admin.laporan.laporanPegawai', compact('pegawai', 'transaksis', 'jumlahTransaksi', 'tanggal'));
     }
-
 }

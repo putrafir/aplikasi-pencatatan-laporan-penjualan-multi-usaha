@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('nama')->unique();
             $table->unsignedBigInteger('business_id');
-            $table->unsignedBigInteger('super_kategori_id')->nullable();
+            // $table->unsignedBigInteger('super_kategori_id')->nullable();
             $table->foreign('business_id')->references('id')->on('business')->onDelete('cascade');
-            $table->foreign('super_kategori_id')->references('id')->on('super_categories')->onDelete('cascade');
+            // $table->foreign('super_kategori_id')->references('id')->on('super_categories')->onDelete('cascade');
             $table->timestamps();
         });
     }

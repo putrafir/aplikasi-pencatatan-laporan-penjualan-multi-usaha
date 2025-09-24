@@ -40,7 +40,7 @@
         'Harga' => 'harga_formatted',
         'Satuan' => 'satuan',
     ]" :rows="$stocks" :total="$total" data-id="{{ $stocks->pluck('id') }}" :perPage="$perPage"
-        :currentPage="$currentPage">
+        :currentPage="$currentPage" :actions="true">
         {{-- <x-slot name="actions"> --}}
         {{-- <x-partials.table-action buttonAction="togglePopup('popup-edit-stock')" :stocks="$business->stocks" /> --}}
 

@@ -14,13 +14,13 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         Category::insert([
-            ['nama' => 'Smoothies', 'business_id' => 2, 'super_kategori_id' => 1],
-            ['nama' => 'Juice', 'business_id' => 2, 'super_kategori_id' => 1],
-            ['nama' => 'Other', 'business_id' => 2, 'super_kategori_id' => 1],
-            ['nama' => 'Pisgor', 'business_id' => 1, 'super_kategori_id' => null],
-            ['nama' => 'Cemilans', 'business_id' => 1, 'super_kategori_id' => null],
-            ['nama' => 'Original', 'business_id' => 2, 'super_kategori_id' => 2],
-            ['nama' => 'Hotang', 'business_id' => 2, 'super_kategori_id' => 2],
+            ['nama' => 'Smoothies', 'business_id' => 2],
+            ['nama' => 'Juice', 'business_id' => 2],
+            ['nama' => 'Other', 'business_id' => 2],
+            ['nama' => 'Pisgor', 'business_id' => 1],
+            ['nama' => 'Cemilans', 'business_id' => 1],
+            ['nama' => 'Original', 'business_id' => 2],
+            ['nama' => 'Hotang', 'business_id' => 2],
         ]);
     }
 }

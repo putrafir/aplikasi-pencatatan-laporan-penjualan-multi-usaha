@@ -17,35 +17,28 @@
             {{-- onclick="window.location='{{ route('admin.kelola-bisnis.show', $bisnis->id) }}'"> --}}
         </div>
 
-        <x-section-header title=Stok :business_id="$business->id" />
 
-        <x-table :headers="[
-            'Nama' => 'nama',
-            'Stok Awal' => 'stok_awal',
-            'Stok Akhir' => 'stok_akhir',
-        ]" :rows="$stocks" :total="$total" data-id="{{ $stocks->pluck('id') }}"
-            :perPage="$perPage" :currentPage="$currentPage">
-            <x-slot name="actions">
-                <x-partials.table-action buttonAction="togglePopup('popup-edit-stock')" :stocks="$business->stocks" />
-            </x-slot>
-        </x-table>
 
-        {{-- <div class="bg-white rounded-lg shadow-lg p-6 w-full">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-full">
             <h2 class="text-xl font-bold mb-6 text-white p-4 rounded-t-lg text-center"
                 style="background: linear-gradient(to right, #ff0066, #8000ff);">
                 Update Sisa Jumlah Stok
             </h2>
 
-            <form action="{{ route('pegawai.update.stock') }}" method="POST">
+            <form action="{{ route('pegawai.update.stock.store') }}" method="POST">
                 @csrf
+                <label for="business_id"></label>
+
+
                 <input type="hidden" name="business_id" value="{{ $business->id }}">
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     @foreach ($stocks as $stock)
                         <div class="border border-gray-300 rounded-lg bg-gray-50 shadow p-4">
-                            <label class="block text-md font-semibold text-gray-700 mb-2">{{ $stock->nama }}</label>
+                            <label class="block text-md font-semibold text-gray-700 mb-2">{{ $stock->stocks->nama }}</label>
                             <div class="flex items-center gap-2">
-                                <input type="number" name="jumlah_stok[{{ $stock->id }}]" placeholder="Jumlah"
+                                <input type="number" name="jumlah_stok[{{ $stock->stocks->id }}]"
+                                    value="{{ $stock->stocks->jumlah_stok }}"
                                     class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                 <span class="text-gray-600 font-medium">{{ $stock->satuan }}</span>
                             </div>
@@ -60,6 +53,6 @@
                     </button>
                 </div>
             </form>
-        </div> --}}
+        </div>
     </div>
 @endsection
