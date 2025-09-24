@@ -30,6 +30,21 @@ class KelolaBisnisController extends Controller
         return view('admin.kelola-bisnis.kelola', compact('business', 'stocks', 'total', 'perPage',  'currentPage'));
     }
 
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'lokasi' => 'required|string|max:255',
+        ]);
+
+        Business::create([
+            'name' => $request->name,
+            'lokasi' => $request->lokasi
+        ]);
+
+        return redirect()->back()->with('success', 'Bisnis berhasil diperbarui.');
+    }
+
     public function update(Request $request, string $id)
     {
         $request->validate([
