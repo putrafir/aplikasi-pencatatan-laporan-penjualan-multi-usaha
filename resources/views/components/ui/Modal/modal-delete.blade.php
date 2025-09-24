@@ -20,8 +20,7 @@
                     class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400">
                     Batal
                 </button>
-                <button type="submit"
-                    class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700">
+                <button type="submit" class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700">
                     Ya, Hapus
                 </button>
             </div>
@@ -29,13 +28,4 @@
     </div>
 </div>
 
-<script>
-    function togglePopup(popupId) {
-        const popup = document.getElementById(popupId);
-        popup.classList.toggle('hidden');
-    }
-
-    function openDeleteModal(deleteModalId) {
-        togglePopup(deleteModalId);
-    }
-</script>
+<script src="{{ asset('js/modal/togglePopup.js') }}"></script>
