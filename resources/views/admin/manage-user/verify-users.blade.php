@@ -12,15 +12,9 @@
                 <div class=" px-6 flex my-9 items-center justify-between gap-2 mb-4">
 
                     <h6>Kelola Pegawai</h6>
-                    <button onclick="togglePopup('popup-add-user')">
-
-                        <svg class="cursor-pointer" width="20" height="20" viewBox="0 0 17 17" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8.48082 1V16M1 8.5H15.9616" stroke="black" stroke-width="2.28571"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </button>
+                    <x-plus-button buttonAction="togglePopup('popup-add-user')" />
                 </div>
+
 
 
                 <x-modal-add id="popup-add-user" title="Add User" action="{{ route('admin.add-user') }}" method="POST"

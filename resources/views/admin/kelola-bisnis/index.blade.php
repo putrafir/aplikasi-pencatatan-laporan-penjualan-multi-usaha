@@ -12,8 +12,8 @@
             <x-plus-button buttonAction="togglePopup('popup-add-bisnis')" />
         </div>
 
-        <x-modal-add id="popup-add-bisnis" title="Tambah Bisnis" :isEdit="false" action="{{ route('admin.kelola-bisnis.add') }}" method="POST"
-            :inputs="[
+        <x-modal-add id="popup-add-bisnis" title="Tambah Bisnis" :isEdit="false"
+            action="{{ route('admin.kelola-bisnis.add') }}" method="POST" :inputs="[
                 [
                     'label' => 'Nama',
                     'name' => 'name',
@@ -75,7 +75,7 @@
                 'type' => 'text',
                 'placeholder' => 'Nama Lokasi',
                 'required' => true,
-            ]
+            ],
         ]" />
 
         <x-modal-delete id="popup-edit-business-delete" action="{{ route('admin.kelola-bisnis.destroy', ':id') }}" />
