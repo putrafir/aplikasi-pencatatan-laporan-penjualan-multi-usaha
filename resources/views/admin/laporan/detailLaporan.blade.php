@@ -22,28 +22,11 @@
     {{-- Stok --}}
     <h3 class="text-lg font-bold mb-2">Stok</h3>
     <div class="overflow-x-auto mb-6">
-        <table class="min-w-full bg-white border border-gray-300 text-sm text-left">
-            <thead class="bg-gradient-to-t from-purple-700 to-pink-500 text-white">
-                <tr>
-                    <th class="px-4 py-2 border">Nama stok</th>
-                    <th class="px-4 py-2 border">Stok Awal</th>
-                    <th class="px-4 py-2 border">Sisa Stok</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($business->stocks as $stok)
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-2 border text-center">{{ $stok->nama ?? '-' }}</td>
-                        <td class="px-4 py-2 border text-center">{{ $stok->stok_awal ?? 0 }}</td>
-                        <td class="px-4 py-2 border text-center">{{ $stok->stok_akhir ?? 0 }}</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="3" class="text-center py-4 text-gray-500">Tidak ada data stok</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+        <x-table :headers="[
+            'Nama Stok' => 'stocks.nama',
+            'Stok Awal' => 'stok_awal',
+            'Stok Akhir' => 'stok_akhir',
+        ]" :rows="$stocks" :total="$total" :perPage="$perPage" :currentPage="$currentPage" />
     </div>
 
     {{-- Pegawai --}}

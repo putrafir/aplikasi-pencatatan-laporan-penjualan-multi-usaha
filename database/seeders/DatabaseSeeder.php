@@ -2,12 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
-use App\Models\Menu;
-use App\Models\MenuSize;
-use App\Models\Size;
-use App\Models\SizePrice;
-use App\Models\SuperCategory;
+
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -41,11 +36,11 @@ class DatabaseSeeder extends Seeder
         // }
 
         $this->call([
-            SuperCategorySeeder::class,
+            // SuperCategorySeeder::class,
             CategorySeeder::class,
             MenuSeeder::class,
-            SizeSeeder::class,
-            SizePriceSeeder::class,
+            // SizeSeeder::class,
+            // SizePriceSeeder::class,
             StockSeeder::class,
             TransaksiSeeder::class,
         ]);

@@ -14,10 +14,12 @@ class MenuSeeder extends Seeder
      */
     public function run(): void
     {
-        $smoothies = Category::where('nama', 'Smoothies')->first();
-        $juice = Category::where('nama', 'Juice')->first();
-        $other = Category::where('nama', 'Other')->first();
 
+        $smoothies = Category::where('nama', 'Smoothies')->first();
+        $juice     = Category::where('nama', 'Juice')->first();
+        $other     = Category::where('nama', 'Other')->first();
+
+        // --- Smoothies dengan variasi ukuran ---
         $smoothiesMenus = [
             'Smoothies Mangga',
             'Smoothies Strawberry',
@@ -31,15 +33,25 @@ class MenuSeeder extends Seeder
             'Smoothies Lychee',
         ];
 
+        $sizes = [
+            ['label' => '(S)',  'harga' => 10000],
+            ['label' => '(M)',  'harga' => 12000],
+            ['label' => '(L)',  'harga' => 15000],
+            ['label' => '(XL)', 'harga' => 18000],
+        ];
+
         foreach ($smoothiesMenus as $menu) {
-            Menu::create([
-                'nama' => $menu,
-                'kategori_id' => $smoothies->id,
-                'business_id' => 2,
-                'harga' => null,
-            ]);
+            foreach ($sizes as $size) {
+                Menu::create([
+                    'nama'        => $menu . ' ' . $size['label'],
+                    'kategori_id' => $smoothies->id,
+                    'business_id' => 2,
+                    'harga'       => $size['harga'],
+                ]);
+            }
         }
 
+        // --- Juice ---
         $juiceMenus = [
             'Jus Alpukat',
             'Jus Mangga',
@@ -53,28 +65,29 @@ class MenuSeeder extends Seeder
 
         foreach ($juiceMenus as $menu) {
             Menu::create([
-                'nama' => $menu,
+                'nama'        => $menu,
                 'kategori_id' => $juice->id,
                 'business_id' => 2,
-
-                'harga' => 6000,
+                'harga'       => 6000,
             ]);
         }
 
+        // --- Other ---
         Menu::create([
-            'nama' => 'Es Teh',
+            'nama'        => 'Es Teh',
             'kategori_id' => $other->id,
             'business_id' => 2,
-            'harga' => 3000,
+            'harga'       => 3000,
         ]);
 
         Menu::create([
-            'nama' => 'Es Teler',
+            'nama'        => 'Es Teler',
             'kategori_id' => $other->id,
             'business_id' => 2,
-            'harga' => 10000,
+            'harga'       => 10000,
         ]);
 
+        // --- Pisgor & Cemilan ---
         $menus_pisgor = [
             ['nama' => 'Pisgor Ori Palm Sugar',     'harga' => 12000, 'kategori_id' => 4, 'business_id' => 1],
             ['nama' => 'Pisgor Coklat',             'harga' => 15000, 'kategori_id' => 4, 'business_id' => 1],
@@ -87,7 +100,7 @@ class MenuSeeder extends Seeder
             ['nama' => 'Pisgor Coklat Taro',        'harga' => 15000, 'kategori_id' => 4, 'business_id' => 1],
             ['nama' => 'Pisgor Coklat Strawberry',  'harga' => 15000, 'kategori_id' => 4, 'business_id' => 1],
 
-            // Cemilan's
+            // Cemilan
             ['nama' => 'Potato Twister',            'harga' => 10000, 'kategori_id' => 5, 'business_id' => 1],
             ['nama' => 'Singkong Keju',             'harga' => 13000, 'kategori_id' => 5, 'business_id' => 1],
             ['nama' => 'Brota isi 4',               'harga' => 15000, 'kategori_id' => 5, 'business_id' => 1],
@@ -99,15 +112,16 @@ class MenuSeeder extends Seeder
             Menu::create($menu_pisgor);
         }
 
+        // --- Hotang ---
         $menus_hotang = [
             // Original
-            ['nama' => 'Full Sosis',                'harga' => 10000, 'kategori_id' => 6, 'business_id' => 2],
-            ['nama' => 'Sosis Mix Mozza',           'harga' => 13000, 'kategori_id' => 6, 'business_id' => 2],
+            ['nama' => 'Full Sosis',      'harga' => 10000, 'kategori_id' => 6, 'business_id' => 2],
+            ['nama' => 'Sosis Mix Mozza', 'harga' => 13000, 'kategori_id' => 6, 'business_id' => 2],
 
             // Hotang
-            ['nama' => 'Full Sosis',                'harga' => 13000, 'kategori_id' => 7, 'business_id' => 2],
-            ['nama' => 'Full Mozza',                'harga' => 15000, 'kategori_id' => 7, 'business_id' => 2],
-            ['nama' => 'Sosis Mix Mozza',           'harga' => 15000, 'kategori_id' => 7, 'business_id' => 2],
+            ['nama' => 'Full Sosis',      'harga' => 13000, 'kategori_id' => 7, 'business_id' => 2],
+            ['nama' => 'Full Mozza',      'harga' => 15000, 'kategori_id' => 7, 'business_id' => 2],
+            ['nama' => 'Sosis Mix Mozza', 'harga' => 15000, 'kategori_id' => 7, 'business_id' => 2],
         ];
 
         foreach ($menus_hotang as $menu_hotang) {

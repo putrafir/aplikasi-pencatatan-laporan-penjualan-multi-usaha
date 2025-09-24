@@ -113,7 +113,7 @@ Route::middleware(['pegawai', 'auth'])->group(function () {
     // Route::post('/pegawai/miss/keranjang/checkout', [MissController::class, 'checkout'])->name('pegawai.miss.keranjang.checkout');
     // Route::post('/pegawai/miss/keranjang/update-quantity/{id}', [MissController::class, 'updateQuantity']);
 
-    Route::post('/items/stock/store/input-sisa-stock', [ManageStockController::class, 'reduceStock'])->name('pegawai.update.stock');
+    Route::post('/pegawai/update_stock/store', [ManageStockController::class, 'reduceStock'])->name('pegawai.update.stock.store');
 
     // Management Usaha Pisgor
     // Route::get('/pegawai/pisgor/home', [PisgorController::class, 'index'])->name('pegawai.pisgor.home');

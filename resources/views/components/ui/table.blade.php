@@ -4,6 +4,7 @@
     'perPage',
     'currentPage',
     'total',
+    'actions' => false,
 ])
 
 @php
@@ -13,8 +14,6 @@
     $start = ($currentPage - 1) * $perPage + 1;
     $end = min($start + $perPage - 1, $total);
 @endphp
-
-
 
 <div class="w-full max-w-full lg:mb-0">
     <div class="flex-auto">
@@ -26,9 +25,10 @@
                         @foreach ($headers as $label => $field)
                             <th class="px-4 py-2 border">{{ $label }}</th>
                         @endforeach
-                        {{-- @if ($actions) --}}
-                        <th class="px-4 py-2 border text-center">Edit</th>
-                        {{-- @endif --}}
+
+                        @if ($actions === true)
+                            <th class="px-4 py-2 border text-center">Edit</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -40,21 +40,25 @@
                                     {{ data_get($row, $field) }}
                                 </td>
                             @endforeach
-                            <td class="px-4 py-2 border text-center">
-                                <button type="button"
-                                    class="text-blue-500 hover:text-blue-700 mx-auto block edit-stock-button"
-                                    data-id="{{ $row->id }}" data-nama="{{ $row->nama }}"
-                                    data-satuan="{{ $row->satuan }}" data-jumlah_stok="{{ $row->jumlah_stok }}"
-                                    data-harga="{{ $row->harga }}" onclick="openEditStockPopup(this)">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path
-                                            d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                        <path fill-rule="evenodd" d="M4 16a1 1 0 001 1h10a1 1 0 100-2H5a1 1 0 00-1 1z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </button>
-                            </td>
+                            @if ($actions === true)
+                                <td class="px-4 py-2 border text-center">
+                                    <button type="button"
+                                        class="text-blue-500 hover:text-blue-700 mx-auto block edit-stock-button"
+                                        data-id="{{ $row->id }}" data-nama="{{ $row->nama }}"
+                                        data-satuan="{{ $row->satuan }}" data-jumlah_stok="{{ $row->jumlah_stok }}"
+                                        data-harga="{{ $row->harga }}" onclick="openEditStockPopup(this)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline"
+                                            viewBox="0 0 20 20" fill="currentColor">
+                                            <path
+                                                d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                            <path fill-rule="evenodd"
+                                                d="M4 16a1 1 0 001 1h10a1 1 0 100-2H5a1 1 0 00-1 1z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            @endif
+
                         </tr>
                     @empty
                         <tr>
