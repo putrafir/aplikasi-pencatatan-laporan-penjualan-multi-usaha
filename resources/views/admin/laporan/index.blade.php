@@ -25,7 +25,9 @@
                         class="bg-white px-4 py-1 rounded-full shadow text-sm font-medium">
                         Masukkan Stok
                     </button>
-                    <a href="{{ route('admin.laporan.detailLaporan', $usaha->id) }}" class="bg-white px-4 py-1 rounded-full shadow text-sm font-medium">
+
+                    <a href="{{ route('admin.laporan.detailLaporan', $usaha->id) }}?date={{ $tanggal }}" class="bg-white px-4 py-1 rounded-full shadow text-sm font-medium">
+
                         Lihat
                     </a>
                 </div>
@@ -41,7 +43,7 @@
 
             <form action="{{ route('admin.stock.store.jumlah_stok') }}" method="POST">
                 @csrf
-                <input type="hidden" id="business_id_modal" name="business_id" value="">
+                <input type="hidden" id="business_id_modal" name="business_id" value="{{ old('business_id') }}">
 
                 <!-- stok akan dimasukkan via JS -->
                 <div class="space-y-3 max-h-80 overflow-y-auto" id="stokList">
@@ -110,7 +112,7 @@
                             <button type="button" onclick="decreaseValue('${item.id}')"
                                 class="px-3 py-1 bg-gray-300 rounded-l-xl text-lg font-bold">-</button>
                             <input id="jumlah_stok_${item.id}" type="number"
-                                name="jumlah_stok[${item.id}]" placeholder="Jumlah"
+                                name="jumlah_stok[${item.id}]" value="${item.jumlah_stok ?? 0}"" placeholder="Jumlah"
                                 class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                             <span class="text-gray-600 font-medium">${item.satuan ?? ''}</span>
                             <button type="button" onclick="increaseValue('${item.id}')"

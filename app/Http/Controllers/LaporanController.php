@@ -60,4 +60,38 @@ class LaporanController extends Controller
         return response()->json($usaha->stocks);
     }
 
+    public function detailLaporan($id, Request $request)
+    {
+        $tanggal = $request->query('date', now()->toDateString());
+
+        $business = Business::with([
+            'transaksis' => function ($q) use ($tanggal) {
+                $q->whereDate('created_at', $tanggal);
+            },
+
+            'stocks' => function ($q) use ($tanggal) {
+                $q->whereDate('created_at', $tanggal);
+            },
+            'users',
+        ])->findOrFail($id);
+
+        return view('admin.laporan.detailLaporan', compact('business', 'tanggal'));
+    }
+
+    public function laporanPegawai($id, Request $request)
+    {
+        $tanggal = $request->query('date', now()->toDateString());
+
+        $pegawai = \App\Models\User::findOrFail($id);
+
+        $transaksis = \App\Models\Transaksi::with(['business', 'user'])
+            ->where('user_id', $id)
+            ->whereDate('created_at', $tanggal)
+            ->get();
+
+        $jumlahTransaksi = $transaksis->count();
+
+        return view('admin.laporan.laporanPegawai', compact('pegawai', 'transaksis', 'jumlahTransaksi', 'tanggal'));
+    }
+
 }
