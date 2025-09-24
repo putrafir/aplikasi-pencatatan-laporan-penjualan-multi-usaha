@@ -92,3 +92,5 @@
         </div>
     </div>
 </div>
+
+<script src="{{ asset('js/modal/togglePopup.js') }}"></script>
