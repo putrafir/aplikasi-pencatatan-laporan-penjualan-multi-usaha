@@ -6,7 +6,7 @@
         <div class="relative bg-white rounded-t-2xl w-full md:w-1/3 h-48 flex items-center justify-center overflow-hidden">
             <x-right-motif class="absolute w-40 top-20" />
             <div class="absolute backdrop-blur-3xl bg-purple-600/85 w-60 h-60 rounded-full -left-14"></div>
-            <img src="{{ asset('img/illustrations/Group 1.svg') }}" alt="" class="absolute h-44 mt-10">
+            <img src="{{ asset('img/illustrations/face1.svg') }}" alt="" class="absolute h-44 mt-10">
         </div>
 
         {{-- Tabel Transaksi --}}
