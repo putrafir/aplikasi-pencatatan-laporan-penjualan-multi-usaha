@@ -32,16 +32,20 @@ class ManageMenuController extends Controller
             'nama'        => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'harga'       => 'required|numeric|min:0',
-            'foto'        => 'required|image|mimes:jpeg,png,jpg,heic|max:5120',
+            'foto'        => 'nullable|image|mimes:jpeg,png,jpg,heic|max:5120',
         ]);
 
-        $foto = $request->file('foto');
-        $namaMenu = Str::slug($request->nama);
-        $namaFile = $namaMenu . '-' . time() . '.' . $foto->getClientOriginalExtension();
+        $fotoPath = 'img/illustrations/no-image.png'; // default image
 
-        // simpan file
-        $foto->move(public_path('img/upload'), $namaFile);
-        $fotoPath = 'img/upload/' . $namaFile;
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
+            $namaMenu = Str::slug($request->nama);
+            $namaFile = $namaMenu . '-' . time() . '.' . $foto->getClientOriginalExtension();
+
+            // simpan file
+            $foto->move(public_path('img/upload'), $namaFile);
+            $fotoPath = 'img/upload/' . $namaFile; // update path jika ada file
+        }
 
         // simpan ke DB
         Menu::create([

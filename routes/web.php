@@ -63,10 +63,10 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::post('/admin/menu/add', [ManageMenuController::class, 'store'])->name('admin.menu.add');
 
     // Management Kategori
-    Route::get('/admin/manage-category', [CategoryController::class, 'index'])->name('admin.manage-category');
+    Route::get('/admin/manage-category', [ManageCategoryController::class, 'index'])->name('admin.manage-category');
     Route::post('/admin/kategori/add', [ManageCategoryController::class, 'store'])->name('admin.category.add');
-    Route::delete('/admin/kategori/{id}', [CategoryController::class, 'destroy'])->name('admin.kategori.destroy');
-    Route::put('/admin/kategori/{id}', [CategoryController::class, 'update'])->name('admin.kategori.update');
+    Route::delete('/admin/kategori/{id}', [ManageCategoryController::class, 'destroy'])->name('admin.kategori.destroy');
+    Route::put('/admin/kategori/{id}', [ManageCategoryController::class, 'update'])->name('admin.kategori.update');
     Route::get('/admin/kategori/by-business/{id}', [ManageMenuController::class, 'getKategoriByBusiness']);
 
     // Management Size/Ukuran
@@ -75,7 +75,12 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::delete('/admin/size/{id}', [sizeController::class, 'destroy'])->name('admin.size.destroy');
     Route::put('/admin/size/{id}', [SizeController::class, 'update'])->name('admin.size.update');
 
-    // Management laporan
+    // Management Business
+    Route::post('/admin/kelola-bisnis/add', [KelolaBisnisController::class, 'store'])->name('admin.kelola-bisnis.add');
+    Route::put('/admin/kelola-bisnis/{id}', [KelolaBisnisController::class, 'update'])->name('admin.kelola-bisnis.update');
+    Route::delete('/admin/kelola-bisnis/{id}', [KelolaBisnisController::class, 'destroy'])->name('admin.kelola-bisnis.destroy');
+    
+    // Management Stock
     Route::get('/admin/business/{id}/stocks', [LaporanController::class, 'getStocks']);
     Route::get('/admin/manage-stock', [ManageStockController::class, 'index'])->name('admin.manage-stock');
     Route::post('/admin/stock/add', [ManageStockController::class, 'store'])->name('admin.stock.add');
@@ -113,7 +118,7 @@ Route::middleware(['pegawai', 'auth'])->group(function () {
     // Route::post('/pegawai/miss/keranjang/checkout', [MissController::class, 'checkout'])->name('pegawai.miss.keranjang.checkout');
     // Route::post('/pegawai/miss/keranjang/update-quantity/{id}', [MissController::class, 'updateQuantity']);
 
-    Route::post('/items/stock/store/input-sisa-stock', [ManageStockController::class, 'reduceStock'])->name('pegawai.update.stock');
+    Route::post('/pegawai/update_stock/store', [ManageStockController::class, 'reduceStock'])->name('pegawai.update.stock.store');
 
     // Management Usaha Pisgor
     // Route::get('/pegawai/pisgor/home', [PisgorController::class, 'index'])->name('pegawai.pisgor.home');
