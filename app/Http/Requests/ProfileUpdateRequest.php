@@ -8,6 +8,11 @@ use Illuminate\Validation\Rule;
 
 class ProfileUpdateRequest extends FormRequest
 {
+    public function authorize(): bool
+    {
+        return true; // pastikan true supaya request jalan
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -25,6 +30,10 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+
+            // tambahan untuk password
+            'old_password' => ['nullable'],
+            'new_password' => ['nullable', 'confirmed', 'min:6'], // wajib ada input name="new_password_confirmation"
         ];
     }
 }
