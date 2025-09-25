@@ -24,8 +24,6 @@
         </div>
     </form>
 
-
-
     <!-- CATEGORY FILTER -->
     <div class="flex gap-3 px-4 py-2 w-full text-sm overflow-x-auto" id="kategori-buttons">
         {{-- Tombol ALL --}}
