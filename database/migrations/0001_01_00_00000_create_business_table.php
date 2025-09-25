@@ -10,19 +10,20 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-       {
-           Schema::table('menus', function (Blueprint $table) {
-               $table->string('foto')->nullable();
-           });
-       }
+    {
+        Schema::create('business', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('lokasi')->nullable();
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('menus', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('business');
     }
 };
