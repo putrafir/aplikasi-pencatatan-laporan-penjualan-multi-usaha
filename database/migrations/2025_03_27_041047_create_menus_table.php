@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama');
             $table->text('deskripsi')->nullable();
             $table->decimal('harga', 10, 2)->nullable();
+            $table->string('foto')->nullable();
             $table->unsignedBigInteger('kategori_id');
             $table->unsignedBigInteger('business_id');
             $table->foreign('business_id')->references('id')->on('business')->onDelete('cascade');
