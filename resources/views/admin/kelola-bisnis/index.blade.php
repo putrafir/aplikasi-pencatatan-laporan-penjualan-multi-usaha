@@ -6,9 +6,23 @@
 
         {{-- Searching --}}
         <div class="flex items-center gap-4">
-            <input type="text" id="search-input" placeholder="Cari Usaha"
-                class="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-
+            <form action="{{ route('admin.kelola-bisnis') }}" method="GET"
+                class="flex-1 rounded-md mt-5 focus:outline-none focus:ring-2">
+                <div class="relative">
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                        </svg>
+                    </div>
+                    <input type="search" id="default-search" name="search"
+                        class="block w-full py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-3xl bg-gray-50"
+                        placeholder="Cari Bisnis atau Lokasi.." value="{{ request('search') }}" />
+                    <button type="submit"
+                        class="text-white  absolute end-2.5 bottom-2.5 bg-gradient-orange hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-3xl text-sm px-4 py-1">Cari</button>
+                </div>
+            </form>
             <x-plus-button buttonAction="togglePopup('popup-add-bisnis')" />
         </div>
 
@@ -40,7 +54,7 @@
                 <!-- Tombol Edit di pojok kanan atas -->
                 <button data-id="{{ $bisnis->id }}" data-nama="{{ $bisnis->name }}" data-lokasi="{{ $bisnis->lokasi }}"
                     onclick="openEditBusinessPopup(this)"
-                    class="absolute text-sm flex items-center text-white top-2 right-0 py-1 pr-1 pl-2 bg-yellow-500 rounded-s-20">
+                    class="absolute text-sm flex items-center text-white top-2 right-0 py-1 pr-1 pl-2 bg-gradient-orange rounded-s-20">
                     <p>Edit</p>
                     <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                         height="24" fill="none" viewBox="0 0 24 24">
@@ -54,7 +68,7 @@
                     <p class="text-sm">{{ $bisnis->users_count }} Pegawai</p>
                     <p class="text-sm">{{ $bisnis->menus_count }} Menu</p>
                     <x-button-inside onclick="window.location='{{ route('admin.kelola-bisnis.kelola', $bisnis->id) }}'"
-                        class="mt-4">
+                        class="mt-4 bg-white font-semibold text-blue-600">
                         Kelola
                     </x-button-inside>
                 </div>

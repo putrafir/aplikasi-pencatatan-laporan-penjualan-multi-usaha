@@ -11,10 +11,10 @@
                 </svg>
             </div>
             <input type="search" id="default-search"
-                class="block w-full py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-3xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
+                class="block w-full py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-3xl bg-gray-50 "
                 placeholder="Cari Menu.." required />
             <button type="submit"
-                class="text-white  absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-3xl text-sm px-4 py-1">Cari</button>
+                class="text-white  absolute end-2.5 bottom-2.5 bg-gradient-orange hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-3xl text-sm px-4 py-1">Cari</button>
         </div>
     </form>
 
