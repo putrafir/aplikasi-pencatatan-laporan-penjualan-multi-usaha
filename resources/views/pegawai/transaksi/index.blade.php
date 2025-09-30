@@ -27,13 +27,13 @@
     <!-- CATEGORY FILTER -->
     <div class="flex gap-3 px-4 py-2 w-full text-sm overflow-x-auto" id="kategori-buttons">
         {{-- Tombol ALL --}}
-        <button onclick="loadMenus('all', this)" class="kategori-btn px-3 py-1 rounded-full text-white">
+        <button onclick="loadMenus('all', this)" class="kategori-btn px-3 py-1 rounded-full bg-pink-500 text-white">
             All
         </button>
         {{-- Tombol Kategori --}}
         @foreach ($categories as $category)
             <button onclick="loadMenus('{{ $category->id }}', this)"
-                class="kategori-btn px-3 py-1 rounded-full bg-gray-200 text-gray-700">
+                class="kategori-btn px-3 py-1 rounded-full bg-pink-500 text-gray-700">
                 {{ $category->nama }}
             </button>
         @endforeach

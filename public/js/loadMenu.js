@@ -40,24 +40,22 @@ function loadMenus(kategoriId, buttonElement) {
 
             menus.forEach((menu) => {
                 let fotoUrl = menu.foto
-                    ? `/storage/${menu.foto}`
+                    ? `/${menu.foto}`
                     : "/img/illustrations/no-image.png";
                 let html = `
                         <div>
-                            <div class=" h-80 bg-white rounded-xl shadow hover:shadow-lg transition relative">
+                            <div class="h-80 bg-white rounded-xl shadow overflow-hidden hover:shadow-lg transition relative flex flex-col">
                                 <img class="w-full h-40 object-cover rounded-t-xl"
-                                    src="${fotoUrl}" alt="" />
-                                <div class="p-4 flex flex-col justify-between h-40">
-                                    <h3 class="font-semibold text-base sm:text-lg">${
-                                        menu.nama
-                                    }</h3>
-                                    <p class=" text-purple-700 font-bold">Rp ${parseInt(
-                                        menu.harga
-                                    ).toLocaleString("id-ID")}</p>
-                                    <button onclick="tambahKeKeranjang(event, ${
-                                        menu.id
-                                    }, ${menu.business_id}, ${menu.harga})"
-                                    class="mt-3 w-full bg-gradient-to-tl from-purple-700 to-pink-500 hover:bg-green-600 text-white py-2 rounded-lg text-sm">
+                                     src="${fotoUrl}" alt="" />
+                                <div class="p-4 flex flex-col justify-between flex-1">
+                                    <h3 class="font-semibold text-base sm:text-lg line-clamp-2 h-12">
+                                        ${menu.nama}
+                                    </h3>
+                                    <p class="text-purple-700 font-bold">
+                                        Rp ${parseInt(menu.harga).toLocaleString("id-ID")}
+                                    </p>
+                                    <button onclick="tambahKeKeranjang(event, ${menu.id}, ${menu.business_id}, ${menu.harga})"
+                                        class="mt-3 w-full bg-gradient-to-tl from-purple-700 to-pink-500 hover:bg-green-600 text-white py-2 rounded-lg text-sm">
                                         Tambah
                                     </button>
                                 </div>
@@ -118,7 +116,7 @@ function tambahKeKeranjang(event, menuId, businessId, hargaSatuan) {
             } else {
                 alert(
                     "Gagal menambahkan item ke keranjang: " +
-                        (data.message ?? "")
+                    (data.message ?? "")
                 );
                 if (data.errors) {
                     console.error("Error validasi:", data.errors);
