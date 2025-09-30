@@ -30,7 +30,9 @@ class ManageStockController extends Controller
             })->whereDate('created_at', today())
             ->get();
 
-        return view('pegawai.UpdateStok', compact('user', 'stocks', 'business', 'transaksi',));
+        $alreadyUpdated = $stocks->isNotEmpty();
+
+        return view('pegawai.UpdateStok', compact('user', 'stocks', 'business', 'transaksi', 'alreadyUpdated'));
     }
 
 
