@@ -58,7 +58,7 @@
             'placeholder' => 'Nama Stok',
             'required' => true,
         ],
-    
+
         ['label' => 'Harga', 'name' => 'harga', 'type' => 'number', 'placeholder' => 'Harga'],
         [
             'label' => 'Satuan',
@@ -92,7 +92,7 @@
             @foreach ($business->categories as $category)
                 <button data-id="{{ $category->id }}" data-nama="{{ $category->nama }}"
                     data-business_id="{{ $category->business_id }}" onclick="openEditCategoryPopup(this)"
-                    class="px-3 py-1 rounded-full bg-[#F4586B] text-white whitespace-nowrap">
+                    class="px-3 py-1 rounded-full bg-gradient-fuchsia-t text-white whitespace-nowrap">
                     {{ $category->nama }}
                 </button>
             @endforeach
@@ -145,7 +145,7 @@
                                 <button data-id="{{ $product->id }}" data-nama="{{ $product->nama }}"
                                     data-harga="{{ $product->harga }}" data-category_id="{{ $product->kategori_id }}"
                                     data-business_id="{{ $product->business_id }}" onclick="openEditMenuPopup(this)"
-                                    class="absolute text-sm flex items-center  text-white top-2 right-0 py-1 pr-1 pl-2 bg-[#F4586B] rounded-s-20">
+                                    class="absolute text-sm flex items-center  text-white top-2 right-0 py-1 pr-1 pl-2 bg-gradient-fuchsia rounded-s-20">
                                     <p>Edit</p>
                                     <svg class="w-5 h-5  text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                         width="24" height="24" fill="none" viewBox="0 0 24 24">

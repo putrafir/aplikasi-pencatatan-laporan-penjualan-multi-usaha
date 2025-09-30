@@ -30,13 +30,11 @@ class ManageCategoryController extends Controller
     {
         $request->validate([
             'business_id' => 'required|exists:business,id',
-            'super_kategori_id' => 'nullable|exists:super_categories,id',
             'nama' => 'required|string|max:255',
         ]);
 
         Category::create([
             'business_id' => $request->business_id,
-            'super_kategori_id' => $request->super_kategori_id,
             'nama' => $request->nama,
         ]);
 

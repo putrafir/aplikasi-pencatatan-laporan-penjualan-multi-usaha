@@ -19,7 +19,7 @@
     <div class="flex-auto">
         <div class="overflow-x-auto">
             <table class="min-w-full bg-white border border-gray-300 text-sm text-left">
-                <thead class="bg-[#F4586B] text-white">
+                <thead class="bg-gradient-fuchsia text-white">
                     <tr>
                         <th class="py-2 border w-10 text-center">No</th>
                         @foreach ($headers as $label => $field)
@@ -80,7 +80,7 @@
                 <ul class="inline-flex -space-x-px text-sm h-8">
                     <li>
                         <a href="?page={{ max(1, $currentPage - 1) }}"
-                            class="px-3 h-8 flex items-center justify-center border rounded-l-lg bg-[#F4586B] {{ $currentPage == 1 ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-100 text-gray-500' }}">
+                            class="px-3 h-8 flex items-center justify-center border rounded-l-lg bg-gradient-fuchsia {{ $currentPage == 1 ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-100 text-gray-500' }}">
                             <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                 width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -92,7 +92,7 @@
 
                     <li>
                         <a href=""
-                            class="px-3 h-8 flex items-center justify-center border 
+                            class="px-3 h-8 flex items-center justify-center border
                  text-slate-700">
                             {{ $currentPage }}
                         </a>
@@ -101,7 +101,7 @@
                     {{-- Next --}}
                     <li>
                         <a href="?page={{ min($totalPages, $currentPage + 1) }}"
-                            class="px-3 h-8 flex items-center justify-center border rounded-e-lg bg-[#F4586B] {{ $currentPage == $totalPages ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-100 text-gray-500' }}">
+                            class="px-3 h-8 flex items-center justify-center border rounded-e-lg bg-gradient-fuchsia-refresh {{ $currentPage == $totalPages ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-100 text-gray-500' }}">
                             <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                 width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"

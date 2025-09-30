@@ -105,7 +105,7 @@
 
             <x-sidebar-item route="admin.manage-stock" label="Stok" /> --}}
 
-            <li class="mt-auto absolute my-3 bottom-0 left-0 w-full px-4">
+            {{-- <li class="mt-auto absolute my-3 bottom-0 left-0 w-full px-4">
                 <form method="POST" action="{{ route('logout') }}" id="logoutForm">
                     @csrf
                     <button type="submit"
@@ -114,12 +114,12 @@
                         Logout
                     </button>
                 </form>
-            </li>
+            </li> --}}
         </ul>
     </div>
 </aside>
 
-<script>
+{{-- <script>
     document.getElementById('logoutForm').addEventListener('submit', function(e) {
         e.preventDefault();
         Swal.fire({
@@ -141,4 +141,4 @@
         });
 
     });
-</script>
+</script> --}}

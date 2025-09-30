@@ -65,7 +65,7 @@
                 </div>
                 <div class="">
                     <button type="submit"
-                        class="w-full text-white bg-gradient-to-b from-blue-600 to-purple-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 text-base font-semibold py-3 rounded-full">Bayar</button>
+                        class="w-full text-white bg-gradient-fuchsia hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 text-base font-semibold py-3 rounded-full">Bayar</button>
                 </div>
             </form>
         </div>
