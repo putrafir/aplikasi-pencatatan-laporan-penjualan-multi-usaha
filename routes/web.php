@@ -96,9 +96,6 @@ Route::middleware(['pegawai', 'auth'])->group(function () {
     // Menu berdasarkan kategori
     Route::get('/pegawai/get-menus/{categoryId}', [PegawaiTransaksiController::class, 'getMenus']);
 
-
-
-
     Route::get('/pegawai/transaksi', [PegawaiTransaksiController::class, 'index'])->name('pegawai.transaksi.index');
     Route::post('/pegawai/keranjang/add', [KeranjangController::class, 'addToCart'])->name('pegawai.keranjang.add');
     Route::post('/pegawai/keranjang/update-quantity/{id}', [KeranjangController::class, 'updateQuantity'])->name('pegawai.keranjang.update-quantity');
@@ -106,11 +103,5 @@ Route::middleware(['pegawai', 'auth'])->group(function () {
     Route::get('/pegawai/keranjang', [KeranjangController::class, 'viewCart'])->name('pegawai.keranjang');
     Route::post('/pegawai/keranjang/checkout', [KeranjangController::class, 'checkout'])->name('pegawai.keranjang.checkout');
 });
-
-
-
-
-
-
 
 require __DIR__ . '/auth.php';

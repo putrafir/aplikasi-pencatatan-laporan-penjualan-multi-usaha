@@ -1,13 +1,7 @@
 @extends('components.layout.PegawaiLayout.body.index')
 @section('pegawai')
     <!-- Search -->
-    {{-- <div class="p-4">
-        <input type="text" id="search-input" placeholder="Cari Produk"
-            class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-    </div> --}}
-
-
-    <form class="max-w-md px-4 pb-4 mx-auto">
+    <form id="search-input" placeholder="Cari Produk" class="max-w-md px-4 pb-4 mx-auto">
         <div class="relative">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 <svg class="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
