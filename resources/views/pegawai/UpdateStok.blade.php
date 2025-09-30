@@ -19,7 +19,7 @@
                 Update Sisa Jumlah Stok
             </h2>
 
-        
+
             @if ($alreadyUpdated)
                 {{-- Kalau sudah update, hanya tampilkan teks --}}
                 <div class="text-center py-10">
@@ -28,68 +28,41 @@
                     </p>
 
 
-            <form action="{{ route('pegawai.update.stock.store') }}" method="POST">
-                @csrf
-                <label for="business_id"></label>
+                    @else
+                        {{-- Form utama untuk input stok --}}
+                        <form id="form-update-stok" method="POST" action="{{ route('pegawai.update.stock.store') }}">
+                            @csrf
+                            <input type="hidden" name="business_id" value="{{ $business->id }}">
 
-
-                <input type="hidden" name="business_id" value="{{ $business->id }}">
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    @foreach ($stocks as $stock)
-                        <div class="border border-gray-300 rounded-lg bg-gray-50 shadow p-4">
-                            <label class="block text-md font-semibold text-gray-700 mb-2">{{ $stock->stocks->nama }}</label>
-                            <div class="flex items-center gap-2">
-                                <input type="number" name="jumlah_stok[{{ $stock->stocks->id }}]"
-                                    value="{{ $stock->stocks->jumlah_stok }}"
-                                    class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                <span class="text-gray-600 font-medium">{{ $stock->satuan }}</span>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                @foreach ($stocks as $stock)
+                                    <div class="border border-gray-300 rounded-lg bg-gray-50 shadow p-4">
+                                        <label
+                                            class="block text-md font-semibold text-gray-700 mb-2">{{ $stock->stocks->nama }}</label>
+                                        <div class="flex items-center gap-2">
+                                            <input type="number" name="jumlah_stok[{{ $stock->stocks->id }}]"
+                                                value="{{ $stock->stocks->jumlah_stok }}"
+                                                class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            <span class="text-gray-600 font-medium">{{ $stock->satuan }}</span>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
-                        </div>
-                    @endforeach
-                </div>
 
-                <div class="flex justify-end mt-8">
-                    <button type="submit"
-                        class="bg-gradient-fuchsia text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700">
-                        Simpan Semua
-                    </button>
-
-                </div>
-            @else
-                {{-- Form utama untuk input stok --}}
-                <form id="form-update-stok" method="POST" action="{{ route('pegawai.update.stock.store') }}">
-                    @csrf
-                    <input type="hidden" name="business_id" value="{{ $business->id }}">
-        
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        @foreach ($stocks as $stock)
-                            <div class="border border-gray-300 rounded-lg bg-gray-50 shadow p-4">
-                                <label class="block text-md font-semibold text-gray-700 mb-2">{{ $stock->stocks->nama }}</label>
-                                <div class="flex items-center gap-2">
-                                    <input type="number" name="jumlah_stok[{{ $stock->stocks->id }}]"
-                                        value="{{ $stock->stocks->jumlah_stok }}"
-                                        class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                    <span class="text-gray-600 font-medium">{{ $stock->satuan }}</span>
-                                </div>
+                            <div class="flex justify-end mt-8">
+                                {{-- Tombol ini tidak submit form, hanya buka modal --}}
+                                <button type="button" onclick="togglePopup('update-modal')"
+                                    class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700">
+                                    Simpan Semua
+                                </button>
                             </div>
-                        @endforeach
-                    </div>
-        
-                    <div class="flex justify-end mt-8">
-                        {{-- Tombol ini tidak submit form, hanya buka modal --}}
-                        <button type="button" onclick="togglePopup('update-modal')"
-                            class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700">
-                            Simpan Semua
-                        </button>
-                    </div>
-                </form>
-        
-                {{-- Modal konfirmasi --}}
-                <x-modal-update-stok id="update-modal" :action="route('pegawai.update.stock.store')" />
+                        </form>
+
+                        {{-- Modal konfirmasi --}}
+                        <x-modal-update-stok id="update-modal" :action="route('pegawai.update.stock.store')" />
             @endif
         </div>
-        
+
     </div>
 
     <script>
@@ -99,7 +72,7 @@
             const mainForm = document.querySelector("#form-update-stok");
 
             modalForm.addEventListener("submit", function(e) {
-                e.preventDefault(); 
+                e.preventDefault();
                 mainForm.submit(); // submit form utama
             });
         });
