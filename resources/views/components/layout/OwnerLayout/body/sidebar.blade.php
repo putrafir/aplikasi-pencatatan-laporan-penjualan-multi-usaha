@@ -7,8 +7,8 @@
         <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap text-slate-700">
             {{-- <img src="{{ asset('img/logo-ct.png') }}"
                 class="inline h-full max-w-full transition-all duration-200 ease-nav-brand max-h-8" alt="main_logo" /> --}}
-            <svg class="w-6 h-6 inline h-full max-w-full transition-all duration-200 ease-nav-brand max-h-8 text-gray-800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 211.01 237.38"
-                fill="currentColor">
+            <svg class="w-6 h-6 inline h-full max-w-full transition-all duration-200 ease-nav-brand max-h-8 text-gray-800"
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 211.01 237.38" fill="currentColor">
                 <g>
                     <path
                         d="m211.01,131.88c0,9.11-1.16,17.95-3.33,26.38-11.71,45.51-53.02,79.13-102.17,79.13S15.03,203.76,3.33,158.26c-2.17-8.43-3.33-17.27-3.33-26.38h26.38c0,9.25,1.59,18.13,4.5,26.38,9.45,26.72,32.84,46.86,61.44,51.66,4.29.72,8.69,1.09,13.19,1.09s8.9-.37,13.19-1.09c9.47-1.59,18.37-4.86,26.38-9.5,16.18-9.36,28.74-24.29,35.06-42.16h-87.82v-52.75H0c0-9.11,1.16-17.95,3.33-26.38,2.41-9.36,6.06-18.22,10.79-26.38C32.36,21.22,66.45,0,105.5,0s73.15,21.22,91.39,52.75c4.73,8.16,8.38,17.02,10.79,26.38,2.17,8.43,3.33,17.27,3.33,26.38h-26.38c0-9.25-1.59-18.13-4.5-26.38-3.48-9.83-8.84-18.77-15.66-26.38-5.58-6.24-12.12-11.57-19.41-15.78-8.01-4.64-16.91-7.91-26.38-9.5-4.29-.72-8.69-1.09-13.19-1.09s-8.9.37-13.19,1.09c-18.08,3.03-34.08,12.2-45.78,25.28-6.82,7.61-12.18,16.55-15.66,26.38h61.44v-26.38h26.38v26.38h26.38v26.38h-26.38v26.38h92.32Z" />
@@ -42,10 +42,10 @@
                             </g>
                         </g>
                     </g>
-                </svg> </x-sidebar-item>
+                </svg></x-sidebar-item>
 
-            <x-sidebar-item route="admin.verify-users" label="Manage Users"> <svg width="12px" height="12px"
-                    viewBox="0 0 46 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            <x-sidebar-item route="admin.verify-users" label="Manage Users">
+                <svg width="12px" height="12px" viewBox="0 0 46 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink">
                     <title>account-user</title>
                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -68,8 +68,8 @@
                     </g>
                 </svg></x-sidebar-item>
 
-            <x-sidebar-item route="admin.kelola-bisnis" label="Kelola Bisnis"> <svg width="12px" height="12px"
-                    viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            <x-sidebar-item route="admin.kelola-bisnis" label="Kelola Bisnis">
+                <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink">
                     <title>office</title>
                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -90,55 +90,21 @@
                 </svg>
             </x-sidebar-item>
             <x-sidebar-item route="admin.laporan" label="Laporan">
-                <svg class="w-4 h-4 {{ Request::routeIs('admin.laporan') ? '' : 'fill-slate-800' }}" aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M5 19V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v13H7a2 2 0 0 0-2 2Zm0 0a2 2 0 0 0 2 2h12M9 3v14m7 0v4" />
+                <svg width="19" height="22" viewBox="0 0 19 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <title>office</title>
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                            <g transform="translate(1716.000000, 291.000000)">
+                                <g transform="translate(153.000000, 2.000000)">
+                                    <path class="{{ Request::routeIs('admin.laporan') ? '' : 'fill-slate-800' }}"
+                                        d="M8.99902 0.953125C7.34212 0.953125 5.99912 2.29313 5.99902 3.95312V5.01562H4.99902C4.08452 4.97883 2.68092 5.57623 2.15522 7.04693L0.999023 7.01562C0.446723 7.01562 -0.00107655 7.46233 -0.000976546 8.01562C-0.000976546 8.56892 0.446723 9.01613 0.999023 9.01613H1.99902V10.0161H0.999023C0.446723 10.0161 -0.00107655 10.4621 -0.000976546 11.0161C-0.000976546 11.5691 0.446723 12.0151 0.999023 12.0161H1.99902V13.0161H0.999023C0.446723 13.0161 -0.00107655 13.4621 -0.000976546 14.0161C-0.000976546 14.5691 0.446723 15.0161 0.999023 15.0161H1.99902V16.0161H0.999023C0.446723 16.0161 -0.00107655 16.4621 -0.000976546 17.0161C-0.000976546 17.5691 0.446723 18.0161 0.999023 18.0161H1.99902C1.99902 19.6721 3.34212 21.0161 4.99902 21.0161H11.999C13.6559 21.0161 14.999 19.6721 14.999 18.0161V17.0161L15.999 16.9841C17.6559 16.9841 18.9989 15.6441 18.999 13.9841V3.95312C18.999 2.29323 17.6558 0.952925 15.999 0.953125H8.99902ZM15.999 2.95312C16.5513 2.95312 16.9991 3.39983 16.999 3.95312V13.9531C16.999 14.5061 16.5513 14.9531 15.999 14.9531L14.999 14.9841V8.01562C14.999 6.35873 13.6559 5.01562 11.999 5.01562H7.99902V3.98443C7.99902 3.43113 8.44672 2.98433 8.99902 2.98443L15.999 2.95312Z">
+                                    </path>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
                 </svg>
-
             </x-sidebar-item>
-
-
-            {{-- <x-sidebar-item route="admin.miss" label="Transaksi" />
-
-            <x-sidebar-item route="admin.manage-menu" label="Menu & Kategori" />
-
-            <x-sidebar-item route="admin.manage-stock" label="Stok" /> --}}
-
-            {{-- <li class="mt-auto absolute my-3 bottom-0 left-0 w-full px-4">
-                <form method="POST" action="{{ route('logout') }}" id="logoutForm">
-                    @csrf
-                    <button type="submit"
-                        class="w-full text-xs font-bold text-white uppercase text-center transition-all border-0 rounded-lg select-none shadow-soft-md bg-gradient-to-tl from-purple-700 to-pink-500 hover:shadow-soft-2xl py-3"
-                        id="logoutBtn">
-                        Logout
-                    </button>
-                </form>
-            </li> --}}
         </ul>
     </div>
 </aside>
-
-{{-- <script>
-    document.getElementById('logoutForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: "Anda akan keluar dari akun ini!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Ya, Logout!',
-            cancelButtonText: 'Batal',
-            customClass: {
-                confirmButton: 'bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded mr-7',
-                cancelButton: 'bg-gray-400 hover:bg-gray-500 text-white py-2 px-5 rounded mx-7 mr-7'
-            },
-            buttonsStyling: false
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('logoutForm').submit();
-            }
-        });
-
-    });
-</script> --}}
