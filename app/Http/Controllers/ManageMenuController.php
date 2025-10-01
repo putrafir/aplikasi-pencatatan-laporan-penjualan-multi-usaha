@@ -30,7 +30,7 @@ class ManageMenuController extends Controller
         $request->validate([
             'business_id' => 'required|exists:business,id', // cek nama tabelnya
             'nama' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
+            'kategori_id' => 'required|exists:categories,id',
             'harga' => 'required|numeric|min:0',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,heic|max:5120',
         ]);
@@ -51,7 +51,7 @@ class ManageMenuController extends Controller
         Menu::create([
             'business_id' => $request->business_id,
             'nama' => $request->nama,
-            'kategori_id' => $request->category_id, // kalau di DB pakai kolom kategori_id
+            'kategori_id' => $request->kategori_id,
             'harga' => $request->harga,
             'foto' => $fotoPath,
         ]);
