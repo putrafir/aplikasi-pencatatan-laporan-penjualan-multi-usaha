@@ -42,7 +42,7 @@ function renderMenus(dataMenus) {
         let html = `
             <div>
                 <div class="h-80 bg-white rounded-xl shadow overflow-hidden hover:shadow-lg transition relative flex flex-col">
-                    <img class="w-full h-40 object-cover rounded-t-xl"
+                    <img class="rounded-t-lg h-[11rem] w-full object-cover"
                          src="${fotoUrl}" alt="" />
                     <div class="p-4 flex flex-col justify-between flex-1">
                         <h3 class="font-semibold text-base sm:text-lg line-clamp-2 h-12">
