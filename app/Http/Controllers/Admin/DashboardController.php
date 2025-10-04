@@ -20,6 +20,7 @@ class DashboardController extends Controller
     {
         $filterPendapatan = $request->get('filter_pendapatan', 'minggu');
         $filterStok = $request->get('filter_stok', 'minggu');
+        $filterMenu = $request->get('filter_menu', 'minggu');
 
         if ($filterPendapatan == 'bulan') {
             // =================== PENJUALAN (TRANSAKSI) ===================
@@ -47,7 +48,7 @@ class DashboardController extends Controller
 
             $transactions = DB::table('transaksis')
                 ->join('business', 'transaksis.business_id', '=', 'business.id')
-                ->selectRaw('YEARWEEK(transaksis.created_at, 3) as yearweek, business.name as business, COUNT(transaksis.id) as total_transaksi, SUM(transaksis.total_bayar) as total_pendapatan')
+                ->selectRaw('YEARWEEK(transaksis.created_at, 3) as yearweek, business.name as business, SUM(transaksis.total_bayar) as total_pendapatan')
                 ->whereBetween('transaksis.created_at', [$startOfMonth, $endOfMonth])
                 ->groupByRaw('YEARWEEK(transaksis.created_at, 3), business.name')
                 ->orderBy('yearweek', 'asc')
@@ -61,7 +62,7 @@ class DashboardController extends Controller
                         $row = $data->firstWhere('yearweek', $week['yearweek']);
                         return [
                             'pendapatan' => $row ? $row->total_pendapatan : 0,
-                            'transaksi'  => $row ? $row->total_transaksi : 0,
+                            // 'transaksi'  => $row ? $row->total_transaksi : 0,
                         ];
                     })->values()->toArray()
                 ];
@@ -74,7 +75,7 @@ class DashboardController extends Controller
 
             $transactions = DB::table('transaksis')
                 ->join('business', 'transaksis.business_id', '=', 'business.id')
-                ->selectRaw('DATE(transaksis.created_at) as tanggal, business.name as business, COUNT(transaksis.id) as total_transaksi, SUM(transaksis.total_bayar) as total_pendapatan')
+                ->selectRaw('DATE(transaksis.created_at) as tanggal, business.name as business, SUM(transaksis.total_bayar) as total_pendapatan')
                 ->whereBetween('transaksis.created_at', [$startOfWeek, $endOfWeek])
                 ->groupByRaw('DATE(transaksis.created_at), business.name')
                 ->orderBy('tanggal', 'asc')
@@ -93,7 +94,7 @@ class DashboardController extends Controller
                         $row = $data->firstWhere('tanggal', $tanggal);
                         return [
                             'pendapatan' => $row ? $row->total_pendapatan : 0,
-                            'transaksi'  => $row ? $row->total_transaksi : 0,
+                            // 'transaksi'  => $row ? $row->total_transaksi : 0,
                         ];
                     })->values()->toArray()
                 ];
@@ -182,7 +183,146 @@ class DashboardController extends Controller
             $totalStokKeluar = $stokLogs->sum('total_keluar');
         }
 
+
+        if ($filterMenu == 'bulan') {
+            $startOfMonth = now()->startOfMonth();
+            $endOfMonth = now()->endOfMonth();
+
+            $weeks = [];
+            $categoriesMenu = [];
+            $current = $startOfMonth->copy();
+            while ($current <= $endOfMonth) {
+                $startOfWeek = $current->copy();
+                $endOfWeek = $current->copy()->endOfWeek();
+                if ($endOfWeek > $endOfMonth) $endOfWeek = $endOfMonth->copy();
+
+                $weeks[] = [
+                    'start' => $startOfWeek->copy(),
+                    'end' => $endOfWeek->copy(),
+                    'label' => $startOfWeek->format('j') . ' - ' . $endOfWeek->format('j M'),
+                    'yearweek' => $startOfWeek->format('oW'),
+                ];
+
+                $categoriesMenu[] = $startOfWeek->format('j') . ' - ' . $endOfWeek->format('j M');
+                $current = $endOfWeek->addDay();
+            }
+
+            // ambil transaksi di bulan ini (dengan business name & details)
+            $transaksis = DB::table('transaksis')
+                ->join('business', 'transaksis.business_id', '=', 'business.id')
+                ->select('transaksis.id', 'business.name as business', 'transaksis.details', 'transaksis.created_at')
+                ->whereBetween('transaksis.created_at', [$startOfMonth, $endOfMonth])
+                ->orderBy('transaksis.created_at', 'asc')
+                ->get();
+
+            // gunakan array untuk mengakumulasi per (yearweek,business)
+            $menuTerjualArr = [];
+
+            foreach ($transaksis as $trx) {
+                $yearweek = Carbon::parse($trx->created_at)->format('oW');
+                $details = json_decode($trx->details, true) ?: [];
+
+                // pastikan mengambil properti 'jumlah' jika ada
+                $totalJumlah = collect($details)->sum(function ($it) {
+                    return isset($it['jumlah']) ? (int) $it['jumlah'] : 0;
+                });
+
+                $key = $yearweek . '|' . $trx->business;
+
+                if (!isset($menuTerjualArr[$key])) {
+                    $menuTerjualArr[$key] = [
+                        'yearweek' => $yearweek,
+                        'business' => $trx->business,
+                        'total_menu_terjual' => 0,
+                    ];
+                }
+
+                $menuTerjualArr[$key]['total_menu_terjual'] += $totalJumlah;
+            }
+
+            // collect untuk mempermudah groupBy
+            $menuTerjual = collect(array_values($menuTerjualArr));
+
+            // bangun series per business, urut sesuai $weeks (so data index cocok dengan categories)
+            $menuSeries = [];
+            foreach ($menuTerjual->groupBy('business') as $business => $group) {
+                $seriesData = collect($weeks)->map(function ($week) use ($group) {
+                    $row = $group->firstWhere('yearweek', $week['yearweek']);
+                    return $row ? (int) $row['total_menu_terjual'] : 0;
+                })->values()->toArray();
+
+                $menuSeries[] = [
+                    'name' => $business,
+                    'data' => collect($seriesData)->map(fn($jumlah) => ['jumlah_menu' => $jumlah])->toArray(),
+                ];
+            }
+
+            $totalMenuTerjual = $menuTerjual->sum('total_menu_terjual');
+        } else {
+            // versi minggu (per-hari)
+            $startOfWeek = now()->startOfWeek();
+            $endOfWeek = now()->endOfWeek();
+
+            $transaksis = DB::table('transaksis')
+                ->join('business', 'transaksis.business_id', '=', 'business.id')
+                ->select('transaksis.id', 'business.name as business', 'transaksis.details', 'transaksis.created_at')
+                ->whereBetween('transaksis.created_at', [$startOfWeek, $endOfWeek])
+                ->orderBy('transaksis.created_at', 'asc')
+                ->get();
+
+            $categoriesMenu = collect();
+            for ($date = $startOfWeek->copy(); $date <= $endOfWeek; $date->addDay()) {
+                $categoriesMenu->push($date->format('Y-m-d'));
+            }
+
+            $menuTerjualArr = [];
+
+            foreach ($transaksis as $trx) {
+                $tanggal = Carbon::parse($trx->created_at)->format('Y-m-d');
+                $details = json_decode($trx->details, true) ?: [];
+
+                $totalJumlah = collect($details)->sum(function ($it) {
+                    return isset($it['jumlah']) ? (int) $it['jumlah'] : 0;
+                });
+
+                $key = $tanggal . '|' . $trx->business;
+
+                if (!isset($menuTerjualArr[$key])) {
+                    $menuTerjualArr[$key] = [
+                        'tanggal' => $tanggal,
+                        'business' => $trx->business,
+                        'total_menu_terjual' => 0,
+                    ];
+                }
+
+                $menuTerjualArr[$key]['total_menu_terjual'] += $totalJumlah;
+            }
+
+            $menuTerjual = collect(array_values($menuTerjualArr));
+
+            $menuSeries = [];
+            foreach ($menuTerjual->groupBy('business') as $business => $group) {
+                $seriesData = $categoriesMenu->map(function ($tanggal) use ($group) {
+                    $row = $group->firstWhere('tanggal', $tanggal);
+                    return $row ? (int) $row['total_menu_terjual'] : 0;
+                })->values()->toArray();
+
+                $menuSeries[] = [
+                    'name' => $business,
+                    'data' => collect($seriesData)->map(fn($jumlah) => ['jumlah_menu' => $jumlah])->toArray(),
+                ];
+            }
+
+            $totalMenuTerjual = $menuTerjual->sum('total_menu_terjual');
+        }
+
+
+
         return view('admin.dashboard', [
+            'filterMenu' => $filterMenu,
+            'categoriesMenu' => $categoriesMenu,
+            'menuSeries' => $menuSeries,
+            'totalMenuTerjual' => $totalMenuTerjual,
             'categoriesPendapatan' => $categoriesPendapatan,
             'categoriesStok' => $categoriesStok,
             'seriesPendapatan' => $seriesPendapatan,          // pendapatan + transaksi
