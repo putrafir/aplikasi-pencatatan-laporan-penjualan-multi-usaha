@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('stock_id');
             $table->integer('stok_awal');
             $table->integer('stok_akhir')->nullable();
+            $table->integer('stok_keluar')->nullable();
             $table->foreign('stock_id')->references('id')->on('stock')->onDelete('cascade');
             $table->timestamps();
         });
