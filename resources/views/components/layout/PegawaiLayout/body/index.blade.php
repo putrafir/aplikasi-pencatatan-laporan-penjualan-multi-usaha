@@ -26,7 +26,7 @@
 
     <!-- Main Content -->
     <main
-        class="pt-11 z-10 ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
+        class="pt-11 z-10 ease-soft-in-out relative h-full max-h-screen rounded-xl transition-all duration-200">
         <div class="w-full py-6 mx-auto">
             @yield('pegawai')
         </div>

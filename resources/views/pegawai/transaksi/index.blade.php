@@ -1,7 +1,7 @@
 @extends('components.layout.PegawaiLayout.body.index')
 @section('pegawai')
     <!-- Search -->
-    <form id="search-input" placeholder="Cari Produk" class="max-w-md px-4 pb-4 mx-auto">
+    <form id="search-input" placeholder="Cari Produk" class="w-full md:max-w-md px-4 pb-4 md:pb-0 mx-auto md:ml-auto md:mr-0">
         <div class="relative">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 <svg class="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -19,7 +19,7 @@
     </form>
 
     <!-- CATEGORY FILTER -->
-    <div class="flex gap-3 px-4 py-2 w-full text-sm overflow-x-auto" id="kategori-buttons">
+    <div class="flex gap-3 px-4 py-2 md:pb-2 w-full text-sm overflow-x-auto" id="kategori-buttons">
         {{-- Tombol ALL --}}
         <button onclick="loadMenus('all', this)" class="kategori-btn px-3 py-1 rounded-full bg-pink-500 text-white">
             All
@@ -34,7 +34,7 @@
     </div>
 
     <!-- LIST MENU -->
-    <div id="menu-list" class="max-w-7xl mx-auto p-4 grid grid-cols-2 gap-4">
+    <div id="menu-list" class="max-w-7xl xl:max-w-full mx-auto p-4 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-4">
         <!-- Menu akan di-load dengan AJAX -->
     </div>
 

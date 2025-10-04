@@ -1,5 +1,5 @@
  <nav class="fixed top-0 w-full z-50 h-16 bg-gray-50">
-     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+     <div class="flex flex-wrap items-center justify-between mx-auto p-4">
 
 
          <a href="{{ route('pegawai.transaksi.index') }}">
