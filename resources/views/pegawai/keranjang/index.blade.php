@@ -11,7 +11,7 @@
         {{-- List Keranjang --}}
         <div class="space-y-4 overflow-y-auto pb-56 hide-scrollbar">
             @foreach ($keranjangs as $keranjang)
-                <div class="bg-white rounded-xl shadow p-3 flex gap-3" id="cart-item-{{ $keranjang->id }}">
+                <div class="bg-white rounded-xl shadow p-3 flex gap-3 md:grid-cols-2" id="cart-item-{{ $keranjang->id }}">
                     @if ($keranjang->menu && $keranjang->menu->foto)
                         <img class="rounded-lg w-16 h-16 object-cover" src="{{ asset($keranjang->menu->foto) }}"
                             alt="" />

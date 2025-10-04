@@ -2,15 +2,15 @@
 
 @section('pegawai')
     <div class="p-6">
-        <div class="relative overflow-hidden max-w-sm h-full bg-gray-100 rounded-2xl shadow-md flex items-center p-4">
+        <div class="relative overflow-hidden h-full bg-gray-100 rounded-2xl shadow-md flex items-center p-4">
             <img src="{{ asset('img/illustrations/pegawai.svg') }}" class="w-30 absolute bottom-0" alt="">
             <x-right-motif />
             <x-left-motif />
 
             <div class="pl-[12rem] text-white mr-auto pb-5 z-10">
-                <h2 class="text-2xl text-white font-bold ">{{ $user->name }}</h2>
-                <p class="text-sm ">Usaha {{ $business->name }}</p>
-                <p class="text-sm ">{{ $transaksi->count() }} Transaksi</p>
+                <h2 class="text-2xl text-white font-bold md:text-slate-700">{{ $user->name }}</h2>
+                <p class="text-sm md:text-slate-700">Usaha {{ $business->name }}</p>
+                <p class="text-sm md:text-slate-700">{{ $transaksi->count() }} Transaksi</p>
             </div>
         </div>
 
