@@ -18,7 +18,7 @@
     </div>
 
 
-    <x-section-header title=Stok buttonAction="togglePopup('popup-add')" :business_id="$business->id" />
+    <x-section-header title=Stok buttonAction="togglePopup('popup-add')" :business_id="$business->id" label="Tambah Stok" :showLabel="true" />
 
     <x-modal-add id="popup-add" title="Tambah Stok" :isEdit="false" action="{{ route('admin.stock.add') }}" method="POST"
         :inputs="[
@@ -72,7 +72,7 @@
 
     <x-modal-delete id="popup-edit-stock-delete" action="{{ route('admin.stock.destroy', ':id') }}" />
 
-    <x-section-header title="Kategori" buttonAction="togglePopup('popup-add-kategori')" />
+    <x-section-header title="Kategori" buttonAction="togglePopup('popup-add-kategori')" label="Tambah Kategori" :showLabel="true" />
 
     <x-modal-add id="popup-add-kategori" title="Tambah Kategori" :isEdit="false"
         action="{{ route('admin.category.add') }}" method="POST" :inputs="[
@@ -112,7 +112,7 @@
 
     <x-modal-delete id="popup-edit-kategori-delete" action="{{ route('admin.kategori.destroy', ':id') }}" />
 
-    <x-section-header title="Menu" buttonAction="togglePopup('popup-add-menu')" />
+    <x-section-header title="Menu" buttonAction="togglePopup('popup-add-menu')" label="Tambah Menu" :showLabel="true" />
 
     <x-modal-add id="popup-add-menu" title="Tambah Menu" :isEdit="false" action="{{ route('admin.menu.add') }}"
         method="POST" :inputs="[
