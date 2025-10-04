@@ -30,7 +30,11 @@ class ManageStockController extends Controller
             })->whereDate('created_at', today())
             ->get();
 
-        $alreadyUpdated = $stocks->isNotEmpty();
+        $stocks_akhir = $stocks->filter(function ($log) {
+            return !is_null($log->stok_akhir);
+        })->values();
+
+        $alreadyUpdated = $stocks_akhir->isNotEmpty();
 
         return view('pegawai.UpdateStok', compact('user', 'stocks', 'business', 'transaksi', 'alreadyUpdated'));
     }
@@ -160,8 +164,10 @@ class ManageStockController extends Controller
                 ->latest('created_at')
                 ->first();
 
+            $stokAwal = $lastLog->stok_awal;
             $lastLog->update([
-                'stok_akhir' => $remainingStock, 
+                'stok_akhir' => $remainingStock,
+                'stok_keluar' => $stokAwal - $remainingStock
             ]);
         }
 

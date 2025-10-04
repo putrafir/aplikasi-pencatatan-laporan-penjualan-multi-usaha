@@ -26,6 +26,7 @@
             'Nama Stok' => 'stocks.nama',
             'Stok Awal' => 'stok_awal',
             'Stok Akhir' => 'stok_akhir',
+            'Stok Keluar' => 'stok_keluar',
         ]" :rows="$stocks" :total="$total" :perPage="$perPage" :currentPage="$currentPage" />
     </div>
 

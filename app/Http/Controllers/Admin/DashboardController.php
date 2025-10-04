@@ -18,16 +18,16 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
-        $filter = $request->get('filter', 'minggu');
+        $filterPendapatan = $request->get('filter_pendapatan', 'minggu');
+        $filterStok = $request->get('filter_stok', 'minggu');
 
-        if ($filter == 'bulan') {
-            // Penjualan per minggu di bulan ini (minggu penuh)
+        if ($filterPendapatan == 'bulan') {
+            // =================== PENJUALAN (TRANSAKSI) ===================
             $startOfMonth = now()->startOfMonth();
             $endOfMonth = now()->endOfMonth();
 
-            // Buat array minggu penuh dalam bulan
             $weeks = [];
-            $categories = [];
+            $categoriesPendapatan = [];
             $current = $startOfMonth->copy();
             while ($current <= $endOfMonth) {
                 $startOfWeek = $current->copy();
@@ -37,16 +37,14 @@ class DashboardController extends Controller
                 $weeks[] = [
                     'start' => $startOfWeek->copy(),
                     'end' => $endOfWeek->copy(),
-
                     'label' => $startOfWeek->format('j') . ' - ' . $endOfWeek->format('j M'),
-                    'yearweek' => $startOfWeek->format('oW'), // ISO week
+                    'yearweek' => $startOfWeek->format('oW'),
                 ];
 
-                $categories[] = $startOfWeek->format('j') . ' - ' . $endOfWeek->format('j M');
+                $categoriesPendapatan[] = $startOfWeek->format('j') . ' - ' . $endOfWeek->format('j M');
                 $current = $endOfWeek->addDay();
             }
 
-            // Ambil transaksi per minggu
             $transactions = DB::table('transaksis')
                 ->join('business', 'transaksis.business_id', '=', 'business.id')
                 ->selectRaw('YEARWEEK(transaksis.created_at, 3) as yearweek, business.name as business, COUNT(transaksis.id) as total_transaksi, SUM(transaksis.total_bayar) as total_pendapatan')
@@ -55,10 +53,9 @@ class DashboardController extends Controller
                 ->orderBy('yearweek', 'asc')
                 ->get();
 
-            // Mapping data ke minggu penuh
-            $series = [];
+            $seriesPendapatan = [];
             foreach ($transactions->groupBy('business') as $usaha => $data) {
-                $series[] = [
+                $seriesPendapatan[] = [
                     'name' => $usaha,
                     'data' => collect($weeks)->map(function ($week) use ($data) {
                         $row = $data->firstWhere('yearweek', $week['yearweek']);
@@ -71,7 +68,7 @@ class DashboardController extends Controller
             }
             $totalPendapatan = $transactions->sum('total_pendapatan');
         } else {
-            // Penjualan per hari di minggu ini
+            // =================== PENJUALAN (TRANSAKSI) ===================
             $startOfWeek = now()->startOfWeek();
             $endOfWeek = now()->endOfWeek();
 
@@ -83,16 +80,16 @@ class DashboardController extends Controller
                 ->orderBy('tanggal', 'asc')
                 ->get();
 
-            $categories = collect();
+            $categoriesPendapatan = collect();
             for ($date = $startOfWeek->copy(); $date <= $endOfWeek; $date->addDay()) {
-                $categories->push($date->format('Y-m-d'));
+                $categoriesPendapatan->push($date->format('Y-m-d'));
             }
 
-            $series = [];
+            $seriesPendapatan = [];
             foreach ($transactions->groupBy('business') as $usaha => $data) {
-                $series[] = [
+                $seriesPendapatan[] = [
                     'name' => $usaha,
-                    'data' => $categories->map(function ($tanggal) use ($data) {
+                    'data' => $categoriesPendapatan->map(function ($tanggal) use ($data) {
                         $row = $data->firstWhere('tanggal', $tanggal);
                         return [
                             'pendapatan' => $row ? $row->total_pendapatan : 0,
@@ -104,11 +101,97 @@ class DashboardController extends Controller
             $totalPendapatan = $transactions->sum('total_pendapatan');
         }
 
+
+        if ($filterStok == 'bulan') {
+            // =================== STOK KELUAR ===================
+
+            $startOfMonth = now()->startOfMonth();
+            $endOfMonth = now()->endOfMonth();
+
+            $weeks = [];
+            $categoriesStok = [];
+            $current = $startOfMonth->copy();
+            while ($current <= $endOfMonth) {
+                $startOfWeek = $current->copy();
+                $endOfWeek = $current->copy()->endOfWeek();
+                if ($endOfWeek > $endOfMonth) $endOfWeek = $endOfMonth->copy();
+
+                $weeks[] = [
+                    'start' => $startOfWeek->copy(),
+                    'end' => $endOfWeek->copy(),
+                    'label' => $startOfWeek->format('j') . ' - ' . $endOfWeek->format('j M'),
+                    'yearweek' => $startOfWeek->format('oW'),
+                ];
+
+                $categoriesStok[] = $startOfWeek->format('j') . ' - ' . $endOfWeek->format('j M');
+                $current = $endOfWeek->addDay();
+            }
+            $stokLogs = DB::table('stock_log')
+                ->join('stock', 'stock_log.stock_id', '=', 'stock.id')
+                ->join('business', 'stock.business_id', '=', 'business.id')
+                ->selectRaw('YEARWEEK(stock_log.created_at, 3) as yearweek, business.name as business, SUM(stock_log.stok_keluar) as total_stok_keluar')
+                ->whereBetween('stock_log.created_at', [$startOfMonth, $endOfMonth])
+                ->groupByRaw('YEARWEEK(stock_log.created_at, 3), business.name')
+                ->orderBy('yearweek', 'asc')
+                ->get();
+
+            $stokSeries = [];
+            foreach ($stokLogs->groupBy('business') as $usaha => $data) {
+                $stokSeries[] = [
+                    'name' => $usaha,
+                    'data' => collect($weeks)->map(function ($week) use ($data) {
+                        $row = $data->firstWhere('yearweek', $week['yearweek']);
+                        return [
+                            'stok_keluar' => $row ? $row->total_stok_keluar : 0,
+                        ];
+                    })->values()->toArray()
+                ];
+            }
+
+            $totalStokKeluar = $stokLogs->sum('total_stok_keluar');
+        } else {
+            // =================== STOK KELUAR ===================
+
+            $startOfWeek = now()->startOfWeek();
+            $endOfWeek = now()->endOfWeek();
+
+            $stokLogs = DB::table('stock_log')
+                ->join('stock', 'stock_log.stock_id', '=', 'stock.id')
+                ->join('business', 'stock.business_id', '=', 'business.id')
+                ->selectRaw('DATE(stock_log.created_at) as tanggal, business.name as business, SUM(stock_log.stok_keluar) as total_keluar')
+                ->groupByRaw('DATE(stock_log.created_at), business.name')
+                ->orderBy('tanggal', 'asc')
+                ->get();
+            $categoriesStok = collect();
+            for ($date = $startOfWeek->copy(); $date <= $endOfWeek; $date->addDay()) {
+                $categoriesStok->push($date->format('Y-m-d'));
+            }
+            $stokSeries = [];
+            foreach ($stokLogs->groupBy('business') as $usaha => $data) {
+                $stokSeries[] = [
+                    'name' => $usaha,
+                    'data' => $categoriesStok->map(function ($tanggal) use ($data) {
+                        $row = $data->firstWhere('tanggal', $tanggal);
+                        return [
+                            'stok_keluar' => $row ? $row->total_keluar : 0,
+                        ];
+                    })
+                ];
+            }
+
+            $totalStokKeluar = $stokLogs->sum('total_keluar');
+        }
+
         return view('admin.dashboard', [
-            'categories' => $categories,
-            'series' => $series,
-            'filter' => $filter,
+            'categoriesPendapatan' => $categoriesPendapatan,
+            'categoriesStok' => $categoriesStok,
+            'seriesPendapatan' => $seriesPendapatan,          // pendapatan + transaksi
+            'stokSeries' => $stokSeries,  // stok keluar
+            'filterPendapatan' => $filterPendapatan,
+            'filterStok' => $filterStok,
             'totalPendapatan' => $totalPendapatan,
+            'totalStokKeluar' => $totalStokKeluar,
+
         ]);
     }
 
