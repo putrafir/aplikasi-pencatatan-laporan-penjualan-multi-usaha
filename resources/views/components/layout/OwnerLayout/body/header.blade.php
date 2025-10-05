@@ -42,8 +42,8 @@
                             class="ml-1 hidden md:block duration-300 opacity-100 pointer-events-none ease-soft">{{ Auth::user()->name }}</span>
                         <div
                             class="{{ Request::routeIs('admin.profile')
-                                ? 'bg-gradient-to-tl from-purple-700 to-pink-500 shadow-soft-2xl ml-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5'
-                                : 'shadow-soft-2xl ml-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5' }}">
+                                ? 'bg-gradient-to-tl from-purple-700 to-pink-500 shadow-soft-2xl ml-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center md:p-2.5'
+                                : 'shadow-soft-2xl ml-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center md:p-2.5' }}">
                             <svg width="12px" height="12px" viewBox="0 0 46 42" version="1.1"
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <title>account-user</title>
