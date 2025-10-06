@@ -2,10 +2,10 @@
 
 @if ($buttonAction)
 
-    <button onclick="{{!! $buttonAction !!}}"
-        class="flex items-center gap-2 px-4 py-3 rounded-full bg-white text-gray-800 text-sm font-semibold 
+    <button onclick="{!! $buttonAction !!}"
+        class="flex items-center gap-2 px-4 py-3 rounded-full bg-white text-gray-800 text-sm font-semibold
         shadow-md border border-gray-200 hover:shadow-lg hover:bg-gray-50 transition">
-        
+
         <span class="{{ $showLabel ? 'hidden md:inline' : '' }}">{{ $label }}</span>
 
         <svg class="w-4 h-4" fill="none" stroke="black" stroke-width="2"
