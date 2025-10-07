@@ -3,8 +3,8 @@
 @section('admin')
     <div class="relative mb-9 overflow-hidden w-full h-full bg-gray-100 rounded-2xl shadow-md flex items-center p-4">
 
-        <img src="{{ asset('img/illustrations/toko.svg') }}" class="w-50 absolute bottom-0" alt="" srcset="">
-        <x-right-motif />
+        <img src="{{ asset('img/illustrations/toko.svg') }}" class="w-50 z-10 absolute bottom-0" alt="" srcset="">
+        <x-right-motif class=" md:-right-10 xl:right-0"/>
 
         <x-left-motif />
 
