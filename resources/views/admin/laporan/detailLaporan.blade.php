@@ -4,7 +4,7 @@
 
     {{-- Header --}}
     <div class="relative mb-9 overflow-hidden w-full h-full bg-gray-100 rounded-2xl shadow-md flex items-center p-4">
-        <img src="{{ asset('img/illustrations/toko.svg') }}" class="w-40 absolute bottom-0" alt="">
+        <img src="{{ asset('img/illustrations/toko.svg') }}" class="w-40 z-10 absolute bottom-0" alt="">
         <x-right-motif />
         <x-left-motif />
 
