@@ -53,7 +53,7 @@
                 <x-left-motif class="z-0" />
 
                 {{-- Gambar toko --}}
-                <img src="{{ asset('img/illustrations/toko.svg') }}" class="absolute -bottom-1 left-0 w-48 z-10"
+                <img src="{{ asset('img/illustrations/toko.svg') }}" class="absolute -bottom-1 left-0 w-40 sm:w-48 z-10"
                     alt="">
 
                 <!-- Tombol Edit -->
@@ -68,7 +68,7 @@
                 </button>
 
                 {{-- Konten kanan --}}
-                <div class="relative flex flex-col items-end justify-center w-full text-right px-6 py-4 z-20">
+                <div class="relative flex flex-col items-end justify-center w-full text-right p-4 z-20">
 
                     {{-- Informasi bisnis di kanan --}}
                     <div class="pr-14 mt-4 flex flex-col items-start">

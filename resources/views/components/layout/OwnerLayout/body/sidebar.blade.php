@@ -92,7 +92,7 @@
                 </svg>
             </x-sidebar-item>
             <x-sidebar-item route="admin.laporan" label="Laporan">
-                <svg width="19" height="22" viewBox="0 0 19 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="12" height="12" viewBox="0 0 19 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <title>office</title>
                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                         <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">

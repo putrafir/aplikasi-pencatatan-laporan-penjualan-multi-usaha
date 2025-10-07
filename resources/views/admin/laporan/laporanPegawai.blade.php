@@ -13,7 +13,6 @@
         <div
             class="relative flex flex-col flex-auto min-w-0 drop-shadow-lg p-4 -mt-4 break-words border-0 rounded-2xl bg-white">
             <div class="flex flex-wrap">
-                <!-- Bagian ini yang kita ubah -->
                 <div class="flex justify-between space-x-20 w-full mb-1">
                     <p class="font-bold text-gray-800 text-sm">Transaksi {{ $pegawai->name }}</p>
                     <p class="font-bold text-gray-800 text-sm">{{ $jumlahTransaksi }} Transaksi</p>
