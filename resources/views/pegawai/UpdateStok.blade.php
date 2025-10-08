@@ -2,11 +2,7 @@
 
 @section('pegawai')
     <div class="p-6">
-        <div class="relative flex items-center p-0 mt-0 overflow-hidden bg-center bg-cover min-h-40 rounded-2xl"
-            style="background-image: url('{{ asset('img/curved-images/curved0.jpg') }}'); background-position-y: 50%">
-            <span
-                class="absolute inset-y-0 w-full h-full bg-center bg-cover bg-gradient-to-tl from-purple-700 to-pink-500 opacity-60"></span>
-        </div>
+        <x-ui.bg-pink/>
         <div class="relative -mt-16 justify-center w-full">
             <div class=" relative max-w-lg md:mx-auto mx-3 overflow-hidden h-full bg-gray-100 rounded-2xl shadow-md flex items-center p-4">
                 <img src="{{ asset('img/illustrations/pegawai.svg') }}" class="w-30 absolute bottom-0" alt="">
