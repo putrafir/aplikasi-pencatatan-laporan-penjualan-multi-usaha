@@ -5,8 +5,6 @@
 
     <div class="grid grid-cols-1 gap-6">
 
-
-
         <div class="max-w-sm md:max-w-full bg-white rounded-lg shadow-sm ">
             <div class="flex justify-between p-4 md:p-6 pb-0 md:pb-0">
                 <div>
@@ -57,7 +55,7 @@
                 <div class="pt-5"></div>
             </div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-0">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 ">
 
             <div class="max-w-sm md:max-w-lg w-full bg-white rounded-lg shadow-sm ">
                 <div class="flex justify-between p-4 md:p-6 pb-0 md:pb-0">
