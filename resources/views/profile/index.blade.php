@@ -3,12 +3,7 @@
 @section(Auth::user()->role === 'pegawai' ? 'pegawai' : 'admin')
 @section('title', 'Profile')
 <div class="p-6">
-    <div class="relative flex items-center p-0 mt-0 overflow-hidden bg-center bg-cover min-h-75 rounded-2xl"
-        style="background-image: url('{{ asset('img/curved-images/curved0.jpg') }}'); background-position-y: 50%">
-        <span
-            class="absolute inset-y-0 w-full h-full bg-center bg-cover bg-gradient-to-tl from-purple-700 to-pink-500 opacity-60"></span>
-    </div>
-
+    <x-ui.bg-pink class="h-75"/>
     <div
         class="relative flex flex-col flex-auto min-w-0 p-4 mx-6 -mt-16 overflow-hidden break-words border-0 shadow-blur rounded-2xl bg-white/80 bg-clip-border backdrop-blur-2xl backdrop-saturate-200">
         <div class="flex flex-wrap -mx-3">
