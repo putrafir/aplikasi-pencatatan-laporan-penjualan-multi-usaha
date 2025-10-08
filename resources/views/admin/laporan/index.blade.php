@@ -2,41 +2,59 @@
 @section('title', 'Laporan')
 @section('admin')
 
-    <div id="datepicker-inline" class="mb-4 flex justify-center"
-        style="[inline-datepicker] .datepicker-days {
-    background-color: #ffffff !important;
-    color: #000000 !important}"
-        inline-datepicker data-date="{{ \Carbon\Carbon::parse($tanggal)->format('m/d/Y') }}"
-        data-max-date="{{ now()->format('m/d/Y') }}" data-date-format="mm/dd/yyyy"
-        datepicker-max-date="{{ now()->format('m/d/Y') }}">
-    </div>
-
-    @foreach ($business as $usaha)
-        <div class="relative flex items-center justify-between bg-white rounded-2xl shadow mb-4 overflow-hidden">
-            <x-left-motif class="absolute left-0 top-0 h-full" />
-            <div class="z-10 flex-1 px-6 py-4">
-                <h2 class="font-bold text-2xl">{{ $usaha->name }}</h2>
+    <div class="flex flex-col space-y-6 md:flex-row gap-6 h-auto md:h-[calc(100vh-100px)] justify-evenly">
+        <!-- Kolom Kiri: Kalender (ukuran lebih besar) -->
+        <div class="md:w-1/3 xl:w-1/3 w-full flex justify-center md:items-start md:sticky top-0">
+            <div id="datepicker-inline"
+                class="w-full md:w-[420px] md:h-[calc(100vh-80px)] p-4 flex justify-center md:justify-center scale-[1.15] origin-top"
+                style="
+            [inline-datepicker] table {
+                font-size: 1.5rem; /* perbesar teks tanggal */
+            }
+            [inline-datepicker] th,
+            [inline-datepicker] td {
+                padding: 1rem; /* perbesar kotak tanggal */
+            }
+        "
+                inline-datepicker data-date="{{ \Carbon\Carbon::parse($tanggal)->format('m/d/Y') }}"
+                data-max-date="{{ now()->format('m/d/Y') }}" data-date-format="mm/dd/yyyy"
+                datepicker-max-date="{{ now()->format('m/d/Y') }}">
             </div>
-            <div class="z-10 py-4 mx-4 rounded-l-full">
-                <p class="text-sm mb-2 text-white">Pendapatan: Rp
-                    {{ number_format($usaha->transaksis->sum('total_bayar') ?? 0, 0, ',', '.') }}</p>
-                <div class="flex space-x-3">
-                    <button onclick="openModal('{{ $usaha->id }}')"
-                        class="bg-white px-4 py-1 rounded-full shadow text-sm font-medium  {{ \Carbon\Carbon::parse($tanggal)->lt(now()->startOfDay()) ? ' text-slate-200 cursor-not-allowed' : '' }}"
-                        {{ \Carbon\Carbon::parse($tanggal)->lt(now()->startOfDay()) ? 'disabled' : '' }}>
-                        Masukkan Stok
-                    </button>
-
-                    <a href="{{ route('admin.laporan.detailLaporan', $usaha->id) }}?date={{ $tanggal }}"
-                        class="bg-white px-4 py-1 rounded-full shadow text-sm font-medium">
-
-                        Lihat
-                    </a>
-                </div>
-            </div>
-            <x-right-motif class="absolute h-60 top-0 w-max" />
         </div>
-    @endforeach
+
+        <!-- Kolom Kanan: Daftar Usaha dengan Scroll -->
+        <div class="md:w-1/2 xl:w-1/2 overflow-y-auto md:h-[calc(100vh-60px)] max-h-[600px] md:max-h-none pr-2 space-y-4">
+            @foreach ($business as $usaha)
+                <div class="relative flex items-center justify-between bg-white rounded-2xl shadow mb-2 overflow-hidden">
+                    <x-left-motif class="absolute left-0 top-0 h-full" />
+
+                    <div class="z-10 flex-1 px-6 py-4">
+                        <h2 class="font-bold text-2xl">{{ $usaha->name }}</h2>
+                    </div>
+
+                    <div class="z-10 py-4 mx-4 rounded-l-full text-right">
+                        <p class="text-sm mb-2 text-black">
+                            Pendapatan: Rp {{ number_format($usaha->transaksis->sum('total_bayar') ?? 0, 0, ',', '.') }}
+                        </p>
+                        <div class="flex space-x-3 justify-end">
+                            <button onclick="openModal('{{ $usaha->id }}')"
+                                class="bg-white px-4 py-1 rounded-full shadow text-sm font-medium {{ \Carbon\Carbon::parse($tanggal)->lt(now()->startOfDay()) ? ' text-slate-200 cursor-not-allowed' : '' }}"
+                                {{ \Carbon\Carbon::parse($tanggal)->lt(now()->startOfDay()) ? 'disabled' : '' }}>
+                                Masukkan Stok
+                            </button>
+
+                            <a href="{{ route('admin.laporan.detailLaporan', $usaha->id) }}?date={{ $tanggal }}"
+                                class="bg-white px-4 py-1 rounded-full shadow text-sm font-medium">
+                                Lihat
+                            </a>
+                        </div>
+                    </div>
+
+                    <x-right-motif class="absolute h-60 top-0 w-max" />
+                </div>
+            @endforeach
+        </div>
+    </div>
 
     <!-- Modal input stok -->
     <div id="stokModal" class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">

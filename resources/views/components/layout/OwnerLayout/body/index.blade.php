@@ -14,6 +14,8 @@
     <!-- Nucleo Icons -->
     <link href="{{ asset('css/nucleo-icons.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/nucleo-svg.css') }}" rel="stylesheet" />
+
+    <link rel="stylesheet" href="{{ asset('css/datepicker-light.css') }}">
     <!-- Popper -->
     {{-- <script src="https://unpkg.com/@popperjs/core@2"></script> --}}
     <!-- Main Styling -->
