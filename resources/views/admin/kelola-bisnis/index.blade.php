@@ -43,7 +43,7 @@
         ]" />
 
     {{-- Daftar Bisnis --}}
-    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         @foreach ($business as $bisnis)
             <div
                 class="relative overflow-hidden max-w-sm md:max-w-md lg:max-w-lg h-full mr-1 bg-gray-100 rounded-2xl shadow-md flex items-center">
