@@ -31,7 +31,7 @@
         @click="sidebarOpen = false">
     </div>
 
-    <main class="ease-soft-in-out md:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
+    <main class="ease-soft-in-out lg:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
         @include('components.layout.OwnerLayout.body.header')
 
         <!-- body -->
