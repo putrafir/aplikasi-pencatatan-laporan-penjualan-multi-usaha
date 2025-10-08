@@ -38,7 +38,6 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['owner', 'auth'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('owner.dashboard');
     Route::get('/admin/verify-users', [UserVerificationController::class, 'index'])->name('admin.verify-users');
-    Route::get('/admin/profile', [DashboardController::class, 'profile'])->name('admin.profile');
     Route::get('/admin/kelola-bisnis', [KelolaBisnisController::class, 'index'])->name('admin.kelola-bisnis');
     Route::get('/admin/kelola-bisnis/{id}', [KelolaBisnisController::class, 'kelola'])->name('admin.kelola-bisnis.kelola');
 

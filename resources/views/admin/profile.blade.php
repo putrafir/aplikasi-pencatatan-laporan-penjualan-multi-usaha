@@ -43,7 +43,7 @@
     <div class="mt-6 p-6 rounded-3 shadow-xl bg-white">
         <div class="flex justify-between">
             <h3 class="text-sm font-semibold text-gray-700 mb-4 uppercase">Profile Information</h3>
-            <p onclick="openEdit()" class="text-blue-500 text-sm font-semibold">Edit</p>
+            <p onclick="openEdit()" class="text-blue-500 text-sm cursor-pointer font-semibold">Edit</p>
         </div>
 
         {{-- Full Name --}}

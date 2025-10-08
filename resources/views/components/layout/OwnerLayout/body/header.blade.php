@@ -37,7 +37,7 @@
                     <a class="{{ Request::routeIs('profile.view')
                         ? 'shadow-soft-xl text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg bg-white font-semibold text-slate-700 transition-colors'
                         : 'text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap transition-colors' }}"
-                        href="{{ route('admin.profile') }}">
+                        href="{{ route('profile.view') }}">
                         <span
                             class="ml-1 hidden md:block duration-300 opacity-100 pointer-events-none ease-soft">{{ Auth::user()->name }}</span>
                         <div
