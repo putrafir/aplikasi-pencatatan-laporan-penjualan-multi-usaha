@@ -3,8 +3,9 @@
 @section('admin')
 
     {{-- Header --}}
-    <x-ui.bg-pink class="hidden md:block"/>
-    <div class="md:-mt-16 relative mb-9 overflow-hidden w-full md:max-w-md md:mx-auto h-full bg-gray-100 rounded-2xl shadow-md flex items-center p-4">
+    <x-ui.bg-pink class="hidden md:block" />
+    <div
+        class="md:-mt-16 relative mb-9 overflow-hidden w-full md:max-w-md md:mx-auto h-full bg-gray-100 rounded-2xl shadow-md flex items-center p-4">
         <img src="{{ asset('img/illustrations/toko.svg') }}" class="w-40 z-10 absolute bottom-0" alt="">
         <x-right-motif class="md:scale-150" />
         <x-left-motif />
@@ -43,8 +44,8 @@
             <a href="{{ route('admin.laporan.pegawai', $pegawai->id) }}?date={{ $tanggal }}">
                 <div class="flex items-center justify-between bg-white rounded-2xl shadow p-4">
                     <div class="flex items-center space-x-3">
-                        <img src="{{ $pegawai->avatar ?? asset('img/illustrations/face2.svg') }}"
-                            class="w-12 h-12 rounded-full" alt="">
+                        <img src="{{ $pegawai->photo ? asset($pegawai->photo) : asset('img/illustrations/face2.svg') }}"
+                            class="w-12 h-12 object-cover rounded-full" alt="">
                         <div>
                             <p class="font-bold">{{ $pegawai->name }}</p>
                             <p class="text-xs text-gray-500">Transaksi: {{ $jumlahTransaksi }}</p>
