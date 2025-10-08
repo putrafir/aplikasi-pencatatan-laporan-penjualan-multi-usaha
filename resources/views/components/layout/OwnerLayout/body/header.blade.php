@@ -2,7 +2,7 @@
     navbar-main navbar-scroll="true">
     <div class="flex justify-between w-full py-1 mx-auto flex-wrap-inherit">
         <nav class="flex pt-1">
-            <button @click="sidebarOpen = !sidebarOpen" class="p-2 md:hidden text-gray-600 focus:outline-none">
+            <button @click="sidebarOpen = !sidebarOpen" class="p-2 lg:hidden text-gray-600 focus:outline-none">
                 <!-- Ikon hamburger -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" stroke="currentColor"
                     stroke-width="2">
