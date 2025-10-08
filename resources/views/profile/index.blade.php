@@ -1,6 +1,8 @@
-@extends('components.layout.OwnerLayout.body.index')
+@extends(Auth::user()->role === 'pegawai' ? 'components.layout.PegawaiLayout.body.index' : 'components.layout.OwnerLayout.body.index')
+
+@section(Auth::user()->role === 'pegawai' ? 'pegawai' : 'admin')
 @section('title', 'Profile')
-@section('admin')
+<div class="p-6">
     <div class="relative flex items-center p-0 mt-0 overflow-hidden bg-center bg-cover min-h-75 rounded-2xl"
         style="background-image: url('{{ asset('img/curved-images/curved0.jpg') }}'); background-position-y: 50%">
         <span
@@ -22,7 +24,8 @@
                 </div>
             </div>
             <!-- DROPDOWN -->
-            <div id="dropdownProfile" class="absolute z-50 mt-2 w-40 bg-white rounded-lg shadow-lg text-gray-700 hidden">
+            <div id="dropdownProfile"
+                class="absolute z-50 mt-2 w-40 bg-white rounded-lg shadow-lg text-gray-700 hidden">
                 <button id="editPhotoBtn" class="block w-full text-left px-4 py-2 hover:bg-gray-100">
                     Edit Foto
                 </button>
@@ -106,7 +109,8 @@
     <div class="mt-6">
         <form action="{{ route('logout') }}" method="POST">
             @csrf
-            <button type="submit" class="w-full border bg-white font-semibold border-red-500 text-red-500 py-2 rounded-md transition">
+            <button type="submit"
+                class="w-full border bg-white font-semibold border-red-500 text-red-500 py-2 rounded-md transition">
                 Logout
             </button>
         </form>
@@ -144,72 +148,7 @@
             </form>
         </div>
     </div>
-
-    <script>
-        // edit profile
-        function openEdit() {
-            document.getElementById('profile-view').classList.add('hidden');
-            document.getElementById('profile-edit').classList.remove('hidden');
-        }
-
-        function cancelEdit() {
-            document.getElementById('profile-edit').classList.add('hidden');
-            document.getElementById('profile-view').classList.remove('hidden');
-        }
-
-        // foto profil
-        const profilePhotoBtn = document.getElementById('profilePhotoBtn');
-        const dropdownProfile = document.getElementById('dropdownProfile');
-        const editPhotoBtn = document.getElementById('editPhotoBtn');
-        const modalUpload = document.getElementById('modalUpload');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-
-        // Toggle dropdown
-        profilePhotoBtn.addEventListener('click', () => {
-            dropdownProfile.classList.toggle('hidden');
-        });
-
-        // Klik edit foto -> buka modal
-        editPhotoBtn.addEventListener('click', () => {
-            dropdownProfile.classList.add('hidden');
-            modalUpload.classList.remove('hidden');
-        });
-
-        // Tutup modal
-        closeModalBtn.addEventListener('click', () => {
-            modalUpload.classList.add('hidden');
-        });
-
-        // Klik di luar modal untuk tutup
-        modalUpload.addEventListener('click', (e) => {
-            if (e.target === modalUpload) {
-                modalUpload.classList.add('hidden');
-            }
-        });
-
-        // Klik di luar dropdown untuk tutup
-        window.addEventListener('click', (e) => {
-            if (!profilePhotoBtn.contains(e.target) && !dropdownProfile.contains(e.target)) {
-                dropdownProfile.classList.add('hidden');
-            }
-        });
-
-        // Hapus foto profil
-        const deletePhotoBtn = document.querySelector('#dropdownProfile button:nth-child(2)');
-
-        deletePhotoBtn.addEventListener('click', () => {
-            dropdownProfile.classList.add('hidden');
-
-            if (confirm('Apakah kamu yakin ingin menghapus foto profil?')) {
-                fetch("{{ route('profile.photo.destroy') }}", {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json'
-                    }
-                }).then(() => location.reload());
-            }
-        });
-    </script>
+</div>
+<script src="{{ asset('js/editProfile.js') }}"></script>
 
 @endsection

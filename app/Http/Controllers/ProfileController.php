@@ -18,11 +18,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->role === 'owner') {
-            return view('admin.profile', compact('user'));
-        } else if ($user->role === 'pegawai') {
-            return view('pegawai.profile', compact('user'));
-        }
+        return view('profile.index', compact('user'));
     }
 
     public function edit(Request $request): View
