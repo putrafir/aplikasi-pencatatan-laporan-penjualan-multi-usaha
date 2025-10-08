@@ -33,7 +33,7 @@
                     </div>
 
                     <div class="z-10 py-4 mx-4 rounded-l-full text-right">
-                        <p class="text-sm mb-2 text-black">
+                        <p class="text-sm mb-2 text-white">
                             Pendapatan: Rp {{ number_format($usaha->transaksis->sum('total_bayar') ?? 0, 0, ',', '.') }}
                         </p>
                         <div class="flex space-x-3 justify-end">
