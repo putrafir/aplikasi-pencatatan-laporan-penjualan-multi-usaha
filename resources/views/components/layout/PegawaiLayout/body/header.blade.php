@@ -30,9 +30,9 @@
                  </x-slot>
 
                  <x-slot name="content">
-                     {{-- <x-dropdown-link :href="route('pegawai.profile')">
+                     <x-dropdown-link :href="route('profile.view')">
                          {{ __('Profile') }}
-                     </x-dropdown-link> --}}
+                     </x-dropdown-link>
                      <x-dropdown-link :href="route('pegawai.update_stoke')">
                          {{ __('Update Stok') }}
                      </x-dropdown-link>

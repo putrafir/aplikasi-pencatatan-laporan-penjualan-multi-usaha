@@ -335,17 +335,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function profile()
-    {
-        $user = Auth::user();
-        return view('admin.profile', compact('user'));
-    }
+ 
 
-    public function filterTanggal(Request $request)
-    {
-
-
-
-        return view('admin.Miss.index', compact('missTransaksis', 'pisgorTransaksis'));
-    }
+ 
 }

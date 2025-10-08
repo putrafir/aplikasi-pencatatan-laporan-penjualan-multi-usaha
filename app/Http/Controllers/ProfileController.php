@@ -12,9 +12,19 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
+
+
+    public function profile()
+    {
+        $user = Auth::user();
+
+        if ($user->role === 'owner') {
+            return view('admin.profile', compact('user'));
+        } else if ($user->role === 'pegawai') {
+            return view('pegawai.profile', compact('user'));
+        }
+    }
+
     public function edit(Request $request): View
     {
         return view('admin.profile', [
@@ -108,5 +118,4 @@ class ProfileController extends Controller
 
         return back()->with('success', 'Foto profil berhasil dihapus.');
     }
-
 }
