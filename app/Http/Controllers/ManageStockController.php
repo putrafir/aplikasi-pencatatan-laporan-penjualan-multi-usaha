@@ -35,8 +35,9 @@ class ManageStockController extends Controller
         })->values();
 
         $alreadyUpdated = $stocks_akhir->isNotEmpty();
+        $noStokToday = $stocks->isEmpty();
 
-        return view('pegawai.UpdateStok', compact('user', 'stocks', 'business', 'transaksi', 'alreadyUpdated'));
+        return view('pegawai.UpdateStok', compact('user', 'stocks', 'business', 'transaksi', 'alreadyUpdated', 'noStokToday'));
     }
 
 
