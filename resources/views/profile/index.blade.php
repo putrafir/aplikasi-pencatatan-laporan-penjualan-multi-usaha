@@ -12,9 +12,9 @@
                 <div class="relative">
                     <!-- Tombol Foto Profil -->
                     <div id="profilePhotoBtn"
-                        class="text-base ease-soft-in-out h-18.5 w-18.5 relative inline-flex items-center justify-center rounded-xl text-white transition-all duration-200 cursor-pointer">
+                        class="text-base ease-soft-in-out h-18.5 overflow-hidden w-18.5 relative inline-flex items-center justify-center rounded-xl text-white transition-all duration-200 cursor-pointer">
                         <img src="{{ asset($user->photo ?? 'img/illustrations/face1.svg') }}" alt="profile_image"
-                            class="w-full shadow-soft-sm rounded-xl" />
+                            class="w-full h-full shadow-soft-sm rounded-xl" />
                     </div>
                 </div>
             </div>
