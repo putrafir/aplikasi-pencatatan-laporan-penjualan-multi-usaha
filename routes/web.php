@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/profile/upload', [ProfileController::class, 'uploadPhoto'])->name('profile.upload');
     Route::delete('/profile/photo', [ProfileController::class, 'destroyPhoto'])->name('profile.photo.destroy');
+    Route::get('/profile', [ProfileController::class, 'profile'])->name('profile.view');
 });
 
 
