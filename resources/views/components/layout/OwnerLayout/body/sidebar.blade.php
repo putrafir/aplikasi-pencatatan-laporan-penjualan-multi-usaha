@@ -1,7 +1,5 @@
 <aside
-
     class="max-w-62.5 ease-nav-brand z-50 fixed inset-y-0 my-4 block w-full lg:border -translate-x-full flex-wrap items-center justify-between overflow-y-auto rounded-2xl border-0 bg-white p-0 antialiased shadow-none transition-transform duration-200 lg:left-0 lg:translate-x-0 lg:bg-transparent"
-
     :class="{ '-translate-x-full': !sidebarOpen, 'translate-x-0': sidebarOpen }">
     <div class="h-19.5">
         <i class="absolute top-0 right-0 hidden p-4 opacity-50 cursor-pointer fas fa-times text-slate-400 lg:hidden"
@@ -92,7 +90,8 @@
                 </svg>
             </x-sidebar-item>
             <x-sidebar-item route="admin.laporan" label="Laporan">
-                <svg width="12" height="12" viewBox="0 0 19 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="12" height="12" viewBox="0 0 19 22" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
                     <title>office</title>
                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                         <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
@@ -106,7 +105,7 @@
                         </g>
                     </g>
                 </svg>
-            </x-sidebar-item >
+            </x-sidebar-item>
         </ul>
     </div>
 </aside>

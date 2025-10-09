@@ -68,7 +68,7 @@
     </div>
 
     <!-- Modal Detail Transaksi -->
-    <div id="modalDetail" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center"
+    <div id="modalDetail" class="hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center"
         onclick="outsideClose(event)">
         <div class="bg-white rounded-xl mx-7 p-4 w-full max-w-md relative" onclick="event.stopPropagation()">
             <!-- Tombol Close X -->
