@@ -59,7 +59,7 @@
                 <!-- Tombol Edit -->
                 <button data-id="{{ $bisnis->id }}" data-nama="{{ $bisnis->name }}" data-lokasi="{{ $bisnis->lokasi }}"
                     onclick="openEditBusinessPopup(this)"
-                    class="absolute text-sm flex items-center text-white top-2 right-0 py-1 pr-1 pl-2 bg-gradient-orange rounded-s-20">
+                    class="absolute text-sm flex items-center z-30 text-white top-2 right-0 py-1 pr-1 pl-2 bg-gradient-orange rounded-s-20">
                     <p>Edit</p> <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" width="24"
                         height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.1"
