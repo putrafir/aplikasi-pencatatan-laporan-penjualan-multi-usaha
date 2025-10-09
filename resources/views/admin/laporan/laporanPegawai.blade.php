@@ -3,17 +3,16 @@
 @section('admin')
 
     <div class="px-4 md:px-8">
-        <div class="relative bg-white rounded-t-2xl w-full md:w-1/3 h-48 flex items-center justify-center overflow-hidden">
+        <div class="relative bg-white rounded-t-2xl w-full md:w-full h-48 flex items-center justify-center overflow-hidden">
             <x-right-motif class="absolute w-40 top-20" />
             <div class="absolute backdrop-blur-3xl bg-purple-600/85 w-60 h-60 rounded-full -left-14"></div>
-            <img src="{{ asset('img/illustrations/Group 1.svg') }}" alt="" class="absolute h-44 mt-10">
+            <img src="{{ asset('img/illustrations/face2.svg') }}" alt="" class="absolute h-44 mt-10 md:mt-2 md:h-52">
         </div>
 
         {{-- Tabel Transaksi --}}
         <div
             class="relative flex flex-col flex-auto min-w-0 drop-shadow-lg p-4 -mt-4 break-words border-0 rounded-2xl bg-white">
             <div class="flex flex-wrap">
-                <!-- Bagian ini yang kita ubah -->
                 <div class="flex justify-between space-x-20 w-full mb-1">
                     <p class="font-bold text-gray-800 text-sm">Transaksi {{ $pegawai->name }}</p>
                     <p class="font-bold text-gray-800 text-sm">{{ $jumlahTransaksi }} Transaksi</p>

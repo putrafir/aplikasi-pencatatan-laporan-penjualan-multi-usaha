@@ -3,13 +3,15 @@
 @section('admin')
 
     {{-- Header --}}
-    <div class="relative mb-9 overflow-hidden w-full h-full bg-gray-100 rounded-2xl shadow-md flex items-center p-4">
-        <img src="{{ asset('img/illustrations/toko.svg') }}" class="w-40 absolute bottom-0" alt="">
-        <x-right-motif />
+    <x-ui.bg-pink class="hidden md:block" />
+    <div
+        class="md:-mt-16 relative mb-9 overflow-hidden w-full md:max-w-md md:mx-auto h-full bg-gray-100 rounded-2xl shadow-md flex items-center p-4">
+        <img src="{{ asset('img/illustrations/toko.svg') }}" class="w-40 z-10 absolute bottom-0" alt="">
+        <x-right-motif class="md:scale-150" />
         <x-left-motif />
 
-        <div class="pl-[12rem] text-white pb-4 mr-auto z-10 md:text-slate-700">
-            <h2 class="text-4xl font-bold text-white md:text-slate-700">{{ $business->name }}</h2>
+        <div class="pl-56 text-white pb-2 mr-auto z-10">
+            <h2 class="text-4xl font-bold text-white">{{ $business->name }}</h2>
             <p class="text-sm">Pendapatan Pada</p>
             {{-- Tanggal sesuai pilihan dari index --}}
             <p class="text-sm">{{ \Carbon\Carbon::parse($tanggal)->format('d M Y') }}</p>
@@ -26,6 +28,7 @@
             'Nama Stok' => 'stocks.nama',
             'Stok Awal' => 'stok_awal',
             'Stok Akhir' => 'stok_akhir',
+            'Stok Keluar' => 'stok_keluar',
         ]" :rows="$stocks" :total="$total" :perPage="$perPage" :currentPage="$currentPage" />
     </div>
 
@@ -41,8 +44,8 @@
             <a href="{{ route('admin.laporan.pegawai', $pegawai->id) }}?date={{ $tanggal }}">
                 <div class="flex items-center justify-between bg-white rounded-2xl shadow p-4">
                     <div class="flex items-center space-x-3">
-                        <img src="{{ $pegawai->avatar ?? asset('img/illustrations/Group 1.svg') }}"
-                            class="w-12 h-12 rounded-full" alt="">
+                        <img src="{{ $pegawai->photo ? asset($pegawai->photo) : asset('img/illustrations/face2.svg') }}"
+                            class="w-12 h-12 object-cover rounded-full" alt="">
                         <div>
                             <p class="font-bold">{{ $pegawai->name }}</p>
                             <p class="text-xs text-gray-500">Transaksi: {{ $jumlahTransaksi }}</p>

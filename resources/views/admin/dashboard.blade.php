@@ -1,219 +1,319 @@
 @extends('components.layout.OwnerLayout.body.index')
 @section('title', 'Dashboard')
 @section('admin')
-    <div class="flex flex-wrap justify-between -mx-3 mb-3">
-        <!-- card1 -->
-        <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 xl:w-1/4">
-            <div class="relative flex flex-col min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
-                <div class="flex-auto p-4">
-                    <div class="flex flex-row -mx-3">
-                        <div class="w-2/3 px-3">
-                            <p class="mb-0 font-sans font-semibold leading-normal text-sm">Total Pendapatan Hari Ini</p>
-                            <h5 class="mb-0 font-bold">Rp{{ number_format($totalPendapatanHariIni, 0, ',', '.') }}</h5>
-                        </div>
-                        <div class="w-1/3 px-3 text-right">
-                            <div
-                                class="inline-block w-12 h-12 text-center rounded-lg bg-gradient-to-tl from-purple-700 to-pink-500">
-                                <i class="ni ni-money-coins text-white text-lg relative top-3.5 leading-none"></i>
-                            </div>
-                        </div>
-                    </div>
+
+
+    <div class="grid grid-cols-1 gap-6">
+
+        <div class="max-w-sm md:max-w-full bg-white rounded-lg shadow-sm ">
+            <div class="flex justify-between p-4 md:p-6 pb-0 md:pb-0">
+                <div>
+                    <h5 class="leading-none text-3xl font-bold text-gray-900 pb-2">
+                        Rp{{ number_format($totalPendapatan, 0, ',', '.') }}</h5>
+                    <p class="text-sm font-normal text-gray-500 ">
+                        {{ $filterPendapatan == 'bulan' ? 'Pendapatan Bulan Ini' : 'Pendapatan Minggu Ini' }}</p>
                 </div>
-            </div>
-        </div>
-
-        <!-- card2 -->
-        <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 xl:w-1/4">
-            <div class="relative flex flex-col min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
-                <div class="flex-auto p-4">
-                    <div class="flex flex-row -mx-3">
-                        <div class="w-2/3 px-3">
-                            <p class="mb-0 font-sans font-semibold leading-normal text-sm">Total Pendapatan Minggu Ini</p>
-                            <h5 class="mb-0 font-bold">Rp{{ number_format($totalPendapatanMingguIni, 0, ',', '.') }}</h5>
-                        </div>
-                        <div class="w-1/3 px-3 text-right">
-                            <div
-                                class="inline-block w-12 h-12 text-center rounded-lg bg-gradient-to-tl from-purple-700 to-pink-500">
-                                <i class="ni ni-world text-white text-lg relative top-3.5 leading-none"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- card3 -->
-        <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 xl:w-1/4">
-            <div class="relative flex flex-col min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
-                <div class="flex-auto p-4">
-                    <div class="flex flex-row -mx-3">
-                        <div class="w-2/3 px-3">
-                            <p class="mb-0 font-sans font-semibold leading-normal text-sm">Total Pendapatan Bulan Ini</p>
-                            <h5 class="mb-0 font-bold">Rp{{ number_format($totalPendapatanBulanIni, 0, ',', '.') }}</h5>
-                        </div>
-                        <div class="w-1/3 px-3 text-right">
-                            <div
-                                class="inline-block w-12 h-12 text-center rounded-lg bg-gradient-to-tl from-purple-700 to-pink-500">
-                                <i class="ni ni-paper-diploma text-white text-lg relative top-3.5 leading-none"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- card4: datepicker -->
-        <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 xl:w-1/4">
-            <label for="tanggal" class="text-sm font-semibold text-gray-700">Filter Tanggal:</label>
-
-            <form method="GET" action="{{ url()->current() }}" class="flex items-center gap-2 mb-6">
-                <input type="date" id="tanggal" name="tanggal" value="{{ request('tanggal') }}"
-                    class="border border-purple-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-purple-400 focus:border-purple-500 transition">
-                <button type="submit"
-                    class="bg-gradient-to-tl from-purple-700 to-pink-500 text-white px-4 py-2 rounded-lg font-semibold shadow hover:opacity-90 transition">
-                    Filter
-                </button>
-                @if (request('tanggal'))
-                    <a href="{{ url()->current() }}"
-                        class="ml-2 text-sm text-red-500 hover:underline font-semibold transition">Reset</a>
-                @endif
-            </form>
-        </div>
-    </div>
-
-    <div class="flex flex-wrap -mx-3">
-        @foreach ($businessData as $business)
-            <!-- Card untuk setiap bisnis -->
-            <div class="w-full h-72 justify-between flex-col max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-2/4">
-                <div
-                    class="relative flex h-full flex-col min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
-                    <div class="flex-auto p-4">
-                        <h5 class="mb-0 font-bold">{{ $business['business_name'] }}</h5>
-                        <!-- Bagian transaksi dengan scroll -->
-                        {{-- <div class="mt-4 overflow-y-auto max-h-40">
-
-                            <ul>
-                                @if (count($business['transactions']) > 0)
-                                    @foreach ($business['transactions'] as $transaction)
-                                        <li class="mb-2">
-                                            <p class="text-sm">
-                                                {{ $transaction['quantity'] }} x {{ $transaction['menu_name'] }}
-                                                @if (!empty($transaction['size']))
-                                                    ({{ $transaction['size'] }})
-                                                @endif
-
-
-                                                Rp {{ number_format($transaction['subtotal'], 0, ',', '.') }}
-                                            </p>
-
-
-
-
-
-                                        </li>
-                                    @endforeach
-                                @else
-                                    <li class="mb-2 h-40 flex items-center justify-center">
-                                        <p class="text-sm text-gray-500">Belum ada pembeli hari ini</p>
-                                    </li>
-                                @endif
+                <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500  text-center">
+                    <form id="filterFormPendapatan" method="get">
+                        <button id="dropdownDefaultButtonPendapatan" data-dropdown-toggle="dropdownPendapatanMenu"
+                            data-dropdown-placement="bottom" type="button"
+                            class="px-3 py-2 inline-flex items-center text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200  ">
+                            {{ request('filter_pendapatan', 'minggu') == 'bulan' ? 'Bulan Ini' : 'Minggu Ini' }}
+                            <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="m1 1 4 4 4-4" />
+                            </svg>
+                        </button>
+                        <input type="hidden" name="filter_pendapatan" id="filterInputPendapatan"
+                            value="{{ request('filter_pendapatan', 'minggu') }}">
+                        <div id="dropdownPendapatanMenu"
+                            class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 ">
+                            <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownDefaultButton">
+                                <li>
+                                    <a href="#"
+                                        onclick="event.preventDefault(); document.getElementById('filterInputPendapatan').value='minggu'; document.getElementById('filterFormPendapatan').submit();"
+                                        class="block px-4 py-2 hover:bg-gray-100 ">
+                                        Minggu Ini
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        onclick="event.preventDefault(); document.getElementById('filterInputPendapatan').value='bulan'; document.getElementById('filterFormPendapatan').submit();"
+                                        class="block px-4 py-2 hover:bg-gray-100 ">
+                                        Bulan Ini
+                                    </a>
+                                </li>
                             </ul>
-                        </div> --}}
-                        <div class="relative overflow-y-auto  max-h-40 border-b border-gray-200">
-                            <table class="w-full text-sm text-left rtl:text-right ">
-
-                                <tbody>
-                                    @if (count($business['transactions']) > 0)
-                                        @foreach ($business['transactions'] as $transaction)
-                                            <tr class="bg-white hover:bg-gray-50 ">
-                                                <th scope="row" class=" font-medium text-sm ">
-                                                    {{ $transaction['quantity'] }} x {{ $transaction['menu_name'] }}
-                                                    @if (!empty($transaction['size']))
-                                                        ({{ $transaction['size'] }})
-                                                    @endif
-                                                </th>
-
-                                                <td class="px-6 py-2">
-                                                    Rp {{ number_format($transaction['subtotal'], 0, ',', '.') }}
-                                                </td>
-
-                                            </tr>
-                                        @endforeach
-                                    @else
-                                        <li class="mb-2 h-40  flex items-center justify-center">
-                                            <p class="text-sm text-gray-500">Belum ada pembeli hari ini</p>
-                                        </li>
-                                    @endif
-
-
-                                </tbody>
-                            </table>
                         </div>
-
-                        <!-- Bagian total pendapatan -->
-                        <h5 class="mt-4  bottom-0 font-bold">
-                            Total Pendapatan: Rp {{ number_format($business['total_profit'], 0, ',', '.') }}
-                        </h5>
-                    </div>
+                    </form>
                 </div>
             </div>
-        @endforeach
+            <div id="labels-chart" class="px-2.5"></div>
+            <div class="grid grid-cols-1 items-center   justify-between mt-5 p-4 md:p-6 pt-0 md:pt-0">
 
-
-        <div class="w-full max-w-full mt-4 px-3 mb-6 ">
-            <div
-                class="relative flex h-full flex-col min-w-0 break-words bg-white shadow-soft-xl rounded-2xl bg-clip-border">
-                <div class="flex-auto p-4">
-                    <!-- Stok yang dimasukkan hari ini -->
-                    <h5 class=" mb-2 font-bold ">Stok yang Dimasukkan Hari Ini</h5>
-                    <div class=" flex pb-4 border-b border-gray-200">
-                        @foreach ($stocksAddedToday as $businessId => $stocks)
-                            <div class="w-1/2">
-                                <h6 class="font-semibold">
-                                    {{ $stocks->first()->stocks->business->name ?? 'Unknown Business' }}
-                                </h6>
-                                <ul>
-                                    @foreach ($stocks as $stock)
-                                        <li class="mb-2">
-                                            <p class="text-sm">
-                                                {{ $stock->stocks->nama }}: {{ $stock->quantity }} unit
-                                            </p>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <!-- Stok yang habis hari ini -->
-
-                    <h5 class="my-2 font-bold">Sisa Stok</h5>
-
-                    <div class=" flex ">
-                        @foreach ($remainingStocks as $businessId => $stocks)
-                            <div class="w-1/2">
-
-                                <h6 class="font-semibold">{{ $stocks->first()->business->name ?? 'Unknown Business' }}
-                                </h6>
-                                <ul>
-                                    @foreach ($stocks as $stock)
-                                        <li class="mb-2">
-                                            <p class="text-sm">
-                                                {{ $stock->nama }}: {{ $stock->jumlah_stok }} unit
-                                            </p>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endforeach
-                    </div>
-
-                </div>
+                <div class="pt-5"></div>
             </div>
         </div>
-    </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 ">
 
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flowbite-datepicker@1.2.2/dist/datepicker.min.js"></script>
+            <div class="max-w-sm md:max-w-lg w-full bg-white rounded-lg shadow-sm ">
+                <div class="flex justify-between p-4 md:p-6 pb-0 md:pb-0">
+                    <div>
+                        <h5 class="leading-none text-3xl font-bold text-gray-900 pb-2">
+                            Stok Keluar</h5>
+                        <p class="text-sm font-normal text-gray-500 ">
+                            {{ $filterStok == 'bulan' ? 'Bulan Ini: ' : 'Minggu Ini: ' }}{{ $totalStokKeluar }}</p>
+                    </div>
+                    <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500  text-center">
+                        <form id="filterFormStok" method="get">
+                            <button id="dropdownDefaultButtonStok" data-dropdown-toggle="dropdownStokMenu"
+                                data-dropdown-placement="bottom" type="button"
+                                class="px-3 py-2 inline-flex items-center text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200  ">
+                                {{ request('filter_stok', 'minggu') == 'bulan' ? 'Bulan Ini' : 'Minggu Ini' }}
+                                <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m1 1 4 4 4-4" />
+                                </svg>
+                            </button>
+                            <input type="hidden" name="filter_stok" id="filterInputStok"
+                                value="{{ request('filter_stok', 'minggu') }}">
+                            <div id="dropdownStokMenu"
+                                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 ">
+                                <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownDefaultButton">
+                                    <li>
+                                        <a href="#"
+                                            onclick="event.preventDefault(); document.getElementById('filterInputStok').value='minggu'; document.getElementById('filterFormStok').submit();"
+                                            class="block px-4 py-2 hover:bg-gray-100 ">
+                                            Minggu Ini
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#"
+                                            onclick="event.preventDefault(); document.getElementById('filterInputStok').value='bulan'; document.getElementById('filterFormStok').submit();"
+                                            class="block px-4 py-2 hover:bg-gray-100 ">
+                                            Bulan Ini
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div id="stok-keluar-chart" class="px-2.5 "></div>
+                <div class="grid grid-cols-1 items-center   justify-between mt-5 p-4 md:p-6 pt-0 md:pt-0">
 
-@endsection
+                    <div class="pt-5"></div>
+                </div>
+            </div>
+            <div class="max-w-sm md:max-w-lg w-full bg-white rounded-lg shadow-sm ">
+                <div class="flex justify-between p-4 md:p-6 pb-0 md:pb-0">
+                    <div>
+                        <h5 class="leading-none text-3xl font-bold text-gray-900 pb-2">
+                            Menu Terjual</h5>
+                        <p class="text-sm font-normal text-gray-500 ">
+                            {{ $filterMenu == 'bulan' ? 'Bulan Ini: ' : 'Minggu Ini: ' }}{{ $totalMenuTerjual }}</p>
+                    </div>
+                    <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500  text-center">
+                        <form id="filterFormMenu" method="get">
+                            <button id="dropdownDefaultButtonMenu" data-dropdown-toggle="dropdownMenuMenu"
+                                data-dropdown-placement="bottom" type="button"
+                                class="px-3 py-2 inline-flex items-center text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200  ">
+                                {{ request('filter_menu', 'minggu') == 'bulan' ? 'Bulan Ini' : 'Minggu Ini' }}
+                                <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m1 1 4 4 4-4" />
+                                </svg>
+                            </button>
+                            <input type="hidden" name="filter_menu" id="filterInputMenu"
+                                value="{{ request('filter_menu', 'minggu') }}">
+                            <div id="dropdownMenuMenu"
+                                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 ">
+                                <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownDefaultButton">
+                                    <li>
+                                        <a href="#"
+                                            onclick="event.preventDefault(); document.getElementById('filterInputMenu').value='minggu'; document.getElementById('filterFormMenu').submit();"
+                                            class="block px-4 py-2 hover:bg-gray-100 ">
+                                            Minggu Ini
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#"
+                                            onclick="event.preventDefault(); document.getElementById('filterInputMenu').value='bulan'; document.getElementById('filterFormMenu').submit();"
+                                            class="block px-4 py-2 hover:bg-gray-100 ">
+                                            Bulan Ini
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div id="menu-terjual-chart" class="px-2.5 "></div>
+                <div class="grid grid-cols-1 items-center   justify-between mt-5 p-4 md:p-6 pt-0 md:pt-0">
+
+                    <div class="pt-5"></div>
+                </div>
+            </div>
+
+
+
+            {{-- <pre>
+{{ json_encode($series, JSON_PRETTY_PRINT) }}
+</pre> --}}
+
+            {{-- <pre>{{ json_encode($categories, JSON_PRETTY_PRINT) }}</pre>
+        <pre>{{ json_encode($series, JSON_PRETTY_PRINT) }}</pre> --}}
+
+        </div>
+
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+
+                // 🎨 Palet warna dasar — bisa kamu ubah sesuai tema
+                const baseColors = [
+                    "#1C64F2", "#16BDCA", "#FDBA8C", "#8B5CF6", "#10B981",
+                    "#F59E0B", "#EF4444", "#EC4899", "#6366F1", "#14B8A6"
+                ];
+
+                // 🗺️ Peta warna global (disimpan per nama usaha)
+                const colorMap = new Map();
+
+                // 🔁 Fungsi untuk ambil warna konsisten berdasarkan nama usaha
+                function getColorForName(name) {
+                    if (!colorMap.has(name)) {
+                        const color = baseColors[colorMap.size % baseColors.length];
+                        colorMap.set(name, color);
+                    }
+                    return colorMap.get(name);
+                }
+
+                // ===================================
+                // === Fungsi bantu bikin chart umum ===
+                // ===================================
+                function makeChart(elementId, rawSeries, categories, dataKey, valueFormatter, unit = '') {
+                    if (!document.getElementById(elementId)) return;
+
+                    const options = {
+                        series: rawSeries.map((s) => ({
+                            name: s.name,
+                            data: s.data.map(d => Number(d[dataKey]) || 0),
+                            color: getColorForName(s.name)
+                        })),
+                        chart: {
+                            height: 300,
+                            type: "area",
+                            toolbar: {
+                                show: false
+                            },
+                            fontFamily: "Inter, sans-serif"
+                        },
+                        xaxis: {
+                            categories: categories,
+                            labels: {
+                                style: {
+                                    fontFamily: "Inter, sans-serif",
+                                    cssClass: 'text-xs fill-gray-500'
+                                },
+                                formatter: function(value) {
+                                    // Jika format YYYY-MM-DD → ubah ke d MMM
+                                    if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+                                        const [y, m, d] = value.split('-');
+                                        const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul",
+                                            "Agu", "Sep", "Okt", "Nov", "Des"
+                                        ];
+                                        return `${parseInt(d)} ${monthNames[parseInt(m) - 1]}`;
+                                    }
+
+                                    // Jika formatnya sudah seperti "1 - 7 Okt" atau teks lain, tampilkan langsung
+                                    return value;
+                                }
+                            }
+                        },
+                        yaxis: {
+                            labels: {
+                                formatter: function(value) {
+                                    return valueFormatter ? valueFormatter(value) : value.toLocaleString(
+                                        'id-ID');
+                                }
+                            }
+                        },
+                        tooltip: {
+                            shared: true,
+                            custom: function({
+                                dataPointIndex,
+                                w
+                            }) {
+                                let html =
+                                    `<div class="bg-gray-800 text-white p-2 rounded-lg shadow-md text-sm">`;
+                                rawSeries.forEach((s, i) => {
+                                    const color = getColorForName(s.name);
+                                    const dataObj = s.data[dataPointIndex] || {};
+                                    const val = dataObj[dataKey] ?? 0;
+                                    html += `
+                            <div class="flex items-center space-x-2">
+                                <span style="background:${color}" class="w-3 h-3 rounded-full inline-block"></span>
+                                <span>${s.name}: <b>${unit}${new Intl.NumberFormat('id-ID').format(val)}</b></span>
+                            </div>`;
+                                });
+                                return html + `</div>`;
+                            }
+                        },
+                        fill: {
+                            type: "gradient",
+                            gradient: {
+                                opacityFrom: 0.55,
+                                opacityTo: 0
+                            }
+                        },
+                        stroke: {
+                            width: 6
+                        },
+                        dataLabels: {
+                            enabled: false
+                        },
+                        legend: {
+                            show: false
+                        },
+                        grid: {
+                            show: true
+                        },
+                    };
+
+                    new ApexCharts(document.getElementById(elementId), options).render();
+                }
+
+                // ===========================
+                // === Render semua chart ===
+                // ===========================
+
+                makeChart(
+                    "labels-chart",
+                    @json($seriesPendapatan),
+                    @json($categoriesPendapatan),
+                    "pendapatan",
+                    (v) => "Rp" + v.toLocaleString("id-ID"),
+                    "Rp"
+                );
+
+                makeChart(
+                    "stok-keluar-chart",
+                    @json($stokSeries),
+                    @json($categoriesStok),
+                    "stok_keluar"
+                );
+
+                makeChart(
+                    "menu-terjual-chart",
+                    @json($menuSeries),
+                    @json($categoriesMenu),
+                    "jumlah_menu"
+                );
+
+            });
+        </script>
+
+    @endsection

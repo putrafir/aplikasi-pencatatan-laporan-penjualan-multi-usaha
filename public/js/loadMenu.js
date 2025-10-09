@@ -1,9 +1,68 @@
+// simpan semua menu global
+let menus = [];
+
 // Load semua menu saat pertama kali halaman dibuka
 document.addEventListener("DOMContentLoaded", () => {
     loadMenus("all", document.querySelector(".kategori-btn"));
 });
 
-//fungsi tombol Load
+// fungsi search
+const searchForm = document.getElementById("search-input");
+const searchInput = document.getElementById("default-search");
+
+searchForm.addEventListener("submit", function (e) {
+    e.preventDefault(); // biar nggak reload halaman
+
+    let keyword = searchInput.value.toLowerCase();
+
+    // filter menu berdasarkan nama
+    let filteredMenus = menus.filter(menu =>
+        menu.nama.toLowerCase().includes(keyword)
+    );
+
+    // render ulang hanya menu yang sesuai
+    renderMenus(filteredMenus);
+});
+
+// fungsi render menu
+function renderMenus(dataMenus) {
+    const menuList = document.getElementById("menu-list");
+    menuList.innerHTML = "";
+
+    if (dataMenus.length === 0) {
+        menuList.innerHTML =
+            '<p class="col-span-full text-center text-gray-500">Tidak ada menu ditemukan.</p>';
+        return;
+    }
+
+    dataMenus.forEach((menu) => {
+        let fotoUrl = menu.foto
+            ? `/${menu.foto}`
+            : "/img/illustrations/no-image.png";
+        let html = `
+            <div>
+                <div class="h-80 bg-white rounded-xl shadow overflow-hidden hover:shadow-lg transition relative flex flex-col">
+                    <img class="rounded-t-lg h-[11rem] w-full object-cover"
+                         src="${fotoUrl}" alt="" />
+                    <div class="p-4 flex flex-col justify-between flex-1">
+                        <h3 class="font-semibold text-base sm:text-lg line-clamp-2 h-12">
+                            ${menu.nama}
+                        </h3>
+                        <p class="text-purple-700 font-bold">
+                            Rp ${parseInt(menu.harga).toLocaleString("id-ID")}
+                        </p>
+                        <button onclick="tambahKeKeranjang(event, ${menu.id}, ${menu.business_id}, ${menu.harga})"
+                            class="mt-3 w-full bg-gradient-to-tl from-purple-700 to-pink-500 hover:bg-green-600 text-white py-2 rounded-lg text-sm">
+                            Tambah
+                        </button>
+                    </div>
+                </div>
+            </div>`;
+        menuList.innerHTML += html;
+    });
+}
+
+// fungsi tombol kategori aktif
 function setActiveButton(button) {
     document.querySelectorAll(".kategori-btn").forEach((btn) => {
         btn.classList.remove("bg-pink-500", "text-white");
@@ -13,7 +72,7 @@ function setActiveButton(button) {
     button.classList.add("bg-pink-500", "text-white");
 }
 
-// fungsi tampilan menu
+// fungsi load menu dari server
 function loadMenus(kategoriId, buttonElement) {
     if (buttonElement) {
         setActiveButton(buttonElement);
@@ -27,44 +86,8 @@ function loadMenus(kategoriId, buttonElement) {
     fetch(url)
         .then((res) => res.json())
         .then((response) => {
-            const menuList = document.getElementById("menu-list");
-            menuList.innerHTML = "";
-
-            const menus = response.menus || [];
-
-            if (menus.length === 0) {
-                menuList.innerHTML =
-                    '<p class="col-span-full text-center text-gray-500">Tidak ada menu dalam kategori ini.</p>';
-                return;
-            }
-
-            menus.forEach((menu) => {
-                let fotoUrl = menu.foto
-                    ? `/storage/${menu.foto}`
-                    : "/img/illustrations/no-image.png";
-                let html = `
-                        <div>
-                            <div class=" h-80 bg-white rounded-xl shadow hover:shadow-lg transition relative">
-                                <img class="w-full h-40 object-cover rounded-t-xl"
-                                    src="${fotoUrl}" alt="" />
-                                <div class="p-4 flex flex-col justify-between h-40">
-                                    <h3 class="font-semibold text-base sm:text-lg">${
-                                        menu.nama
-                                    }</h3>
-                                    <p class=" text-purple-700 font-bold">Rp ${parseInt(
-                                        menu.harga
-                                    ).toLocaleString("id-ID")}</p>
-                                    <button onclick="tambahKeKeranjang(event, ${
-                                        menu.id
-                                    }, ${menu.business_id}, ${menu.harga})"
-                                    class="mt-3 w-full bg-gradient-to-tl from-purple-700 to-pink-500 hover:bg-green-600 text-white py-2 rounded-lg text-sm">
-                                        Tambah
-                                    </button>
-                                </div>
-                            </div>
-                        </div>`;
-                menuList.innerHTML += html;
-            });
+            menus = response.menus || []; // simpan global
+            renderMenus(menus); // tampilkan menu
         });
 }
 
@@ -73,11 +96,9 @@ let jumlahItemDiKeranjang = 0;
 let keranjang = [];
 
 function tambahKeKeranjang(event, menuId, businessId, hargaSatuan) {
-    // pastikan event di-passing
     event.preventDefault();
 
-    // Jika nanti ada ukuran/opsi lain:
-    const parentDiv = event.target.closest(".h-80"); // sesuai card menu
+    const parentDiv = event.target.closest(".h-80");
     const selectEl = parentDiv ? parentDiv.querySelector("select") : null;
     const ukuran = selectEl ? selectEl.value : null;
 
@@ -116,10 +137,7 @@ function tambahKeKeranjang(event, menuId, businessId, hargaSatuan) {
                 badge.classList.remove("hidden");
                 console.log("Item ditambahkan ke keranjang:", data);
             } else {
-                alert(
-                    "Gagal menambahkan item ke keranjang: " +
-                        (data.message ?? "")
-                );
+                alert("Gagal menambahkan item ke keranjang: " + (data.message ?? ""));
                 if (data.errors) {
                     console.error("Error validasi:", data.errors);
                 }

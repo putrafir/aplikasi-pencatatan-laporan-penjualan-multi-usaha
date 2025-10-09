@@ -29,10 +29,10 @@ class ManageMenuController extends Controller
     {
         $request->validate([
             'business_id' => 'required|exists:business,id', // cek nama tabelnya
-            'nama'        => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'harga'       => 'required|numeric|min:0',
-            'foto'        => 'nullable|image|mimes:jpeg,png,jpg,heic|max:5120',
+            'nama' => 'required|string|max:255',
+            'kategori_id' => 'required|exists:categories,id',
+            'harga' => 'required|numeric|min:0',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,heic|max:5120',
         ]);
 
         $fotoPath = 'img/illustrations/no-image.png'; // default image
@@ -50,17 +50,14 @@ class ManageMenuController extends Controller
         // simpan ke DB
         Menu::create([
             'business_id' => $request->business_id,
-            'nama'        => $request->nama,
-            'kategori_id' => $request->category_id, // kalau di DB pakai kolom kategori_id
-            'harga'       => $request->harga,
-            'foto'        => $fotoPath,
+            'nama' => $request->nama,
+            'kategori_id' => $request->kategori_id,
+            'harga' => $request->harga,
+            'foto' => $fotoPath,
         ]);
 
         return redirect()->back()->with('success', 'Menu berhasil ditambahkan.');
     }
-
-
-
 
 
     public function update(Request $request, $id)
@@ -80,8 +77,13 @@ class ManageMenuController extends Controller
         $menu->harga = $request->harga;
 
         if ($request->hasFile('foto')) {
-            if ($menu->foto && file_exists(public_path($menu->foto))) {
-                unlink(public_path($menu->foto));
+            // hapus foto lama kecuali default "no-image.png"
+            if (
+                $menu->foto &&
+                $menu->foto !== 'img/illustrations/no-image.png' &&
+                File::exists(public_path($menu->foto))
+            ) {
+                File::delete(public_path($menu->foto));
             }
 
             $foto = $request->file('foto');

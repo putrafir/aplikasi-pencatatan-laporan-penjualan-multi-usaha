@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama');
             $table->unsignedBigInteger('business_id');
             $table->integer('jumlah_stok')->default(0);
+            $table->integer('harga')->nullable();
             $table->string('satuan');
             $table->foreign('business_id')->references('id')->on('business')->onDelete('cascade');
             $table->timestamps();

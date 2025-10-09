@@ -11,7 +11,7 @@
         {{-- List Keranjang --}}
         <div class="space-y-4 overflow-y-auto pb-56 hide-scrollbar">
             @foreach ($keranjangs as $keranjang)
-                <div class="bg-white rounded-xl shadow p-3 flex gap-3" id="cart-item-{{ $keranjang->id }}">
+                <div class="bg-white rounded-xl shadow p-3 flex gap-3 md:grid-cols-2" id="cart-item-{{ $keranjang->id }}">
                     @if ($keranjang->menu && $keranjang->menu->foto)
                         <img class="rounded-lg w-16 h-16 object-cover" src="{{ asset($keranjang->menu->foto) }}"
                             alt="" />
@@ -65,7 +65,7 @@
                 </div>
                 <div class="">
                     <button type="submit"
-                        class="w-full text-white bg-gradient-to-b from-blue-600 to-purple-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 text-base font-semibold py-3 rounded-full">Bayar</button>
+                        class="w-full text-white bg-gradient-fuchsia hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 text-base font-semibold py-3 rounded-full">Bayar</button>
                 </div>
             </form>
         </div>

@@ -30,7 +30,14 @@ class ManageStockController extends Controller
             })->whereDate('created_at', today())
             ->get();
 
-        return view('pegawai.UpdateStok', compact('user', 'stocks', 'business', 'transaksi',));
+        $stocks_akhir = $stocks->filter(function ($log) {
+            return !is_null($log->stok_akhir);
+        })->values();
+
+        $alreadyUpdated = $stocks_akhir->isNotEmpty();
+        $noStokToday = $stocks->isEmpty();
+
+        return view('pegawai.UpdateStok', compact('user', 'stocks', 'business', 'transaksi', 'alreadyUpdated', 'noStokToday'));
     }
 
 
@@ -133,7 +140,6 @@ class ManageStockController extends Controller
     }
     public function reduceStock(Request $request)
     {
-
         $validated = $request->validate([
             'jumlah_stok' => 'required|array',
             'jumlah_stok.*' => 'nullable|integer|min:0',
@@ -142,27 +148,36 @@ class ManageStockController extends Controller
         $businessId = $request->input('business_id');
 
         foreach ($validated['jumlah_stok'] as $stockId => $remainingStock) {
-            if (is_null($remainingStock)) continue;
+            if (is_null($remainingStock))
+                continue;
 
             $stock = Stock::where('id', $stockId)
                 ->where('business_id', $businessId)
                 ->first();
 
-            if (!$stock) continue;
-
-            $stock->jumlah_stok = $remainingStock;
-            $stock->save();
-
+            if (!$stock)
+                continue;
 
             $lastLog = StockLog::where('stock_id', $stock->id)
                 ->latest('created_at')
                 ->first();
 
-            $lastLog->update([
-                'stok_akhir' => $remainingStock, 
-            ]);
-        }
+            $stokAwal = $lastLog ? $lastLog->stok_awal : $stock->jumlah_stok;
 
+            if ($remainingStock > $stokAwal) {
+                return back()->with('error', "Jumlah stok {$stock->nama} melebihi stok awal ({$stokAwal}).");
+            }
+
+            $stock->jumlah_stok = $remainingStock;
+            $stock->save();
+
+            if ($lastLog) {
+                $lastLog->update([
+                    'stok_akhir' => $remainingStock,
+                    'stok_keluar' => $stokAwal - $remainingStock
+                ]);
+            }
+        }
 
         return redirect()->back()->with('success', 'Sisa stok berhasil diperbarui.');
     }

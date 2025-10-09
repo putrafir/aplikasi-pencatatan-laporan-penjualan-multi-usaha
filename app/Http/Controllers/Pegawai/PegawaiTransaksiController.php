@@ -34,7 +34,7 @@ class PegawaiTransaksiController extends Controller
     {
         $user = Auth::user();
 
-        $menus = Menu::with(['category.sizePrices.size'])
+        $menus = Menu::with(['category'])
             ->where('kategori_id', $kategoriId)
             ->whereHas('category', function ($query) use ($user) {
                 $query->where('business_id', $user->id_business);
@@ -46,14 +46,7 @@ class PegawaiTransaksiController extends Controller
                     'nama' => $menu->nama,
                     'deskripsi' => $menu->deskripsi,
                     'harga' => $menu->harga,
-                    'sizePrices' => $menu->category->sizePrices->map(function ($sp) {
-                        return [
-                            'size' => [
-                                'nama' => $sp->size->nama
-                            ],
-                            'harga' => $sp->harga
-                        ];
-                    })
+               
                 ];
             });
 

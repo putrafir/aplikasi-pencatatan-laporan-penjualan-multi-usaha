@@ -496,53 +496,26 @@ export default {
                 "," +
                 theme("colors.pink.500") +
                 ")",
-            "gradient-cyan":
-                "linear-gradient(310deg," +
-                theme("colors.blue.600") +
+            "gradient-fuchsia-t":
+                "linear-gradient(0deg," +
+                theme("colors.purple.700") +
                 "," +
-                theme("colors.cyan.400") +
+                theme("colors.pink.500") +
                 ")",
+
+            "gradient-fuchsia-refresh":
+                "linear-gradient(310deg," +
+                theme("colors.pink.500") +
+                "," +
+                theme("colors.purple.700") +
+                ")",
+
             "gradient-orange":
                 "linear-gradient(310deg," +
                 theme("colors.red.500") +
                 "," +
                 theme("colors.yellow.400") +
                 ")",
-            "gradient-red":
-                "linear-gradient(310deg," +
-                theme("colors.red.600") +
-                "," +
-                theme("colors.rose.400") +
-                ")",
-            "gradient-lime":
-                "linear-gradient(310deg," +
-                theme("colors.green.600") +
-                "," +
-                theme("colors.lime.400") +
-                ")",
-            "gradient-slate":
-                "linear-gradient(310deg," +
-                theme("colors.slate.600") +
-                "," +
-                theme("colors.slate.300") +
-                ")",
-            "gradient-dark-gray":
-                "linear-gradient(310deg," +
-                theme("colors.gray.900") +
-                "," +
-                theme("colors.slate.800") +
-                ")",
-            "gradient-gray":
-                "linear-gradient(310deg," +
-                theme("colors.gray.400") +
-                "," +
-                theme("colors.gray.100") +
-                ")",
-
-            "gradient-horizontal-dark":
-                "linear-gradient(90deg,transparent,rgba(0,0,0,.4),transparent)",
-            "gradient-horizontal-light":
-                "linear-gradient(90deg,transparent,rgba(0,0,0,.1),transparent)",
         }),
         backgroundOpacity: ({ theme }) => theme("opacity"),
         backgroundPosition: {

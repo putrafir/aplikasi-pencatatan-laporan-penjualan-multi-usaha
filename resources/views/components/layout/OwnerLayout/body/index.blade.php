@@ -14,6 +14,8 @@
     <!-- Nucleo Icons -->
     <link href="{{ asset('css/nucleo-icons.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/nucleo-svg.css') }}" rel="stylesheet" />
+
+    <link rel="stylesheet" href="{{ asset('css/datepicker-light.css') }}">
     <!-- Popper -->
     {{-- <script src="https://unpkg.com/@popperjs/core@2"></script> --}}
     <!-- Main Styling -->
@@ -31,7 +33,7 @@
         @click="sidebarOpen = false">
     </div>
 
-    <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
+    <main class="ease-soft-in-out lg:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
         @include('components.layout.OwnerLayout.body.header')
 
         <!-- body -->
@@ -53,5 +55,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('js/modal/delet.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 </html>

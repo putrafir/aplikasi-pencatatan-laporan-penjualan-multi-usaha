@@ -1,13 +1,7 @@
 @extends('components.layout.PegawaiLayout.body.index')
 @section('pegawai')
     <!-- Search -->
-    {{-- <div class="p-4">
-        <input type="text" id="search-input" placeholder="Cari Produk"
-            class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-    </div> --}}
-
-
-    <form class="max-w-md px-4 pb-4 mx-auto">
+    <form id="search-input" placeholder="Cari Produk" class="w-full md:max-w-md px-4 pb-4 md:pb-0 mx-auto md:ml-auto md:mr-0">
         <div class="relative">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 <svg class="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -17,32 +11,30 @@
                 </svg>
             </div>
             <input type="search" id="default-search"
-                class="block w-full py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-3xl bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
+                class="block w-full py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-3xl bg-gray-50 "
                 placeholder="Cari Menu.." required />
             <button type="submit"
-                class="text-white  absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-3xl text-sm px-4 py-1">Cari</button>
+                class="text-white  absolute end-2.5 bottom-2.5 bg-gradient-orange hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-3xl text-sm px-4 py-1">Cari</button>
         </div>
     </form>
 
-
-
     <!-- CATEGORY FILTER -->
-    <div class="flex gap-3 px-4 py-2 w-full text-sm overflow-x-auto" id="kategori-buttons">
+    <div class="flex gap-3 px-4 py-2 md:pb-2 w-full text-sm overflow-x-auto" id="kategori-buttons">
         {{-- Tombol ALL --}}
-        <button onclick="loadMenus('all', this)" class="kategori-btn px-3 py-1 rounded-full text-white">
+        <button onclick="loadMenus('all', this)" class="kategori-btn px-3 py-1 rounded-full bg-pink-500 text-white">
             All
         </button>
         {{-- Tombol Kategori --}}
         @foreach ($categories as $category)
             <button onclick="loadMenus('{{ $category->id }}', this)"
-                class="kategori-btn px-3 py-1 rounded-full bg-gray-200 text-gray-700">
+                class="kategori-btn px-3 py-1 rounded-full bg-pink-500 text-gray-700">
                 {{ $category->nama }}
             </button>
         @endforeach
     </div>
 
     <!-- LIST MENU -->
-    <div id="menu-list" class="max-w-7xl mx-auto p-4 grid grid-cols-2 gap-4">
+    <div id="menu-list" class="max-w-7xl xl:max-w-full mx-auto p-4 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-4">
         <!-- Menu akan di-load dengan AJAX -->
     </div>
 

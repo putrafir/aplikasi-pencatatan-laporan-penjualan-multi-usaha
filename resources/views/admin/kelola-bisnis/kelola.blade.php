@@ -1,15 +1,16 @@
 @extends('components.layout.OwnerLayout.body.index')
 @section('title', 'Kelola Bisnis')
 @section('admin')
-    <div class="relative mb-9 overflow-hidden w-full h-full bg-gray-100 rounded-2xl shadow-md flex items-center p-4">
+    <x-ui.bg-pink class="hidden md:block"/>
+    <div class="md:-mt-16 relative mb-9 overflow-hidden md:max-w-md md:mx-auto h-full bg-gray-100 rounded-2xl shadow-md flex items-center p-4">
 
-        <img src="{{ asset('img/illustrations/toko.svg') }}" class="w-50 absolute bottom-0" alt="" srcset="">
-        <x-right-motif />
+        <img src="{{ asset('img/illustrations/toko.svg') }}" class="w-50 z-10 absolute bottom-0" alt="" srcset="">
+        <x-right-motif class="md:scale-150"/>
 
         <x-left-motif />
 
-        <div class="pl-[12rem] text-white pb-4 mr-auto z-10 md:text-slate-700">
-            <h2 class="text-2xl text-white md:text-slate-700 font-bold ">{{ $business->name }}</h2>
+        <div class="pl-56 text-white pb-2 mr-auto z-10">
+            <h2 class="text-2xl text-white font-bold ">{{ $business->name }}</h2>
             <p class="text-sm ">{{ $business->stocks_count }} Stok</p>
             <p class="text-sm ">{{ $business->categories_count }} Kategori</p>
             <p class="text-sm ">{{ $business->menus_count }} Menu</p>
@@ -18,7 +19,7 @@
     </div>
 
 
-    <x-section-header title=Stok buttonAction="togglePopup('popup-add')" :business_id="$business->id" />
+    <x-section-header title=Stok buttonAction="togglePopup('popup-add')" :business_id="$business->id" label="Tambah Stok" :showLabel="true" />
 
     <x-modal-add id="popup-add" title="Tambah Stok" :isEdit="false" action="{{ route('admin.stock.add') }}" method="POST"
         :inputs="[
@@ -58,7 +59,7 @@
             'placeholder' => 'Nama Stok',
             'required' => true,
         ],
-    
+
         ['label' => 'Harga', 'name' => 'harga', 'type' => 'number', 'placeholder' => 'Harga'],
         [
             'label' => 'Satuan',
@@ -72,7 +73,7 @@
 
     <x-modal-delete id="popup-edit-stock-delete" action="{{ route('admin.stock.destroy', ':id') }}" />
 
-    <x-section-header title="Kategori" buttonAction="togglePopup('popup-add-kategori')" />
+    <x-section-header title="Kategori" buttonAction="togglePopup('popup-add-kategori')" label="Tambah Kategori" :showLabel="true" />
 
     <x-modal-add id="popup-add-kategori" title="Tambah Kategori" :isEdit="false"
         action="{{ route('admin.category.add') }}" method="POST" :inputs="[
@@ -92,7 +93,7 @@
             @foreach ($business->categories as $category)
                 <button data-id="{{ $category->id }}" data-nama="{{ $category->nama }}"
                     data-business_id="{{ $category->business_id }}" onclick="openEditCategoryPopup(this)"
-                    class="px-3 py-1 rounded-full bg-[#F4586B] text-white whitespace-nowrap">
+                    class="px-3 py-1 rounded-full bg-gradient-fuchsia-t text-white whitespace-nowrap">
                     {{ $category->nama }}
                 </button>
             @endforeach
@@ -112,7 +113,7 @@
 
     <x-modal-delete id="popup-edit-kategori-delete" action="{{ route('admin.kategori.destroy', ':id') }}" />
 
-    <x-section-header title="Menu" buttonAction="togglePopup('popup-add-menu')" />
+    <x-section-header title="Menu" buttonAction="togglePopup('popup-add-menu')" label="Tambah Menu" :showLabel="true" />
 
     <x-modal-add id="popup-add-menu" title="Tambah Menu" :isEdit="false" action="{{ route('admin.menu.add') }}"
         method="POST" :inputs="[
@@ -145,7 +146,7 @@
                                 <button data-id="{{ $product->id }}" data-nama="{{ $product->nama }}"
                                     data-harga="{{ $product->harga }}" data-category_id="{{ $product->kategori_id }}"
                                     data-business_id="{{ $product->business_id }}" onclick="openEditMenuPopup(this)"
-                                    class="absolute text-sm flex items-center  text-white top-2 right-0 py-1 pr-1 pl-2 bg-[#F4586B] rounded-s-20">
+                                    class="absolute text-sm flex items-center  text-white top-2 right-0 py-1 pr-1 pl-2 bg-gradient-fuchsia rounded-s-20">
                                     <p>Edit</p>
                                     <svg class="w-5 h-5  text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                         width="24" height="24" fill="none" viewBox="0 0 24 24">

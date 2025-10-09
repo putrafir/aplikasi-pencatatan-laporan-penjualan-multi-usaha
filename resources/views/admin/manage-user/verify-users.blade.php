@@ -12,7 +12,7 @@
                 <div class=" px-6 flex my-9 items-center justify-between gap-2 mb-4">
 
                     <h6>Kelola Pegawai</h6>
-                    <x-plus-button buttonAction="togglePopup('popup-add-user')" />
+                    <x-plus-button buttonAction="togglePopup('popup-add-user')" label="Tambah Pegawai" :showLabel="true" />
                 </div>
 
 
@@ -81,11 +81,11 @@
                                         <td
                                             class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                             <div class="flex px-2 py-1">
-                                                {{-- <div>
-                                                    <img src="{{ asset('img/team-2.jpg') }}"
+                                                <div>
+                                                    <img src="{{ $item->photo ? asset($item->photo) : asset('img/illustrations/face2.svg') }}"
                                                         class="inline-flex items-center justify-center mr-4 text-sm text-white transition-all duration-200 ease-soft-in-out h-9 w-9 rounded-xl"
-                                                        alt="user1" />
-                                                </div> --}}
+                                                        alt="user" />
+                                                </div>
                                                 <div class="flex flex-col justify-center">
                                                     <h6 class="mb-0 text-sm leading-normal">{{ $item->name }}</h6>
                                                     <p class="mb-0 text-xs leading-tight text-slate-400">

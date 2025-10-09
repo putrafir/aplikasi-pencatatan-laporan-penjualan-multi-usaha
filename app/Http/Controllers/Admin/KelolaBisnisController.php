@@ -8,10 +8,16 @@ use Illuminate\Http\Request;
 
 class KelolaBisnisController extends Controller
 {
-    public function index()
-
+    public function index(Request $request)
     {
-        $business = Business::withCount(['menus', 'users'])->get();
+        $search = $request->input('search');
+
+        $business = Business::withCount(['menus', 'users'])
+            ->when($search, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->get();
+
         return view('admin.kelola-bisnis.index', compact('business'));
     }
 
@@ -26,8 +32,8 @@ class KelolaBisnisController extends Controller
         $total = $allStocks->count();
         $stocks = $allStocks->slice(($currentPage - 1) * $perPage, $perPage)->values();
 
-        
-        return view('admin.kelola-bisnis.kelola', compact('business', 'stocks', 'total', 'perPage',  'currentPage'));
+
+        return view('admin.kelola-bisnis.kelola', compact('business', 'stocks', 'total', 'perPage', 'currentPage'));
     }
 
     public function store(Request $request)
