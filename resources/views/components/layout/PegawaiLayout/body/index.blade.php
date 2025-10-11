@@ -17,6 +17,7 @@
     @vite('resources/css/app.css')
     <!-- Nepcha Analytics -->
     <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+    <script src="{{ asset('js/modal/notifikasi.js') }}"></script>
 </head>
 
 <body class="min-h-screen m-0 font-sans antialiased font-normal text-base leading-default bg-gray-50 text-slate-500">
@@ -25,8 +26,7 @@
     @include('components.layout.PegawaiLayout.body.header')
 
     <!-- Main Content -->
-    <main
-        class="pt-11 z-10 ease-soft-in-out relative h-full max-h-screen rounded-xl transition-all duration-200">
+    <main class="pt-11 z-10 ease-soft-in-out relative h-full max-h-screen rounded-xl transition-all duration-200">
         <div class="w-full py-6 mx-auto">
             @yield('pegawai')
         </div>

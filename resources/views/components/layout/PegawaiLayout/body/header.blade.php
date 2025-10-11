@@ -36,6 +36,9 @@
                      <x-dropdown-link :href="route('pegawai.update_stoke')">
                          {{ __('Update Stok') }}
                      </x-dropdown-link>
+                     <x-dropdown-link :href="route('pegawai.riwayat-transaksi.index')">
+                         {{ __('Riwayat Transaksi') }}
+                     </x-dropdown-link>
                      <!-- Authentication -->
                      <form method="POST" action="{{ route('logout') }}">
                          @csrf

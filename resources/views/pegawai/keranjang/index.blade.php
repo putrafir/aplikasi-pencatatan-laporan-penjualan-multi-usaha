@@ -10,40 +10,50 @@
 
         {{-- List Keranjang --}}
         <div class="space-y-4 overflow-y-auto pb-56 hide-scrollbar">
-            @foreach ($keranjangs as $keranjang)
-                <div class="bg-white rounded-xl shadow p-3 flex gap-3 md:grid-cols-2" id="cart-item-{{ $keranjang->id }}">
-                    @if ($keranjang->menu && $keranjang->menu->foto)
-                        <img class="rounded-lg w-16 h-16 object-cover" src="{{ asset($keranjang->menu->foto) }}"
-                            alt="" />
-                    @else
-                        <img class="rounded-lg w-16 h-16 object-cover" src="{{ asset('img/illustrations/no-image.png') }}"
-                            alt="" />
-                    @endif
-                    <div class="flex-1">
-                        <p class="text-sm font-semibold">
-                            {{ $keranjang->menu ? $keranjang->menu->nama : 'Menu Tidak Ditemukan' }}
-                        </p>
-                        <div id="total-harga-{{ $keranjang->id }}" class="text-purple-700 font-semibold text-sm mt-1">
-                            @php echo 'Rp '.number_format($keranjang->total_harga, 0, ',', '.'); @endphp
+            @if ($keranjangs->isEmpty())
+                <div class="flex flex-col items-center justify-center py-20 text-gray-600">
+                    <p class="text-lg font-bold">Belum ada menu yang ditambahkan</p>
+                </div>
+            @else
+                @foreach ($keranjangs as $keranjang)
+                    <div class="bg-white rounded-xl shadow p-3 flex gap-3 md:grid-cols-2"
+                        id="cart-item-{{ $keranjang->id }}">
+                        @if ($keranjang->menu && $keranjang->menu->foto)
+                            <img class="rounded-lg w-16 h-16 object-cover" src="{{ asset($keranjang->menu->foto) }}"
+                                alt="" />
+                        @else
+                            <img class="rounded-lg w-16 h-16 object-cover"
+                                src="{{ asset('img/illustrations/no-image.png') }}" alt="" />
+                        @endif
+                        <div class="flex-1">
+                            <p class="text-sm font-semibold">
+                                {{ $keranjang->menu ? $keranjang->menu->nama : 'Menu Tidak Ditemukan' }}
+                            </p>
+                            <div id="total-harga-{{ $keranjang->id }}" class="text-purple-700 font-semibold text-sm mt-1">
+                                @php echo 'Rp ' . number_format($keranjang->total_harga, 0, ',', '.'); @endphp
+                            </div>
+                        </div>
+
+                        {{-- Tombol hapus --}}
+                        <button type="button" class="text-red-500 remove-item-btn" data-id="{{ $keranjang->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+
+                        {{-- Tombol jumlah --}}
+                        <div class="flex flex-col items-center justify-between">
+                            <button onclick="updateQuantity('{{ $keranjang->id }}', 'increment')"
+                                class="bg-gray-200 w-6 h-6 flex items-center justify-center rounded">+</button>
+                            <span id="jumlah-{{ $keranjang->id }}" class="text-sm">{{ $keranjang->jumlah }}</span>
+                            <button onclick="updateQuantity('{{ $keranjang->id }}', 'decrement')"
+                                class="bg-gray-200 w-6 h-6 flex items-center justify-center rounded">-</button>
                         </div>
                     </div>
-                    {{-- Hapus elemen <form> dan ganti dengan <button> biasa --}}
-                    <button type="button" class="text-red-500 remove-item-btn" data-id="{{ $keranjang->id }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                            class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                    </button>
-                    <div class="flex flex-col items-center justify-between">
-                        <button onclick="updateQuantity('{{ $keranjang->id }}', 'increment')"
-                            class="bg-gray-200 w-6 h-6 flex items-center justify-center rounded">+</button>
-                        <span id="jumlah-{{ $keranjang->id }}" class="text-sm">{{ $keranjang->jumlah }}</span>
-                        <button onclick="updateQuantity('{{ $keranjang->id }}', 'decrement')"
-                            class="bg-gray-200 w-6 h-6 flex items-center justify-center rounded">-</button>
-                    </div>
-                </div>
-            @endforeach
+                @endforeach
+            @endif
         </div>
 
         <div class="fixed bottom-0 left-0 right-0 bg-gray-50 p-4 z-10">
@@ -55,7 +65,7 @@
                 </div>
             </div>
             {{-- Tombol Pesan --}}
-            <form action="{{ route('pegawai.keranjang.checkout') }}" method="POST">
+            <form id="checkoutForm" action="{{ route('pegawai.keranjang.checkout') }}" method="POST">
                 @csrf
                 <div class="my-4">
                     <label for="uang_dibayarkan" class="block text-sm font-medium text-gray-700">Jumlah Uang
@@ -99,6 +109,17 @@
                 });
         }
 
+        document.getElementById('checkoutForm').addEventListener('submit', function(event) {
+            const totalText = document.getElementById('total-bayar').textContent.trim();
+            const totalValue = parseInt(totalText.replace(/[^\d]/g, ''));
+            const uangDibayarkan = parseInt(document.getElementById('uang_dibayarkan').value);
+
+            if (uangDibayarkan < totalValue) {
+                event.preventDefault();
+                showPopup('Uang yang dibayarkan kurang dari total pembayaran!', 'error');
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             const removeButtons = document.querySelectorAll('.remove-item-btn');
 
@@ -119,54 +140,41 @@
                                 'Accept': 'application/json'
                             }
                         })
-                        .then(response => response.json())
+                        .then(async response => {
+                            try {
+                                return await response.json();
+                            } catch {
+                                throw new Error('Respons server tidak valid.');
+                            }
+                        })
                         .then(data => {
                             if (data.success) {
                                 const cartItemElement = document.getElementById('cart-item-' +
                                     keranjangId);
                                 if (cartItemElement) {
-                                    cartItemElement.remove();
+                                    cartItemElement.style.transition = 'opacity 0.3s ease';
+                                    cartItemElement.style.opacity = '0';
+                                    setTimeout(() => cartItemElement.remove(), 300);
                                 }
-                                document.getElementById('total-bayar').textContent = data
-                                    .total_bayar_formatted;
-
-                                // Show popup notification
-                                showPopup(data.message);
-
+                                const totalBayarElement = document.getElementById(
+                                    'total-bayar');
+                                if (totalBayarElement) {
+                                    totalBayarElement.textContent = data.total_bayar_formatted;
+                                }
+                                showPopup(data.message, 'success');
                             } else {
                                 showPopup('Gagal menghapus item: ' + (data.message ||
-                                    'Terjadi kesalahan yang tidak diketahui.'));
+                                    'Terjadi kesalahan.'), 'error');
                             }
                         })
                         .catch(error => {
                             console.error('Error:', error);
                             showPopup(
-                                'Terjadi kesalahan jaringan atau server saat menghapus item.'
-                            );
+                                'Terjadi kesalahan jaringan atau server saat menghapus item.',
+                                'error');
                         });
                 });
             });
-
-            // Popup function
-            function showPopup(message) {
-                let popup = document.createElement('div');
-                popup.textContent = message;
-                popup.style.position = 'fixed';
-                popup.style.bottom = '80px';
-                popup.style.left = '50%';
-                popup.style.transform = 'translateX(-50%)';
-                popup.style.background = '#4F46E5';
-                popup.style.color = '#fff';
-                popup.style.padding = '12px 24px';
-                popup.style.borderRadius = '8px';
-                popup.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
-                popup.style.zIndex = '9999';
-                popup.style.textAlign = 'center';
-                document.body.appendChild(popup);
-                setTimeout(() => {
-                    popup.remove();
-                }, 2000);
-            }
         });
     </script>
 @endsection

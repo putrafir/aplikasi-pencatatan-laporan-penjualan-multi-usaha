@@ -2,9 +2,10 @@
 
 @section('pegawai')
     <div class="p-6">
-        <x-ui.bg-pink/>
+        <x-ui.bg-pink />
         <div class="relative -mt-16 justify-center w-full">
-            <div class=" relative max-w-lg md:mx-auto mx-3 overflow-hidden h-full bg-gray-100 rounded-2xl shadow-md flex items-center p-4">
+            <div
+                class=" relative max-w-lg md:mx-auto mx-3 overflow-hidden h-full bg-gray-100 rounded-2xl shadow-md flex items-center p-4">
                 <img src="{{ asset('img/illustrations/pegawai.svg') }}" class="w-30 absolute bottom-0" alt="">
                 <x-right-motif />
                 <x-left-motif />
@@ -33,7 +34,7 @@
                     {{-- Kalau sudah update, hanya tampilkan teks --}}
                     <div class="text-center py-10">
                         <p class="text-lg font-semibold">
-                            Sisa stok berhasil diperbarui.
+                            Sisa stok sudah diperbarui silahkan logout.
                         </p>
                     @else
                         {{-- Form utama untuk input stok --}}
@@ -95,6 +96,12 @@
         }
 
         document.getElementById("btn-save-stok").addEventListener("click", () => {
+
+            @if ($noStokToday)
+                showPopup("Stok awal belum ditambahkan hari ini!", "error");
+                return; // hentikan proses lebih lanjut
+            @endif
+
             let isValid = true;
             let warningText = "Ada data stok yang melebihi stok awal:<br>";
 

@@ -93,7 +93,6 @@ function loadMenus(kategoriId, buttonElement) {
 
 // fungsi tambah ke keranjang
 let jumlahItemDiKeranjang = 0;
-let keranjang = [];
 
 function tambahKeKeranjang(event, menuId, businessId, hargaSatuan) {
     event.preventDefault();
@@ -135,15 +134,17 @@ function tambahKeKeranjang(event, menuId, businessId, hargaSatuan) {
                 const badge = document.getElementById("cart-badge");
                 badge.textContent = jumlahItemDiKeranjang;
                 badge.classList.remove("hidden");
-                console.log("Item ditambahkan ke keranjang:", data);
+
+                // ✅ tampilkan notifikasi
+                showPopup("Menu berhasil ditambahkan ke keranjang!", "success");
             } else {
-                alert("Gagal menambahkan item ke keranjang: " + (data.message ?? ""));
+                showPopup(data.message || "Gagal menambahkan item ke keranjang.", "error");
                 if (data.errors) {
                     console.error("Error validasi:", data.errors);
                 }
             }
         })
-        .catch((error) => {
-            console.error("Error saat menambahkan ke keranjang:", error);
+        .catch(() => {
+            showPopup("Terjadi kesalahan koneksi ke server.", "error");
         });
 }

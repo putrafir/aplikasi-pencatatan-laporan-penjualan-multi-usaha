@@ -1,22 +1,26 @@
 @extends('components.layout.PegawaiLayout.body.index')
 @section('pegawai')
-    <!-- Search -->
-    <form id="search-input" placeholder="Cari Produk" class="w-full md:max-w-md px-4 pb-4 md:pb-0 mx-auto md:ml-auto md:mr-0">
-        <div class="relative">
-            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg class="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 20 20">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                </svg>
+    <div class="flex flex-col md:flex-row justify-between">
+        <h1 class="font-bold text-lg px-4 py-2">Menu Transaksi</h1>
+        <!-- Search -->
+        <form id="search-input" placeholder="Cari Produk"
+            class="w-full md:max-w-md px-4 pb-4 md:pb-0 mx-auto md:ml-auto md:mr-0">
+            <div class="relative">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                    </svg>
+                </div>
+                <input type="search" id="default-search"
+                    class="block w-full py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-3xl bg-gray-50 "
+                    placeholder="Cari Menu.." required />
+                <button type="submit"
+                    class="text-white  absolute end-2.5 bottom-2.5 bg-gradient-orange hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-3xl text-sm px-4 py-1">Cari</button>
             </div>
-            <input type="search" id="default-search"
-                class="block w-full py-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-3xl bg-gray-50 "
-                placeholder="Cari Menu.." required />
-            <button type="submit"
-                class="text-white  absolute end-2.5 bottom-2.5 bg-gradient-orange hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-3xl text-sm px-4 py-1">Cari</button>
-        </div>
-    </form>
+        </form>
+    </div>
 
     <!-- CATEGORY FILTER -->
     <div class="flex gap-3 px-4 py-2 md:pb-2 w-full text-sm overflow-x-auto" id="kategori-buttons">
@@ -56,5 +60,68 @@
         </a>
     </div>
 
+    <!-- Reusable Modal Notification -->
+    <div id="globalModal" class="hidden fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-lg max-w-sm w-full mx-4 p-6 text-center transform transition-all scale-95">
+            <h3 id="modalTitle" class="text-lg font-semibold text-gray-800 mb-2">Pemberitahuan</h3>
+            <p id="modalMessage" class="text-gray-600 mb-4">Pesan notifikasi di sini</p>
+            <button id="modalCloseBtn"
+                class="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold py-2 rounded-lg hover:opacity-90">
+                Tutup
+            </button>
+        </div>
+    </div>
+
     <script src="{{ asset('js/loadMenu.js') }}"></script>
+    <script>
+        // 🔹 Notifikasi stok berhasil diperbarui
+        @if (session('success'))
+            document.addEventListener('DOMContentLoaded', function() {
+                showPopup("{{ session('success') }}", 'success');
+            });
+        @endif
+
+        // 🔹 Notifikasi error stok
+        @if (session('error'))
+            document.addEventListener('DOMContentLoaded', function() {
+                showPopup("{{ session('error') }}", 'error');
+            });
+        @endif
+    </script>
+    <script>
+        // Fungsi universal untuk menampilkan modal
+        function showModal(message, title = "Pemberitahuan") {
+            const modal = document.getElementById('globalModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalMessage = document.getElementById('modalMessage');
+            const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+
+            // Tampilkan modal
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.add('scale-100'), 10);
+
+            // Tutup modal
+            modalCloseBtn.onclick = () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('scale-100');
+            };
+
+            // Klik di luar modal untuk menutup
+            modal.onclick = (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('scale-100');
+                }
+            };
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const kembalian = {{ session('kembalian') }};
+            showModal('Kembalian Anda: Rp ' + new Intl.NumberFormat('id-ID').format(kembalian),
+                'Pembayaran Berhasil');
+        });
+    </script>
 @endsection
