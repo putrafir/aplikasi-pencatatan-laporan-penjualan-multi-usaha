@@ -12,6 +12,7 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ManageCategoryController;
 use App\Http\Controllers\Pegawai\KeranjangController;
 use App\Http\Controllers\Pegawai\PegawaiTransaksiController;
+use App\Http\Controllers\Pegawai\RiwayatTransaksiController;
 
 
 // Route::middleware('guest')->group(function () {
@@ -102,6 +103,7 @@ Route::middleware(['pegawai', 'auth'])->group(function () {
     Route::delete('/pegawai/keranjang/{id}', [KeranjangController::class, 'removeFromCart'])->name('pegawai.keranjang.remove');
     Route::get('/pegawai/keranjang', [KeranjangController::class, 'viewCart'])->name('pegawai.keranjang');
     Route::post('/pegawai/keranjang/checkout', [KeranjangController::class, 'checkout'])->name('pegawai.keranjang.checkout');
+    Route::get('/pegawai/riwayat-transaksi', [RiwayatTransaksiController::class, 'index'])->name('pegawai.riwayat-transaksi.index');
 });
 
 require __DIR__ . '/auth.php';

@@ -77,7 +77,7 @@ class ProfileController extends Controller
     public function uploadPhoto(Request $request)
     {
         $request->validate([
-            'photo' => 'required|image|mimes:jpeg,png,jpg,svg,heic|max:2048'
+            'photo' => 'required|image|mimes:jpeg,png,jpg,svg,heic|max:20480'
         ]);
 
         $user = $request->user();

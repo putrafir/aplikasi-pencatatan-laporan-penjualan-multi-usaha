@@ -142,7 +142,8 @@ class KeranjangController extends Controller
             'uang_dibayarkan' => 'required|numeric|min:0',
         ]);
 
-        $keranjangs = Keranjang::all();
+        $businessId = Auth::user()->id_business;
+        $keranjangs = Keranjang::where('business_id', $businessId)->with('menu')->get();
 
         if ($keranjangs->isEmpty()) {
             return redirect()->back()->with('error', 'Keranjang kosong, tidak ada yang bisa dibayar.');
@@ -156,21 +157,18 @@ class KeranjangController extends Controller
 
         $kembalian = $request->uang_dibayarkan - $totalBayar;
 
-        $businessId = Auth::user()->id_business;
-
         $details = $keranjangs->map(function ($keranjang) {
             return [
                 'menu_id' => $keranjang->menu_id,
-                'nama' => $keranjang->menu->nama,
+                'nama' => $keranjang->menu->nama ?? '-',
                 'jumlah' => $keranjang->jumlah,
                 'harga' => $keranjang->harga_satuan,
                 'subtotal' => $keranjang->total_harga,
-                // 'ukuran' => $keranjang->ukuran,
-                'extra_topping' => $keranjang->extra_topping,
+                'extra_topping' => $keranjang->extra_topping ?? null,
             ];
         });
 
-        $transaksi = Transaksi::create([
+        Transaksi::create([
             'user_id' => Auth::id(),
             'business_id' => $businessId,
             'total_bayar' => $totalBayar,
@@ -179,8 +177,10 @@ class KeranjangController extends Controller
             'details' => $details->toJson(),
         ]);
 
-        Keranjang::where('business_id', Auth::user()->id_business)->delete();
+        Keranjang::where('business_id', $businessId)->delete();
 
-        return redirect()->route('pegawai.transaksi.index')->with('success', "Pembayaran berhasil. Uang yang di bayarkan: Rp " . number_format($request->uang_dibayarkan, 0, ',', '.') . ". Kembalian: Rp " . number_format($kembalian, 0, ',', '.'));
+        return redirect()
+            ->route('pegawai.transaksi.index')
+            ->with('kembalian', $kembalian);
     }
 }

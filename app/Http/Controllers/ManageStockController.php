@@ -179,6 +179,6 @@ class ManageStockController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Sisa stok berhasil diperbarui.');
+        return redirect()->route('pegawai.transaksi.index')->with('success', 'Sisa stok berhasil diperbarui.');
     }
 }

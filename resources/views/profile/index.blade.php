@@ -107,13 +107,15 @@
     </div>
 
     <div class="mt-6">
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit"
-                class="w-full border bg-white font-semibold border-red-500 text-red-500 py-2 rounded-md transition">
-                Logout
-            </button>
-        </form>
+        @if (auth()->user()->role !== 'pegawai')
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit"
+                    class="w-full border bg-white font-semibold border-red-500 text-red-500 py-2 rounded-md transition">
+                    Logout
+                </button>
+            </form>
+        @endif
     </div>
 
     <!-- MODAL UPLOAD FOTO -->
@@ -152,3 +154,18 @@
 <script src="{{ asset('js/editProfile.js') }}"></script>
 
 @endsection
+@if (session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            showPopup("{{ session('success') }}", "success");
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            showPopup("{{ session('error') }}", "error");
+        });
+    </script>
+@endif
