@@ -19,9 +19,9 @@
     </div>
 
 
-    <x-section-header title=Stok buttonAction="togglePopup('popup-add')" :business_id="$business->id" label="Tambah Stok" :showLabel="true" />
+    <x-section-header title=Bahan buttonAction="togglePopup('popup-add')" :business_id="$business->id" label="Tambah Stok" :showLabel="true" />
 
-    <x-modal-add id="popup-add" title="Tambah Stok" :isEdit="false" action="{{ route('admin.stock.add') }}" method="POST"
+    <x-modal-add id="popup-add" title="Tambah Bahan" :isEdit="false" action="{{ route('admin.stock.add') }}" method="POST"
         :inputs="[
             ['label' => 'Nama', 'name' => 'nama', 'type' => 'text', 'placeholder' => 'Nama Stok', 'required' => true],
             ['label' => 'Jumlah Stok', 'name' => 'jumlah_stok', 'type' => 'number', 'placeholder' => 'Jumlah Stok'],
@@ -51,7 +51,7 @@
 
     </x-table>
 
-    <x-modal-add id="popup-edit-stock" title="Edit Stok" method="PUT" :isEdit="true" :inputs="[
+    <x-modal-add id="popup-edit-stock" title="Edit Bahan" method="PUT" :isEdit="true" :inputs="[
         [
             'label' => 'Nama',
             'name' => 'nama',

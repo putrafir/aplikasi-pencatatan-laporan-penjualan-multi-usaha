@@ -17,15 +17,15 @@ class Category extends Model
         return $this->hasMany(Menu::class, 'kategori_id');
     }
     
-    public function sizePrices()
-    {
-        return $this->hasMany(SizePrice::class);
-    }
+    // public function sizePrices()
+    // {
+    //     return $this->hasMany(SizePrice::class);
+    // }
 
-    public function superCategory()
-    {
-        return $this->belongsTo(SuperCategory::class, 'super_kategori_id');
-    }
+    // public function superCategory()
+    // {
+    //     return $this->belongsTo(SuperCategory::class, 'super_kategori_id');
+    // }
 
     public function business()
     {
