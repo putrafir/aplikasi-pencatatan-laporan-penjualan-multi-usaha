@@ -2,9 +2,11 @@
 @section('title', 'Dashboard')
 @section('admin')
 
-
     <div class="grid grid-cols-1 gap-6">
 
+        {{-- ============================
+             📈 Pendapatan
+        ============================ --}}
         <div class="max-w-sm md:max-w-full bg-white rounded-lg shadow-sm ">
             <div class="flex justify-between p-4 md:p-6 pb-0 md:pb-0">
                 <div>
@@ -13,11 +15,11 @@
                     <p class="text-sm font-normal text-gray-500 ">
                         {{ $filterPendapatan == 'bulan' ? 'Pendapatan Bulan Ini' : 'Pendapatan Minggu Ini' }}</p>
                 </div>
-                <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500  text-center">
+                <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 text-center">
                     <form id="filterFormPendapatan" method="get">
                         <button id="dropdownDefaultButtonPendapatan" data-dropdown-toggle="dropdownPendapatanMenu"
                             data-dropdown-placement="bottom" type="button"
-                            class="px-3 py-2 inline-flex items-center text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200  ">
+                            class="px-3 py-2 inline-flex items-center text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200">
                             {{ request('filter_pendapatan', 'minggu') == 'bulan' ? 'Bulan Ini' : 'Minggu Ini' }}
                             <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                 fill="none" viewBox="0 0 10 6">
@@ -50,13 +52,15 @@
                 </div>
             </div>
             <div id="labels-chart" class="px-2.5"></div>
-            <div class="grid grid-cols-1 items-center   justify-between mt-5 p-4 md:p-6 pt-0 md:pt-0">
-
-                <div class="pt-5"></div>
-            </div>
+            <!-- Legend Pendapatan -->
+            <div id="legend-pendapatan" class="flex flex-wrap justify-center gap-4 p-4"></div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 ">
 
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-0">
+
+            {{-- ============================
+                 📊 Stok Keluar
+            ============================ --}}
             <div class="max-w-sm md:max-w-lg w-full bg-white rounded-lg shadow-sm ">
                 <div class="flex justify-between p-4 md:p-6 pb-0 md:pb-0">
                     <div>
@@ -65,11 +69,11 @@
                         <p class="text-sm font-normal text-gray-500 ">
                             {{ $filterStok == 'bulan' ? 'Bulan Ini: ' : 'Minggu Ini: ' }}{{ $totalStokKeluar }}</p>
                     </div>
-                    <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500  text-center">
+                    <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 text-center">
                         <form id="filterFormStok" method="get">
                             <button id="dropdownDefaultButtonStok" data-dropdown-toggle="dropdownStokMenu"
                                 data-dropdown-placement="bottom" type="button"
-                                class="px-3 py-2 inline-flex items-center text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200  ">
+                                class="px-3 py-2 inline-flex items-center text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200">
                                 {{ request('filter_stok', 'minggu') == 'bulan' ? 'Bulan Ini' : 'Minggu Ini' }}
                                 <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 10 6">
@@ -101,12 +105,13 @@
                         </form>
                     </div>
                 </div>
-                <div id="stok-keluar-chart" class="px-2.5 "></div>
-                <div class="grid grid-cols-1 items-center   justify-between mt-5 p-4 md:p-6 pt-0 md:pt-0">
-
-                    <div class="pt-5"></div>
-                </div>
+                <div id="stok-keluar-chart" class="px-2.5"></div>
+                <div id="legend-stok" class="flex flex-wrap justify-center gap-4 p-4"></div>
             </div>
+
+            {{-- ============================
+                 🍽️ Menu Terjual
+            ============================ --}}
             <div class="max-w-sm md:max-w-lg w-full bg-white rounded-lg shadow-sm ">
                 <div class="flex justify-between p-4 md:p-6 pb-0 md:pb-0">
                     <div>
@@ -115,11 +120,11 @@
                         <p class="text-sm font-normal text-gray-500 ">
                             {{ $filterMenu == 'bulan' ? 'Bulan Ini: ' : 'Minggu Ini: ' }}{{ $totalMenuTerjual }}</p>
                     </div>
-                    <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500  text-center">
+                    <div class="flex items-center px-2.5 py-0.5 text-base font-semibold text-green-500 text-center">
                         <form id="filterFormMenu" method="get">
                             <button id="dropdownDefaultButtonMenu" data-dropdown-toggle="dropdownMenuMenu"
                                 data-dropdown-placement="bottom" type="button"
-                                class="px-3 py-2 inline-flex items-center text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200  ">
+                                class="px-3 py-2 inline-flex items-center text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200">
                                 {{ request('filter_menu', 'minggu') == 'bulan' ? 'Bulan Ini' : 'Minggu Ini' }}
                                 <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 10 6">
@@ -151,38 +156,25 @@
                         </form>
                     </div>
                 </div>
-                <div id="menu-terjual-chart" class="px-2.5 "></div>
-                <div class="grid grid-cols-1 items-center   justify-between mt-5 p-4 md:p-6 pt-0 md:pt-0">
-
-                    <div class="pt-5"></div>
-                </div>
+                <div id="menu-terjual-chart" class="px-2.5"></div>
+                <div id="legend-menu" class="flex flex-wrap justify-center gap-4 p-4"></div>
             </div>
-
-
-
-            {{-- <pre>
-{{ json_encode($series, JSON_PRETTY_PRINT) }}
-</pre> --}}
-
-            {{-- <pre>{{ json_encode($categories, JSON_PRETTY_PRINT) }}</pre>
-        <pre>{{ json_encode($series, JSON_PRETTY_PRINT) }}</pre> --}}
 
         </div>
 
-
+        {{-- ============================
+             📜 Script Chart
+        ============================ --}}
         <script>
             document.addEventListener("DOMContentLoaded", function() {
 
-                // 🎨 Palet warna dasar — bisa kamu ubah sesuai tema
                 const baseColors = [
                     "#1C64F2", "#16BDCA", "#FDBA8C", "#8B5CF6", "#10B981",
                     "#F59E0B", "#EF4444", "#EC4899", "#6366F1", "#14B8A6"
                 ];
 
-                // 🗺️ Peta warna global (disimpan per nama usaha)
                 const colorMap = new Map();
 
-                // 🔁 Fungsi untuk ambil warna konsisten berdasarkan nama usaha
                 function getColorForName(name) {
                     if (!colorMap.has(name)) {
                         const color = baseColors[colorMap.size % baseColors.length];
@@ -191,12 +183,11 @@
                     return colorMap.get(name);
                 }
 
-                // ===================================
-                // === Fungsi bantu bikin chart umum ===
-                // ===================================
-                function makeChart(elementId, rawSeries, categories, dataKey, valueFormatter, unit = '') {
-                    if (!document.getElementById(elementId)) return;
+                function makeChart(elementId, legendId, rawSeries, categories, dataKey, valueFormatter, unit = '', xLabel = 'Tanggal', yLabel = 'Jumlah') {
+                    const el = document.getElementById(elementId);
+                    if (!el) return;
 
+                    // Render Chart
                     const options = {
                         series: rawSeries.map((s) => ({
                             name: s.name,
@@ -206,114 +197,81 @@
                         chart: {
                             height: 300,
                             type: "area",
-                            toolbar: {
-                                show: false
-                            },
+                            toolbar: { show: false },
                             fontFamily: "Inter, sans-serif"
                         },
                         xaxis: {
                             categories: categories,
+                            title: { text: xLabel, style: { fontSize: '12px', fontWeight: 600 } },
                             labels: {
-                                style: {
-                                    fontFamily: "Inter, sans-serif",
-                                    cssClass: 'text-xs fill-gray-500'
-                                },
+                                style: { fontFamily: "Inter, sans-serif", cssClass: 'text-xs fill-gray-500' },
                                 formatter: function(value) {
-                                    // Jika format YYYY-MM-DD → ubah ke d MMM
                                     if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
                                         const [y, m, d] = value.split('-');
-                                        const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul",
-                                            "Agu", "Sep", "Okt", "Nov", "Des"
-                                        ];
+                                        const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
                                         return `${parseInt(d)} ${monthNames[parseInt(m) - 1]}`;
                                     }
-
-                                    // Jika formatnya sudah seperti "1 - 7 Okt" atau teks lain, tampilkan langsung
                                     return value;
                                 }
                             }
                         },
                         yaxis: {
+                            title: { text: yLabel, style: { fontSize: '12px', fontWeight: 600 } },
                             labels: {
                                 formatter: function(value) {
-                                    return valueFormatter ? valueFormatter(value) : value.toLocaleString(
-                                        'id-ID');
+                                    return valueFormatter ? valueFormatter(value) : value.toLocaleString('id-ID');
                                 }
                             }
                         },
                         tooltip: {
                             shared: true,
-                            custom: function({
-                                dataPointIndex,
-                                w
-                            }) {
-                                let html =
-                                    `<div class="bg-gray-800 text-white p-2 rounded-lg shadow-md text-sm">`;
-                                rawSeries.forEach((s, i) => {
+                            custom: function({ dataPointIndex }) {
+                                let html = `<div class="bg-gray-800 text-white p-2 rounded-lg shadow-md text-sm">`;
+                                rawSeries.forEach((s) => {
                                     const color = getColorForName(s.name);
                                     const dataObj = s.data[dataPointIndex] || {};
                                     const val = dataObj[dataKey] ?? 0;
                                     html += `
-                            <div class="flex items-center space-x-2">
-                                <span style="background:${color}" class="w-3 h-3 rounded-full inline-block"></span>
-                                <span>${s.name}: <b>${unit}${new Intl.NumberFormat('id-ID').format(val)}</b></span>
-                            </div>`;
+                                        <div class="flex items-center space-x-2">
+                                            <span style="background:${color}" class="w-3 h-3 rounded-full inline-block"></span>
+                                            <span>${s.name}: <b>${unit}${new Intl.NumberFormat('id-ID').format(val)}</b></span>
+                                        </div>`;
                                 });
                                 return html + `</div>`;
                             }
                         },
-                        fill: {
-                            type: "gradient",
-                            gradient: {
-                                opacityFrom: 0.55,
-                                opacityTo: 0
-                            }
-                        },
-                        stroke: {
-                            width: 6
-                        },
-                        dataLabels: {
-                            enabled: false
-                        },
-                        legend: {
-                            show: false
-                        },
-                        grid: {
-                            show: true
-                        },
+                        fill: { type: "gradient", gradient: { opacityFrom: 0.55, opacityTo: 0 } },
+                        stroke: { width: 6 },
+                        dataLabels: { enabled: false },
+                        legend: { show: false },
+                        grid: { show: true },
                     };
 
-                    new ApexCharts(document.getElementById(elementId), options).render();
+                    new ApexCharts(el, options).render();
+
+                    // Render Legend Custom
+                    const legendContainer = document.getElementById(legendId);
+                    legendContainer.innerHTML = rawSeries.map(s => {
+                        const total = s.data.reduce((sum, d) => sum + (Number(d[dataKey]) || 0), 0);
+                        const color = getColorForName(s.name);
+                        return `
+                            <div class="flex items-center gap-2 text-sm">
+                                <span style="background:${color}" class="w-3 h-3 rounded-full inline-block"></span>
+                                <span>${s.name}: <b>${unit}${new Intl.NumberFormat('id-ID').format(total)}</b></span>
+                            </div>
+                        `;
+                    }).join('');
                 }
 
-                // ===========================
-                // === Render semua chart ===
-                // ===========================
+                makeChart("labels-chart", "legend-pendapatan", @json($seriesPendapatan), @json($categoriesPendapatan), "pendapatan",
+                    (v) => "Rp" + v.toLocaleString("id-ID"), "Rp", "Tanggal", "Jumlah Pendapatan (Rp)");
 
-                makeChart(
-                    "labels-chart",
-                    @json($seriesPendapatan),
-                    @json($categoriesPendapatan),
-                    "pendapatan",
-                    (v) => "Rp" + v.toLocaleString("id-ID"),
-                    "Rp"
-                );
+                makeChart("stok-keluar-chart", "legend-stok", @json($stokSeries), @json($categoriesStok), "stok_keluar", null, "",
+                    "Tanggal", "Jumlah Stok yang Keluar");
 
-                makeChart(
-                    "stok-keluar-chart",
-                    @json($stokSeries),
-                    @json($categoriesStok),
-                    "stok_keluar"
-                );
-
-                makeChart(
-                    "menu-terjual-chart",
-                    @json($menuSeries),
-                    @json($categoriesMenu),
-                    "jumlah_menu"
-                );
-
+                makeChart("menu-terjual-chart", "legend-menu", @json($menuSeries), @json($categoriesMenu), "jumlah_menu", null, "",
+                    "Tanggal", "Jumlah Menu yang Terjual");
             });
         </script>
 
-    @endsection
+@endsection

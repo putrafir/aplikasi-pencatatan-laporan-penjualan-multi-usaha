@@ -30,6 +30,9 @@
 
                     <div class="z-10 flex-1 px-6 py-4">
                         <h2 class="font-bold text-2xl">{{ $usaha->name }}</h2>
+                        <p class="text-sm text-gray-600 mt-1">
+                            {{ $usaha->lokasi ?? 'Lokasi tidak tersedia' }}
+                        </p>
                     </div>
 
                     <div class="z-10 py-4 mx-4 rounded-l-full text-right">
