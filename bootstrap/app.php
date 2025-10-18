@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\ForceToHttps;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\OwnerMiddleware;
 use App\Http\Middleware\PegawaiMiddleware;
@@ -20,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'owner' => OwnerMiddleware::class,
             'pegawai' => PegawaiMiddleware::class
         ]);
+        $middleware->append(ForceToHttps::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
