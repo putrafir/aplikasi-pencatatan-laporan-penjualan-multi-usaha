@@ -26,7 +26,7 @@ class ManageStockController extends Controller
         // $stocks = Stock::where('business_id', $business->id)->get();
 
         $stocks = StockLog::with('stock')
-            ->whereHas('stock', function ($query) use ($business) {
+            ->whereHas('stocks', function ($query) use ($business) {
                 $query->where('business_id', $business->id);
             })->whereDate('created_at', today())
             ->get();
