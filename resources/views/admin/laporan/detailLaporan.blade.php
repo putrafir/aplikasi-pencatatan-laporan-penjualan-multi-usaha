@@ -3,9 +3,42 @@
 @section('admin')
 
     {{-- Header --}}
-    <x-ui.bg-pink class="hidden md:block" />
+    {{-- <x-ui.bg-pink class="hidden md:block" /> --}}
+
+    <form method="GET" action="{{ route('admin.laporan', $business->id) }}" class="flex items-center space-x-4">
+        <div id="date-range-picker" date-rangepicker class="flex items-center">
+            <div class="relative">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                    </svg>
+                </div>
+                <input id="datepicker-range-start" name="start" type="text" value="{{ request('start') }}"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  "
+                    placeholder="Tanggal Awal">
+            </div>
+            <span class="mx-4 text-gray-500">to</span>
+            <div class="relative">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                    </svg>
+                </div>
+                <input id="datepicker-range-end" name="end" type="text" value="{{ request('end') }}"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  "
+                    placeholder="Tanggal Akhir">
+            </div>
+        </div>
+        <button type="submit" class="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-lg shadow">
+            Tampilkan
+        </button>
+    </form>
     <div
-        class="md:-mt-16 relative mb-9 overflow-hidden w-full md:max-w-md md:mx-auto h-full bg-gray-100 rounded-2xl shadow-md flex items-center p-4">
+        class=" mt-10 relative mb-9 overflow-hidden w-full md:max-w-md md:mx-auto h-full bg-gray-100 rounded-2xl shadow-md flex items-center p-4">
         <img src="{{ asset('img/illustrations/toko.svg') }}" class="w-40 z-10 absolute bottom-0" alt="">
         <x-right-motif class="md:scale-150" />
         <x-left-motif />
