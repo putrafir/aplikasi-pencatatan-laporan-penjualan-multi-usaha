@@ -69,7 +69,7 @@ Route::middleware(['owner', 'auth'])->group(function () {
 
     // Management Stock
     Route::get('/admin/business/{id}/stocks', [LaporanController::class, 'getStocks']);
-    Route::get('/admin/manage-stock', [ManageStockController::class, 'index'])->name('admin.manage-stock');
+    Route::get('/admin/manage-stock/{id}', [ManageStockController::class, 'index'])->name('admin.manage-stock');
     Route::post('/admin/stock/add', [ManageStockController::class, 'store'])->name('admin.stock.add');
     Route::put('/admin/stock/{id}', [ManageStockController::class, 'update'])->name('admin.stock.update');
     Route::delete('/admin/stock/{id}', [ManageStockController::class, 'destroy'])->name('admin.stock.destroy');
@@ -83,7 +83,7 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::post('/items/stock/store/jumlah-stock', [ManageStockController::class, 'increaseStock'])->name('admin.stock.store.jumlah_stok');
 
 
-    Route::get('/admin/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
+    Route::get('/admin/laporan/{id}', [LaporanController::class, 'index'])->name('admin.laporan');
     Route::get('/admin/laporan/data', [LaporanController::class, 'getData'])->name('laporan.data');
 });
 

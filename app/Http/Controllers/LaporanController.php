@@ -8,20 +8,53 @@ use Illuminate\Http\Request;
 
 class LaporanController extends Controller
 {
-    public function index(Request $request)
+    public function index($id, Request $request)
     {
         $tanggal = $request->query('date', now()->toDateString());
+        // Ambil tanggal awal dan akhir dari query string (jika ada)
 
+        $startDate = $request->query('start', now()->toDateString());
+        $endDate = $request->query('end', $startDate); // jika end kosong, gunakan start
+
+        // Ambil data business + transaksi dalam rentang tanggal
         $business = Business::with([
-            'transaksis' => function ($q) use ($tanggal) {
-                $q->whereDate('created_at', $tanggal);
+            'transaksis' => function ($q) use ($startDate, $endDate) {
+                $q->whereBetween('created_at', [
+                    \Carbon\Carbon::parse($startDate)->startOfDay(),
+                    \Carbon\Carbon::parse($endDate)->endOfDay(),
+                ]);
             },
-            'stocks' => function ($q) use ($tanggal) {
-                $q->whereDate('created_at', $tanggal);
-            },
-        ])->get();
+            'users' // biar bagian pegawai tetap bisa diakses di view
+        ])->findOrFail($id);
 
-        return view('admin.laporan.index', compact('business', 'tanggal'));
+        // Ambil stock log berdasarkan business dan rentang tanggal
+        $stocks = StockLog::with('stocks')
+            ->whereHas('stocks', function ($query) use ($business) {
+                $query->where('business_id', $business->id);
+            })
+            ->whereBetween('created_at', [
+                \Carbon\Carbon::parse($startDate)->startOfDay(),
+                \Carbon\Carbon::parse($endDate)->endOfDay(),
+            ])
+            ->get();
+
+        // Pagination manual (karena stoknya pakai Collection, bukan QueryBuilder)
+        $perPage = 5;
+        $currentPage = $request->get('page', 1);
+        $total = $stocks->count();
+        $stocks = $stocks->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        // Kirim data ke view
+        return view('admin.laporan.detailLaporan', compact(
+            'business',
+            'startDate',
+            'endDate',
+            'stocks',
+            'total',
+            'currentPage',
+            'perPage',
+            'tanggal'
+        ));
     }
 
     public function getData(Request $request)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Business;
+use App\Models\RiwayatStok;
 use App\Models\Stock;
 use App\Models\StockLog;
 use App\Models\Transaksi;
@@ -24,8 +25,8 @@ class ManageStockController extends Controller
 
         // $stocks = Stock::where('business_id', $business->id)->get();
 
-        $stocks = StockLog::with('stocks')
-            ->whereHas('stocks', function ($query) use ($business) {
+        $stocks = StockLog::with('stock')
+            ->whereHas('stock', function ($query) use ($business) {
                 $query->where('business_id', $business->id);
             })->whereDate('created_at', today())
             ->get();
@@ -37,14 +38,15 @@ class ManageStockController extends Controller
         $alreadyUpdated = $stocks_akhir->isNotEmpty();
         $noStokToday = $stocks->isEmpty();
 
+
         return view('pegawai.UpdateStok', compact('user', 'stocks', 'business', 'transaksi', 'alreadyUpdated', 'noStokToday'));
     }
 
 
 
-    public function index(Request $request)
+    public function index($id, Request $request)
     {
-        $business_id = $request->get('business_id', 2);
+        $business_id = $request->get('business_id', $id);
         $stocks = Stock::when($business_id, function ($query, $business_id) {
             return $query->where('business_id', $business_id);
         })->get();
@@ -53,7 +55,9 @@ class ManageStockController extends Controller
 
         $datanama = "data master";
 
-        return view('admin.manage-stock.index', compact('stocks', 'businesses', 'datanama', 'business_id'));
+        $riwayatStok = RiwayatStok::latest()->take(5)->get();
+
+        return view('admin.manage-stock.index', compact('stocks', 'riwayatStok', 'businesses', 'datanama', 'business_id'));
     }
 
     public function store(Request $request)
@@ -114,29 +118,45 @@ class ManageStockController extends Controller
 
     public function increaseStock(Request $request)
     {
-        $business_id = $request->get('business_id');
+        // Validasi input
 
-
-
+        // dd($request->all());
         $validated = $request->validate([
-            'jumlah_stok' => 'required|array',
-            'jumlah_stok.*' => 'nullable|integer|min:0',
+            'stock' => 'required|array',
+            'stock.*.id' => 'required|integer|exists:stock,id',
+            'stock.*.jumlah_tambah' => 'nullable|integer|min:0',
         ]);
 
-        foreach ($validated['jumlah_stok'] as $itemId => $jumlah) {
-            if ($jumlah > 0) {
-                $stock = Stock::findOrFail($itemId);
-                $stock->jumlah_stok = $jumlah;
-                $stock->save();
-
-                StockLog::create([
-                    'stock_id' => $stock->id,
-                    'stok_awal' => $jumlah,
-                ]);
+        // Loop tiap stok yang dikirim
+        foreach ($validated['stock'] as $data) {
+            // Lewati jika tidak menambah apa-apa
+            if (empty($data['jumlah_tambah']) || $data['jumlah_tambah'] <= 0) {
+                continue;
             }
+
+            $stock = Stock::findOrFail($data['id']);
+            $stok_awal = $stock->jumlah_stok;
+
+            // Tambahkan stok
+            $stock->jumlah_stok += $data['jumlah_tambah'];
+            $stock->save();
+
+            RiwayatStok::create([
+                'stock_id' => $stock->id,
+                'status' => 'masuk',
+                'jumlah' => $data['jumlah_tambah'],
+            ]);
+
+            // Simpan log riwayat stok
+            // StockLog::create([
+            //     'stock_id'   => $stock->id,
+            //     'stok_awal'  => $stok_awal,
+            //     'stok_tambah' => $data['jumlah_tambah'],
+            //     'stok_akhir' => $stock->jumlah_stok,
+            // ]);
         }
 
-        return redirect()->back()->with('success', 'Stok berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Stok berhasil diperbarui.');
     }
     public function reduceStock(Request $request)
     {
