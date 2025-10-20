@@ -180,7 +180,6 @@ class KeranjangController extends Controller
         Keranjang::where('business_id', $businessId)->delete();
 
         return redirect()
-            ->route('pegawai.transaksi.index')
-            ->with('kembalian', $kembalian);
+            ->route('pegawai.transaksi.index');
     }
 }

@@ -16,8 +16,7 @@
                 </div>
             @else
                 @foreach ($keranjangs as $keranjang)
-                    <div class="bg-white rounded-xl shadow p-3 flex gap-3 md:grid-cols-2"
-                        id="cart-item-{{ $keranjang->id }}">
+                    <div class="bg-white rounded-xl shadow p-3 flex gap-3 md:grid-cols-2" id="cart-item-{{ $keranjang->id }}">
                         @if ($keranjang->menu && $keranjang->menu->foto)
                             <img class="rounded-lg w-16 h-16 object-cover" src="{{ asset($keranjang->menu->foto) }}"
                                 alt="" />
@@ -58,24 +57,37 @@
 
         <div class="fixed bottom-0 left-0 right-0 bg-gray-50 p-4 z-10">
             {{-- Ringkasan --}}
-            <div class="bg-white rounded-xl shadow p-4 space-y-2">
-                <div class="flex justify-between text-base font-bold">
-                    <span>Total</span>
-                    <span id="total-bayar">Rp.@php echo number_format($totalBayar, 0, ',', '.'); @endphp</span>
+            <div class="space-y-2">
+                <!-- Kotak Total -->
+                <div class="bg-white rounded-xl shadow p-4 flex justify-between items-center">
+                    <span class="font-semibold">Total</span>
+                    <span id="total-bayar" class="font-bold">
+                        Rp {{ number_format($totalBayar, 0, ',', '.') }}
+                    </span>
+                </div>
+
+                <!-- Kotak Kembalian -->
+                <div id="box-kembalian" class="bg-white rounded-xl shadow p-4 flex justify-between items-center hidden">
+                    <span class="font-semibold text-green-600">Kembalian</span>
+                    <span id="kembalian" class="font-bold text-green-600">Rp 0</span>
                 </div>
             </div>
+
             {{-- Tombol Pesan --}}
             <form id="checkoutForm" action="{{ route('pegawai.keranjang.checkout') }}" method="POST">
                 @csrf
                 <div class="my-4">
-                    <label for="uang_dibayarkan" class="block text-sm font-medium text-gray-700">Jumlah Uang
-                        Dibayarkan</label>
+                    <label for="uang_dibayarkan" class="block text-sm font-medium text-gray-700">
+                        Jumlah Uang Dibayarkan
+                    </label>
                     <input type="number" name="uang_dibayarkan" id="uang_dibayarkan" required
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                 </div>
-                <div class="">
+                <div>
                     <button type="submit"
-                        class="w-full text-white bg-gradient-fuchsia hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 text-base font-semibold py-3 rounded-full">Bayar</button>
+                        class="w-full text-white bg-gradient-fuchsia hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 text-base font-semibold py-3 rounded-full">
+                        Bayar
+                    </button>
                 </div>
             </form>
         </div>
@@ -174,6 +186,39 @@
                                 'error');
                         });
                 });
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const uangInput = document.getElementById('uang_dibayarkan');
+            const kembalianEl = document.getElementById('kembalian');
+            const boxKembalian = document.getElementById('box-kembalian');
+
+            const formatRupiah = (angka) => {
+                return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            };
+
+            const hitungKembalian = () => {
+                const totalText = document.getElementById('total-bayar').textContent.trim();
+                const totalValue = parseInt(totalText.replace(/[^\d]/g, '')) || 0;
+                const uangDibayarkan = parseInt(uangInput.value) || 0;
+                const kembalian = uangDibayarkan - totalValue;
+
+                if (uangDibayarkan > 0) {
+                    boxKembalian.classList.remove('hidden');
+                    kembalianEl.textContent = formatRupiah(kembalian > 0 ? kembalian : 0);
+                } else {
+                    boxKembalian.classList.add('hidden');
+                }
+            };
+
+            // Perhitungan ulang setiap user input uang
+            uangInput.addEventListener('input', hitungKembalian);
+
+            // 👉 Perhitungan ulang juga saat total berubah (quantity tambah, kurang, hapus)
+            const observer = new MutationObserver(hitungKembalian);
+            observer.observe(document.getElementById('total-bayar'), {
+                childList: true
             });
         });
     </script>

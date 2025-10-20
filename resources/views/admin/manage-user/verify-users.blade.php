@@ -1,23 +1,18 @@
 @extends('components.layout.OwnerLayout.body.index')
 @section('title', 'Manage Users')
 @section('admin')
-    <!-- table 1 -->
-
     <div class="flex flex-wrap -mx-3">
         <div class="flex-none w-full max-w-full px-3">
             <div
                 class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
 
-
-                <div class=" px-6 flex my-9 items-center justify-between gap-2 mb-4">
-
+                <div class="px-6 flex my-9 items-center justify-between gap-2 mb-4">
                     <h6>Kelola Pegawai</h6>
                     <x-plus-button buttonAction="togglePopup('popup-add-user')" label="Tambah Pegawai" :showLabel="true" />
                 </div>
 
-
-
-                <x-modal-add id="popup-add-user" title="Add User" action="{{ route('admin.add-user') }}" method="POST"
+                {{-- Modal Tambah User --}}
+                <x-modal-add id="popup-add-user" title="Add User" :isEdit="false" action="{{ route('admin.add-user') }}" method="POST"
                     :inputs="[
                         [
                             'label' => 'Name',
@@ -45,13 +40,12 @@
                             'name' => 'id_business',
                             'type' => 'select',
                             'options' => $businesses
-                                ->map(function ($business) {
-                                    return ['value' => $business->id, 'label' => $business->name];
-                                })
+                                ->map(fn($b) => ['value' => $b->id, 'label' => $b->name])
                                 ->toArray(),
                             'required' => true,
                         ],
                     ]" />
+
                 <div class="flex-auto px-0 pt-0 pb-2">
                     <div class="p-0 overflow-x-auto">
                         <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">
@@ -68,16 +62,13 @@
                                         Status</th>
                                     <th
                                         class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
-                                        Register At</th>
-                                    <th
-                                        class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
                                         Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-
-                                @foreach ($users as $key => $item)
+                                @foreach ($users as $item)
                                     <tr>
+                                        {{-- Kolom Name --}}
                                         <td
                                             class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                             <div class="flex px-2 py-1">
@@ -93,64 +84,50 @@
                                                 </div>
                                             </div>
                                         </td>
+
+                                        {{-- Kolom Business --}}
                                         <td
                                             class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                             <p class="mb-0 text-xs leading-tight text-slate-400">
-                                                {{ $item->business->name }}</p>
-                                        </td>
-                                        @if ($item->is_verified == true)
-                                            <td
-                                                class="p-2 text-sm leading-normal text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                                <span
-                                                    class="bg-gradient-to-tl from-green-600 to-lime-400 px-2.5 text-xs rounded-1.8 py-1.4 inline-block whitespace-nowrap text-center align-baseline font-bold uppercase leading-none text-white">Active</span>
-                                            </td>
-                                        @else
-                                            <td
-                                                class="p-2 text-sm leading-normal text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                                <span
-                                                    class="bg-gradient-to-tl from-slate-600 to-slate-300 px-2.5 text-xs rounded-1.8 py-1.4 inline-block whitespace-nowrap text-center align-baseline font-bold uppercase leading-none text-white">Inactive</span>
-                                            </td>
-                                        @endif
-
-                                        <td
-                                            class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                            <span
-                                                class="text-xs font-semibold leading-tight text-slate-400">{{ \Carbon\Carbon::parse($item->created_at)->format('l, d F Y') }}</span>
+                                                {{ $item->business->name }}
+                                            </p>
                                         </td>
 
+                                        {{-- Kolom Status (klik badge untuk toggle) --}}
                                         <td
-                                            class="flex justify-center p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                            class="p-2 text-sm text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                             <form
-                                                action="{{ route($item->is_verified == false ? 'admin.verify-user' : 'admin.inverify-user', $item) }}"
-                                                method="POST">
+                                                action="{{ route($item->is_verified ? 'admin.inverify-user' : 'admin.verify-user', $item) }}"
+                                                method="POST" class="inline">
                                                 @csrf
                                                 <button type="submit"
-                                                    class="inline-block px-6 py-3 font-bold text-center text-white uppercase align-middle transition-all bg-transparent rounded-lg cursor-pointer leading-pro text-xs ease-soft-in shadow-soft-md bg-150 bg-gradient-to-tl from-gray-900 to-slate-800 hover:shadow-soft-xs active:opacity-85 hover:scale-102 tracking-tight-soft bg-x-25">
-                                                    {{ $item->is_verified == false ? 'Verify' : 'In Verify' }}
+                                                    class="px-3 py-1 rounded-lg text-xs font-bold uppercase text-white 
+                                                    {{ $item->is_verified
+                                                        ? 'bg-gradient-to-tl from-green-600 to-lime-400'
+                                                        : 'bg-gradient-to-tl from-slate-600 to-slate-300' }}">
+                                                    {{ $item->is_verified ? 'Active' : 'Inactive' }}
                                                 </button>
                                             </form>
-                                            <form id="delete-form-{{ $item->id }}"
-                                                action="{{ route('admin.delete-user', $item->id) }}" method="POST"
-                                                class="inline">
-                                                @csrf
-                                                <button
-                                                    class="z-10 inline-block px-4 py-3 mb-0 font-bold text-center text-transparent uppercase align-middle transition-all border-0 rounded-lg shadow-none cursor-pointer leading-pro text-xs ease-soft-in bg-150 bg-gradient-to-tl from-red-600 to-rose-400 hover:scale-102 active:opacity-85 bg-x-25 bg-clip-text"
-                                                    type="submit" onclick="confirmDelete(event, {{ $item->id }})"><i
-                                                        class="mr-2 far fa-trash-alt bg-150 bg-gradient-to-tl from-red-600 to-rose-400 bg-x-25 bg-clip-text"></i>Delete</button>
-                                            </form>
+                                        </td>
+
+                                        {{-- Kolom Action (hapus saja) --}}
+                                        <td
+                                            class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                                            <a href="{{ route('admin.users.detail', $item->id) }}"
+                                                class="text-blue-500 hover:underline text-sm leading-tight">
+                                                Detail
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
-
                             </tbody>
                         </table>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
-
     @include('components.ui.Modal.delete')
-
 @endsection
