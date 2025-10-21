@@ -45,6 +45,9 @@ Route::middleware(['owner', 'auth'])->group(function () {
     // Management Users
     Route::post('/admin/unverify-users/{user}', [UserVerificationController::class, 'inverify'])->name('admin.inverify-user');
     Route::post('/admin/verify-users/{user}', [UserVerificationController::class, 'verify'])->name('admin.verify-user');
+    Route::get('/admin/users/{id}/detail', [UserVerificationController::class, 'showDetail'])->name('admin.users.detail');
+    Route::put('/admin/users/{id}', [UserVerificationController::class, 'updateUser'])->name('admin.users.update');
+    Route::delete('/admin/users/{id}', [UserVerificationController::class, 'deleteUser'])->name('admin.users.delete');
     Route::post('/admin/delete-users/{user}', [UserVerificationController::class, 'deleteUser'])->name('admin.delete-user');
     Route::post('/admin/add-users', [UserVerificationController::class, 'addUser'])->name('admin.add-user');
 

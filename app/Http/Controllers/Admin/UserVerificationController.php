@@ -67,6 +67,27 @@ class UserVerificationController extends Controller
         $employee = User::findOrFail($id);
         $employee->delete();
 
-        return redirect()->back()->with('success', 'Employee deleted successfully');
+        return redirect()->route('admin.verify-users')->with('success', 'Pegawai berhasil dihapus');
+    }
+
+    public function showDetail($id)
+    {
+        $user = User::findOrFail($id);
+
+        return view('admin.manage-user.detail', compact('user'));
+    }
+
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+        ]);
+
+        $user->update($request->only(['name', 'email']));
+
+        return redirect()->route('admin.users.detail', $id)->with('success', 'Data pegawai berhasil diperbarui');
     }
 }
