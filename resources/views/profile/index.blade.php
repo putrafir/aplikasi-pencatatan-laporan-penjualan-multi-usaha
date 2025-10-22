@@ -39,6 +39,26 @@
                     <p class="mb-0 font-semibold leading-normal text-sm">{{ $user->role }}</p>
                 </div>
             </div>
+            <div class="w-full max-w-full px-3 mx-auto mt-4 sm:my-auto sm:mr-0 lg:w-40">
+                @if (auth()->user()->role !== 'pegawai')
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit"
+                            class="w-full border flex items-center justify-center bg-white font-semibold  text-red-500 py-1 drop-shadow-md rounded-md transition">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="mr-2"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path class="fill-red-500"
+                                    d="M2 12L1.21913 11.3753L0.719375 12L1.21913 12.6247L2 12ZM11 13C11.5523 13 12 12.5523 12 12C12 11.4477 11.5523 11 11 11V13ZM5.21913 6.3753L1.21913 11.3753L2.78087 12.6247L6.78087 7.6247L5.21913 6.3753ZM1.21913 12.6247L5.21913 17.6247L6.78087 16.3753L2.78087 11.3753L1.21913 12.6247ZM2 13H11V11H2V13Z"
+                                    />
+                                <path class="stroke-red-500"
+                                    d="M10 8.13193V7.38851C10 5.77017 10 4.961 10.474 4.4015C10.9479 3.84201 11.7461 3.70899 13.3424 3.44293L15.0136 3.1644C18.2567 2.62388 19.8782 2.35363 20.9391 3.25232C22 4.15102 22 5.79493 22 9.08276V14.9172C22 18.2051 22 19.849 20.9391 20.7477C19.8782 21.6464 18.2567 21.3761 15.0136 20.8356L13.3424 20.5571C11.7461 20.291 10.9479 20.158 10.474 19.5985C10 19.039 10 18.2298 10 16.6115V16.066"
+                                    stroke-width="2" />
+                            </svg>
+                            Logout
+                        </button>
+                    </form>
+                @endif
+            </div>
         </div>
     </div>
 
@@ -106,18 +126,6 @@
         </div>
     </div>
 
-    <div class="mt-6">
-        @if (auth()->user()->role !== 'pegawai')
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit"
-                    class="w-full border bg-white font-semibold border-red-500 text-red-500 py-2 rounded-md transition">
-                    Logout
-                </button>
-            </form>
-        @endif
-    </div>
-
     <!-- MODAL UPLOAD FOTO -->
     <div id="modalUpload" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
         <div class="bg-white rounded-2xl shadow-xl p-6 w-96">
@@ -129,7 +137,8 @@
                     <div class="flex flex-col items-center justify-center pt-5 pb-6">
                         <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                             fill="none" viewBox="0 0 20 16">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
                                 d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                         </svg>
                         <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to
@@ -155,17 +164,17 @@
 
 @endsection
 @if (session('success'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            showPopup("{{ session('success') }}", "success");
-        });
-    </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        showPopup("{{ session('success') }}", "success");
+    });
+</script>
 @endif
 
 @if (session('error'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            showPopup("{{ session('error') }}", "error");
-        });
-    </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        showPopup("{{ session('error') }}", "error");
+    });
+</script>
 @endif
