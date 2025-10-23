@@ -2,86 +2,9 @@
 @section('title', 'Kelola Stok')
 @section('admin')
     <div class="grid grid-cols-1 lg:grid-cols-3 -mx-3">
-        <div class=" col-span-2 w-full max-w-full px-3">
-            <div
-                class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
 
+        <x-form-stok :stocks="$stocks" mode="tambah" />
 
-                <div class=" px-6 flex my-9 items-center justify-between gap-2 mb-4">
-
-                    <h6>Tambah Stok</h6>
-                </div>
-                <form action="{{ route('admin.stock.store.jumlah_stok') }}" method="POST">
-                    @csrf
-                    <div class="flex-auto px-0 pt-0 pb-2">
-                        <div class="p-0 overflow-x-auto overflow-y-auto max-h-80">
-                            <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">
-                                <thead class="align-bottom">
-                                    <tr>
-                                        <th
-                                            class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
-                                            Name</th>
-                                        <th
-                                            class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
-                                            Jumlah Saat Ini</th>
-                                        <th
-                                            class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
-                                            Tambah</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    @foreach ($stocks as $key => $item)
-                                        <tr>
-                                            <td
-                                                class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                                <div class="flex px-4 py-1">
-
-                                                    <div class="flex flex-col justify-center">
-                                                        <h6 class="mb-0 text-sm leading-normal">{{ $item->nama }}</h6>
-                                                        <p class="mb-0 text-xs leading-tight text-slate-400">
-                                                            {{ $item->satuan }}</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td
-                                                class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                                <p class="mb-0 text-xs leading-tight text-slate-400">
-                                                    {{ $item->jumlah_stok }}</p>
-                                            </td>
-
-
-
-
-                                            <td
-                                                class="flex justify-center px-2 py-3 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                                <input type="hidden" name="stock[{{ $item->id }}][id]"
-                                                    value="{{ $item->id }}">
-                                                <input type="number" name="stock[{{ $item->id }}][jumlah_tambah]"
-                                                    min="1"
-                                                    class="w-20  text-center border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-                                                    placeholder="0">
-
-                                            </td>
-                                        </tr>
-                                    @endforeach
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-                    </div>
-                    <div class="py-4 flex justify-center">
-                        <button type="submit"
-                            class="px-5 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-                            Tambah Semua
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
         <div class="w-full max-w-full px-3 ">
             <color:div
                 class="relative flex flex-col  min-w-0 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
