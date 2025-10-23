@@ -33,8 +33,10 @@
                     placeholder="Tanggal Akhir">
             </div>
         </div>
-        <button type="submit" class="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-lg shadow">
-            Tampilkan
+        <button type="submit"
+            class="flex bg-gradient-fuchsia text-white items-center gap-2 px-4 py-3 rounded-lg text-xs font-bold
+        hover:bg-gray-50 transition">
+            TAMPILKAN
         </button>
     </form>
     <div
@@ -55,19 +57,17 @@
     </div>
 
     {{-- Stok --}}
-    <h3 class="text-lg font-bold mb-2">Stok</h3>
-    <div class="overflow-x-auto mb-6">
-        <x-table :headers="[
-            'Nama Stok' => 'stocks.nama',
-            'Stok Awal' => 'stok_awal',
-            'Stok Akhir' => 'stok_akhir',
-            'Stok Keluar' => 'stok_keluar',
-        ]" :rows="$stocks" :total="$total" :perPage="$perPage" :currentPage="$currentPage" />
-    </div>
+    <x-table :headers="[
+        'Nama Stok' => 'stocks.nama',
+        'Stok Awal' => 'stok_awal',
+        'Stok Akhir' => 'stok_akhir',
+        'Stok Keluar' => 'stok_keluar',
+    ]" :rows="$stocks" title="Stok" :business_id="$business->id" :total="$total" :perPage="$perPage"
+        :currentPage="$currentPage" />
 
     {{-- Pegawai --}}
     <h3 class="text-lg font-bold mb-2">Pegawai</h3>
-    <div class="space-y-3 mb-6">
+    <div class=" space-y-3 mb-6">
         @forelse ($business->users ?? [] as $pegawai)
             @php
                 // Hitung transaksi pegawai ini pada tanggal yang difilter
@@ -100,52 +100,15 @@
     </div>
 
     {{-- Terjual --}}
-    <h3 class="text-lg font-bold mb-2">Terjual</h3>
-    <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border border-gray-300 text-sm text-left">
-            <thead class="bg-gradient-to-t from-purple-700 to-pink-500 text-white">
-                <tr>
-                    <th class="px-4 py-2 border text-center">Nama Menu</th>
-                    <th class="px-4 py-2 border text-center">Jumlah Terjual</th>
-                    <th class="px-4 py-2 border text-center">Harga Satuan</th>
-                    <th class="px-4 py-2 border text-center">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                @php
-                    $adaItem = false;
-                @endphp
 
-                @forelse ($business->transaksis as $transaksi)
-                    @php
-                        // decode details JSON jadi array PHP
-                        $items = json_decode($transaksi->details, true) ?? [];
-                    @endphp
+    <x-table :headers="[
+        'Nama Menu' => 'nama',
+        'Jumlah Terjual' => 'jumlah',
+        'Harga Satuan' => 'harga',
+        'Total' => 'total',
+    ]" :rows="$allItems" title="Terjual" :business_id="$business->id" :total="0" :perPage="null"
+        :currentPage="null" />
 
-                    @foreach ($items as $item)
-                        @php $adaItem = true; @endphp
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-2 border text-center">{{ $item['nama'] ?? '-' }}</td>
-                            <td class="px-4 py-2 border text-center">{{ $item['jumlah'] ?? 0 }}</td>
-                            <td class="px-4 py-2 border text-center">
-                                Rp {{ number_format((float) $item['harga'] ?? 0, 0, ',', '.') }}
-                            </td>
-                            <td class="px-4 py-2 border text-center">
-                                Rp
-                                {{ number_format(((float) $item['harga'] ?? 0) * ((int) $item['jumlah'] ?? 0), 0, ',', '.') }}
-                            </td>
-                        </tr>
-                    @endforeach
-                @empty
-                    {{-- tidak ada transaksi --}}
-                @endforelse
 
-                @if (!$adaItem)
-                    <tr>
-                        <td colspan="4" class="text-center py-4 text-gray-500">Tidak ada transaksi</td>
-                    </tr>
-                @endif
-            </tbody>
-        </table>
-    </div>
+
 @endsection

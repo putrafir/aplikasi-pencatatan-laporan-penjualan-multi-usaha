@@ -38,6 +38,21 @@ class LaporanController extends Controller
             ])
             ->get();
 
+        $allItems = [];
+
+        foreach ($business->transaksis as $transaksi) {
+            $items = json_decode($transaksi->details, true) ?? [];
+            foreach ($items as $item) {
+                $allItems[] = [
+                    'nama' => $item['nama'] ?? '-',
+                    'jumlah' => $item['jumlah'] ?? 0,
+                    'harga' => $item['harga'] ?? 0,
+                    'total' => ($item['harga'] ?? 0) * ($item['jumlah'] ?? 0),
+                ];
+            }
+        }
+
+
         // Pagination manual (karena stoknya pakai Collection, bukan QueryBuilder)
         $perPage = 5;
         $currentPage = $request->get('page', 1);
@@ -53,6 +68,7 @@ class LaporanController extends Controller
             'total',
             'currentPage',
             'perPage',
+            'allItems',
             'tanggal'
         ));
     }

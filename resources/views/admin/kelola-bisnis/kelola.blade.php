@@ -1,11 +1,12 @@
 @extends('components.layout.OwnerLayout.body.index')
 @section('title', 'Kelola Bisnis')
 @section('admin')
-    <x-ui.bg-pink class="hidden md:block"/>
-    <div class="md:-mt-16 relative mb-9 overflow-hidden md:max-w-md md:mx-auto h-full bg-gray-100 rounded-2xl shadow-md flex items-center p-4">
+    <x-ui.bg-pink class="hidden md:block" />
+    <div
+        class="md:-mt-16 relative mb-9 overflow-hidden md:max-w-md md:mx-auto h-full bg-gray-100 rounded-2xl shadow-md flex items-center p-4">
 
         <img src="{{ asset('img/illustrations/toko.svg') }}" class="w-50 z-10 absolute bottom-0" alt="" srcset="">
-        <x-right-motif class="md:scale-150"/>
+        <x-right-motif class="md:scale-150" />
 
         <x-left-motif />
 
@@ -19,10 +20,25 @@
     </div>
 
 
-    <x-section-header title=Bahan buttonAction="togglePopup('popup-add')" :business_id="$business->id" label="Tambah Stok" :showLabel="true" />
 
-    <x-modal-add id="popup-add" title="Tambah Bahan" :isEdit="false" action="{{ route('admin.stock.add') }}" method="POST"
-        :inputs="[
+
+    <x-table :headers="[
+        'Nama' => 'nama',
+        'Harga' => 'harga_formatted',
+        'Satuan' => 'satuan',
+    ]" :rows="$stocks" :business_id="$business->id" label="TAMBAH" :total="$total" title="Bahan"
+        data-id="{{ $stocks->pluck('id') }}" :perPage="$perPage" :currentPage="$currentPage" buttonAction="togglePopup('popup-add')"
+        :actions="['edit' => 'openEditStockPopup']" :showLabel="true" :button="true">
+        {{-- <x-slot name="actions"> --}}
+        {{-- <x-partials.table-action buttonAction="togglePopup('popup-edit-stock')" :stocks="$business->stocks" /> --}}
+
+
+        {{-- </x-slot> --}}
+
+
+    </x-table>
+    <x-modal-add id="popup-add" title="Tambah Bahan" :isEdit="false" action="{{ route('admin.stock.add') }}"
+        method="POST" :inputs="[
             ['label' => 'Nama', 'name' => 'nama', 'type' => 'text', 'placeholder' => 'Nama Stok', 'required' => true],
             ['label' => 'Jumlah Stok', 'name' => 'jumlah_stok', 'type' => 'number', 'placeholder' => 'Jumlah Stok'],
             ['label' => 'Harga', 'name' => 'harga', 'type' => 'number', 'placeholder' => 'Harga'],
@@ -36,21 +52,6 @@
             ['label' => '', 'name' => 'business_id', 'type' => 'hidden', 'value' => $business->id],
         ]" />
 
-    <x-table :headers="[
-        'Nama' => 'nama',
-        'Harga' => 'harga_formatted',
-        'Satuan' => 'satuan',
-    ]" :rows="$stocks" :total="$total" data-id="{{ $stocks->pluck('id') }}" :perPage="$perPage"
-        :currentPage="$currentPage" :actions="true">
-        {{-- <x-slot name="actions"> --}}
-        {{-- <x-partials.table-action buttonAction="togglePopup('popup-edit-stock')" :stocks="$business->stocks" /> --}}
-
-
-        {{-- </x-slot> --}}
-
-
-    </x-table>
-
     <x-modal-add id="popup-edit-stock" title="Edit Bahan" method="PUT" :isEdit="true" :inputs="[
         [
             'label' => 'Nama',
@@ -59,7 +60,7 @@
             'placeholder' => 'Nama Stok',
             'required' => true,
         ],
-
+    
         ['label' => 'Harga', 'name' => 'harga', 'type' => 'number', 'placeholder' => 'Harga'],
         [
             'label' => 'Satuan',
@@ -73,7 +74,8 @@
 
     <x-modal-delete id="popup-edit-stock-delete" action="{{ route('admin.stock.destroy', ':id') }}" />
 
-    <x-section-header title="Kategori" buttonAction="togglePopup('popup-add-kategori')" label="Tambah Kategori" :showLabel="true" />
+    {{-- <x-section-header title="Kategori" buttonAction="togglePopup('popup-add-kategori')" label="Tambah Kategori"
+        :showLabel="true" /> --}}
 
     <x-modal-add id="popup-add-kategori" title="Tambah Kategori" :isEdit="false"
         action="{{ route('admin.category.add') }}" method="POST" :inputs="[
@@ -87,7 +89,14 @@
             ['label' => '', 'name' => 'business_id', 'type' => 'hidden', 'value' => $business->id],
         ]" />
 
-    <div class="w-full text-sm overflow-x-auto">
+
+    <x-table :headers="[
+        'Nama Kategori' => 'nama',
+    ]" :rows="$business->categories" title="Kategori" :business_id="$business->id" :total="$business->categories->count()" :perPage="$perPage"
+        :currentPage="$currentPage" buttonAction="togglePopup('popup-add-kategori')" label="TAMBAH" :showLabel="true"
+        :button="true" :actions="['edit' => 'openEditCategoryPopup']" />
+
+    {{-- <div class="w-full text-sm overflow-x-auto">
         <div class="flex gap-3 px-2 py-2">
 
             @foreach ($business->categories as $category)
@@ -98,7 +107,7 @@
                 </button>
             @endforeach
         </div>
-    </div>
+    </div> --}}
 
     <x-modal-add id="popup-edit-kategori" title="Edit Kategori" method="PUT" :isEdit="true" :inputs="[
         [
@@ -113,7 +122,7 @@
 
     <x-modal-delete id="popup-edit-kategori-delete" action="{{ route('admin.kategori.destroy', ':id') }}" />
 
-    <x-section-header title="Menu" buttonAction="togglePopup('popup-add-menu')" label="Tambah Menu" :showLabel="true" />
+    <x-section-header title="Menu" buttonAction="togglePopup('popup-add-menu')" label="TAMBAH" :button="true" :showLabel="true" />
 
     <x-modal-add id="popup-add-menu" title="Tambah Menu" :isEdit="false" action="{{ route('admin.menu.add') }}"
         method="POST" :inputs="[
