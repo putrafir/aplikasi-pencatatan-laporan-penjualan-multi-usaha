@@ -4,7 +4,13 @@
     'perPage',
     'currentPage',
     'total',
-    'actions' => false,
+    'actions' => [],
+    'business_id',
+    'title',
+    'label' => null,
+    'buttonAction' => null,
+    'showLabel' => false,
+    'button' => false,
 ])
 
 @php
@@ -15,105 +21,200 @@
     $end = min($start + $perPage - 1, $total);
 @endphp
 
-<div class="w-full max-w-full lg:mb-0">
-    <div class="flex-auto">
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-white border border-gray-300 text-sm text-left">
-                <thead class="bg-gradient-fuchsia text-white">
-                    <tr>
-                        <th class="py-2 border w-10 text-center">No</th>
-                        @foreach ($headers as $label => $field)
-                            <th class="px-4 py-2 border">{{ $label }}</th>
-                        @endforeach
 
-                        @if ($actions === true)
-                            <th class="px-4 py-2 border text-center">Edit</th>
-                        @endif
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($rows as $index => $row)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-2 border text-center">{{ $start - 1 + $index + 1 }}</td>
-                            @foreach ($headers as $label => $field)
-                                <td class="px-4 py-2 border">
-                                    {{ data_get($row, $field) }}
-                                </td>
-                            @endforeach
-                            @if ($actions === true)
-                                <td class="px-4 py-2 border text-center">
-                                    <button type="button"
-                                        class="text-blue-500 hover:text-blue-700 mx-auto block edit-stock-button"
-                                        data-id="{{ $row->id }}" data-nama="{{ $row->nama }}"
-                                        data-satuan="{{ $row->satuan }}" data-jumlah_stok="{{ $row->jumlah_stok }}"
-                                        data-harga="{{ $row->harga }}" onclick="openEditStockPopup(this)">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline"
-                                            viewBox="0 0 20 20" fill="currentColor">
-                                            <path
-                                                d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                                            <path fill-rule="evenodd"
-                                                d="M4 16a1 1 0 001 1h10a1 1 0 100-2H5a1 1 0 00-1 1z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </button>
-                                </td>
-                            @endif
 
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="{{ count($headers) + (isset($actions) ? 2 : 1) }}" class="text-center py-4">
-                                Data tidak tersedia.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+<div class="flex flex-wrap -mx-3">
+    <div class="flex-none w-full max-w-full px-3">
+        <div
+            class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border">
 
-            <nav class="flex items-center justify-between pt-4" aria-label="Table navigation">
-                <span class="text-sm text-slate-500">
-                    Menampilkan <span class="font-semibold">{{ $start }}</span>
-                    - <span class="font-semibold">{{ $end }}</span>
-                    dari <span class="font-semibold">{{ $total }}</span>
-                </span>
+            <x-section-header title="{{ $title }}" buttonAction="{{ $buttonAction }}"
+                business_id="{{ $business_id }}" label="{{ $label }}" showLabel="{{ $showLabel }}"
+                button="{{ $button }}" />
 
-                <ul class="inline-flex -space-x-px text-sm h-8">
-                    <li>
-                        <a href="?page={{ max(1, $currentPage - 1) }}"
-                            class="px-3 h-8 flex items-center justify-center border rounded-l-lg bg-gradient-fuchsia {{ $currentPage == 1 ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-100 text-gray-500' }}">
-                            <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m15 19-7-7 7-7" />
-                            </svg>
 
-                        </a>
-                    </li>
 
-                    <li>
-                        <a href=""
-                            class="px-3 h-8 flex items-center justify-center border
+
+            <div class="flex-auto px-0 pb-2">
+                <div class="p-0 overflow-x-auto">
+                    <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">
+                        <thead class="align-bottom">
+                            <tr>
+                                @foreach ($headers as $label => $field)
+                                    <th
+                                        class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                        {{ $label }}</th>
+                                @endforeach
+
+                                @if (!empty($actions))
+                                    <th
+                                        class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                        edit</th>
+                                @endif
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($rows as $index => $row)
+                                <tr>
+
+
+                                    @foreach ($headers as $label => $field)
+                                        <td
+                                            class="p-2 px-6 align-middle bg-transparent border-t whitespace-nowrap shadow-transparent">
+                                            <p class="mb-0 text-sm  font-thin leading-tight text-slate-600">
+                                                {{ data_get($row, $field) }}
+                                            </p>
+                                        </td>
+                                    @endforeach
+
+                                    @if (!empty($actions))
+                                        <td
+                                            class="p-2 px-6 bg-transparent border-t whitespace-nowrap shadow-transparent">
+                                            @foreach ($actions as $label => $function)
+                                                <button type="button" class="text-sm mx-1 {{ $label }}-button"
+                                                    onclick="{{ $function }}(this)">
+                                                    {{ ucfirst($label) }}
+                                                </button>
+                                            @endforeach
+                                        </td>
+                                    @endif
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="{{ count($headers) + (isset($actions) ? 2 : 1) }}"
+                                        class="text-center text-sm py-4">
+                                        Data tidak tersedia.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                    <nav class="flex items-center px-6 justify-between py-2" aria-label="Table navigation">
+                        <span class="text-sm text-slate-500">
+                            Menampilkan <span class="font-semibold">{{ $start }}</span>
+                            - <span class="font-semibold">{{ $end }}</span>
+                            dari <span class="font-semibold">{{ $total }}</span>
+                        </span>
+
+                        <ul class="inline-flex -space-x-px text-sm h-8">
+                            <li>
+                                <a href="?page={{ max(1, $currentPage - 1) }}"
+                                    class="px-3 h-8 flex items-center justify-center border rounded-l-lg bg-gradient-fuchsia {{ $currentPage == 1 ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-100 text-gray-500' }}">
+                                    <svg class="w-6 h-6 text-white" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m15 19-7-7 7-7" />
+                                    </svg>
+
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href=""
+                                    class="px-3 h-8 flex items-center justify-center border
                  text-slate-700">
-                            {{ $currentPage }}
-                        </a>
-                    </li>
+                                    {{ $currentPage }}
+                                </a>
+                            </li>
 
-                    {{-- Next --}}
-                    <li>
-                        <a href="?page={{ min($totalPages, $currentPage + 1) }}"
-                            class="px-3 h-8 flex items-center justify-center border rounded-e-lg bg-gradient-fuchsia-refresh {{ $currentPage == $totalPages ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-100 text-gray-500' }}">
-                            <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m9 5 7 7-7 7" />
-                            </svg>
+                            {{-- Next --}}
+                            <li>
+                                <a href="?page={{ min($totalPages, $currentPage + 1) }}"
+                                    class="px-3 h-8 flex items-center justify-center border rounded-e-lg bg-gradient-fuchsia-refresh {{ $currentPage == $totalPages ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-100 text-gray-500' }}">
+                                    <svg class="w-6 h-6 text-white" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m9 5 7 7-7 7" />
+                                    </svg>
 
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
         </div>
-
-
     </div>
 </div>
+
+
+<script>
+    function openEditStockPopup(button) {
+        const stockId = button.getAttribute('data-id');
+        const nama = button.getAttribute('data-nama');
+        const harga = button.getAttribute('data-harga');
+        const satuan = button.getAttribute('data-satuan');
+
+        const modal = document.getElementById('popup-edit-stock');
+        const form = modal.querySelector('form');
+
+        const actionTemplate = "{{ route('admin.stock.update', ':id') }}";
+        form.action = actionTemplate.replace(':id', stockId);
+
+        form.querySelector('input[name="nama"]').value = nama ?? '';
+        form.querySelector('input[name="harga"]').value = harga ?? '';
+        form.querySelector('input[name="satuan"]').value = satuan ?? '';
+
+        togglePopup('popup-edit-stock');
+
+        const deleteModal = document.getElementById('popup-edit-stock-delete');
+        const deleteForm = deleteModal.querySelector('form');
+        const deleteTemplate = "{{ route('admin.stock.destroy', ':id') }}";
+        deleteForm.action = deleteTemplate.replace(':id', stockId);
+    }
+
+    function openEditCategoryPopup(button) {
+        const kategoriId = button.getAttribute('data-id');
+        const nama = button.getAttribute('data-nama');
+        const businessId = button.getAttribute('data-business_id');
+
+        const modal = document.getElementById('popup-edit-kategori');
+        const form = modal.querySelector('form');
+
+        const actionTemplate = "{{ route('admin.kategori.update', ':id') }}";
+        form.action = actionTemplate.replace(':id', kategoriId);
+
+        form.querySelector('input[name="nama"]').value = nama ?? '';
+        form.querySelector('input[name="business_id"]').value = businessId ?? '';
+
+        togglePopup('popup-edit-kategori');
+
+        const deleteModal = document.getElementById('popup-edit-kategori-delete');
+        const deleteForm = deleteModal.querySelector('form');
+        const deleteTemplate = "{{ route('admin.kategori.destroy', ':id') }}";
+        deleteForm.action = deleteTemplate.replace(':id', kategoriId);
+    }
+
+    function openEditMenuPopup(button) {
+        const menuId = button.getAttribute('data-id');
+        const nama = button.getAttribute('data-nama');
+        const harga = button.getAttribute('data-harga');
+        const categoryId = button.getAttribute('data-category_id');
+        const businessId = button.getAttribute('data-business_id');
+
+        const modal = document.getElementById('popup-edit-menu');
+        const form = modal.querySelector('form');
+
+        const actionTemplate = "{{ route('admin.menus.update', ':id') }}";
+        form.action = actionTemplate.replace(':id', menuId);
+
+        form.querySelector('input[name="nama"]').value = nama ?? '';
+        form.querySelector('input[name="harga"]').value = harga ?? '';
+        form.querySelector('input[name="business_id"]').value = businessId ?? '';
+
+        const categorySelect = form.querySelector('select[name="kategori_id"]');
+        if (categorySelect) {
+            categorySelect.value = categoryId ?? '';
+        }
+
+        togglePopup('popup-edit-menu');
+
+        const deleteModal = document.getElementById('popup-edit-menu-delete');
+        const deleteForm = deleteModal.querySelector('form');
+        const deleteTemplate = "{{ route('admin.menus.destroy', ':id') }}";
+        deleteForm.action = deleteTemplate.replace(':id', menuId);
+    }
+</script>
