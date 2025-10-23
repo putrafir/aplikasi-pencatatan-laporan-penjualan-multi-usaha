@@ -23,23 +23,22 @@ class ManageStockController extends Controller
             ->whereDate('created_at', now()->toDateString())
             ->get();
 
-        // $stocks = Stock::where('business_id', $business->id)->get();
+        $stocks = Stock::where('business_id', $business->id)->get();
 
-        $stocks = StockLog::with('stock')
-            ->whereHas('stock', function ($query) use ($business) {
-                $query->where('business_id', $business->id);
-            })->whereDate('created_at', today())
-            ->get();
+        // $stocks = StockLog::with('stocks')
+        //     ->whereHas('stocks', function ($query) use ($business) {
+        //         $query->where('business_id', $business->id);
+        //     })->latest()
+        //     ->get();
 
         $stocks_akhir = $stocks->filter(function ($log) {
             return !is_null($log->stok_akhir);
         })->values();
 
         $alreadyUpdated = $stocks_akhir->isNotEmpty();
-        $noStokToday = $stocks->isEmpty();
+        // $noStokToday = $stocks->isEmpty();
 
-
-        return view('pegawai.UpdateStok', compact('user', 'stocks', 'business', 'transaksi', 'alreadyUpdated', 'noStokToday'));
+        return view('pegawai.UpdateStok', compact('user', 'stocks', 'business', 'transaksi', 'alreadyUpdated'));
     }
 
 
@@ -158,6 +157,7 @@ class ManageStockController extends Controller
 
         return redirect()->back()->with('success', 'Stok berhasil diperbarui.');
     }
+
     public function reduceStock(Request $request)
     {
         $validated = $request->validate([
@@ -178,27 +178,37 @@ class ManageStockController extends Controller
             if (!$stock)
                 continue;
 
-            $lastLog = StockLog::where('stock_id', $stock->id)
-                ->latest('created_at')
-                ->first();
+            // $lastLog = StockLog::where('stock_id', $stock->id)
+            //     ->latest('created_at')
+            //     ->first();
 
-            $stokAwal = $lastLog ? $lastLog->stok_awal : $stock->jumlah_stok;
+            // $stokAwal = $lastLog ? $lastLog->stok_awal : $stock->jumlah_stok;
+            $stokAwal = $stock->jumlah_stok;
+            $stokKeluar = $stokAwal - $remainingStock;
 
-            if ($remainingStock > $stokAwal) {
-                return back()->with('error', "Jumlah stok {$stock->nama} melebihi stok awal ({$stokAwal}).");
-            }
-
+            // Update stok utama
             $stock->jumlah_stok = $remainingStock;
             $stock->save();
 
-            if ($lastLog) {
-                $lastLog->update([
-                    'stok_akhir' => $remainingStock,
-                    'stok_keluar' => $stokAwal - $remainingStock
+            // Catat log semua stok seperti biasa
+            StockLog::create([
+                'stock_id' => $stock->id,
+                'stok_awal' => $stokAwal,
+                'stok_keluar' => $stokKeluar,
+                'stok_akhir' => $remainingStock,
+            ]);
+
+            // Tambahkan ke riwayat hanya jika stok berubah
+            if ($stokKeluar > 0) {
+                RiwayatStok::create([
+                    'stock_id' => $stock->id,
+                    'status'   => 'keluar',
+                    'jumlah'   => $stokKeluar,
                 ]);
             }
         }
 
-        return redirect()->route('pegawai.transaksi.index')->with('success', 'Sisa stok berhasil diperbarui.');
+        return redirect()->route('pegawai.transaksi.index')
+            ->with('success', 'Sisa stok berhasil diperbarui dan log berhasil disimpan.');
     }
 }

@@ -22,13 +22,13 @@
                     Update Sisa Jumlah Stok
                 </h2>
 
-                @if ($noStokToday)
+                {{-- @if ($noStokToday)
                     <div class="text-center py-10">
                         <p class="text-lg font-semibold">
                             Stok Awal Belum Ditambahkan
                         </p>
                     </div>
-                @endif
+                @endif --}}
 
                 @if ($alreadyUpdated)
                     {{-- Kalau sudah update, hanya tampilkan teks --}}
@@ -46,13 +46,13 @@
                                 @foreach ($stocks as $stock)
                                     <div class="border border-gray-300 rounded-lg bg-gray-50 shadow p-4">
                                         <label
-                                            class="block text-md font-semibold text-gray-700 mb-2">{{ $stock->stocks->nama }}</label>
+                                            class="block text-md font-semibold text-gray-700 mb-2">{{ $stock->nama }}</label>
                                         <div class="flex items-center gap-2">
-                                            <input type="number" name="jumlah_stok[{{ $stock->stocks->id }}]"
-                                                value="{{ $stock->stocks->jumlah_stok }}"
-                                                max="{{ $stock->stocks->jumlah_stok }}" min="0"
-                                                data-max="{{ $stock->stocks->jumlah_stok }}"
-                                                data-nama="{{ $stock->stocks->nama }}"
+                                            <input type="number" name="jumlah_stok[{{ $stock->id }}]"
+                                                value="{{ $stock->jumlah_stok }}"
+                                                max="{{ $stock->jumlah_stok }}" min="0"
+                                                data-max="{{ $stock->jumlah_stok }}"
+                                                data-nama="{{ $stock->nama }}"
                                                 class="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <span class="text-gray-600 font-medium">{{ $stock->satuan }}</span>
                                         </div>
@@ -96,11 +96,6 @@
         }
 
         document.getElementById("btn-save-stok").addEventListener("click", () => {
-
-            @if ($noStokToday)
-                showPopup("Stok awal belum ditambahkan hari ini!", "error");
-                return; // hentikan proses lebih lanjut
-            @endif
 
             let isValid = true;
             let warningText = "Ada data stok yang melebihi stok awal:<br>";
