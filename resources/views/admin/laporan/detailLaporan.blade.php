@@ -67,7 +67,7 @@
 
     {{-- Pegawai --}}
     <h3 class="text-lg font-bold mb-2">Pegawai</h3>
-    <div class=" space-y-3 mb-6">
+    <div class=" gap-2 flex flex-col mb-6">
         @forelse ($business->users ?? [] as $pegawai)
             @php
                 // Hitung transaksi pegawai ini pada tanggal yang difilter
