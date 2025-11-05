@@ -1,5 +1,5 @@
 @extends('components.layout.OwnerLayout.body.index')
-@section('title', 'Kelola Stok')
+@section('title', 'Kelola Stok ' . $business_name->name)
 @section('admin')
     <div class="grid grid-cols-1 lg:grid-cols-3 -mx-3">
 
@@ -14,7 +14,7 @@
                             <h6 class="mb-0">Riwayat Stok</h6>
                         </div>
                         <div class="flex-none w-1/2 max-w-full px-3 text-right">
-                            <button
+                            <button type="button" onclick="window.location.href = '{{ route('admin.stock-history') }}'"
                                 class="inline-block px-8 py-2 mb-0 font-bold text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-lg shadow-none cursor-pointer leading-pro ease-soft-in text-xs bg-150 active:opacity-85 hover:scale-102 tracking-tight-soft bg-x-25 border-fuchsia-500 text-fuchsia-500 hover:opacity-75">Lihat
                                 Semua</button>
                         </div>
