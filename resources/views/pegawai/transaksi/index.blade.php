@@ -22,20 +22,36 @@
         </form>
     </div>
 
-    <!-- CATEGORY FILTER -->
-    <div class="flex gap-3 px-4 py-2 md:pb-2 w-full text-sm overflow-x-auto" id="kategori-buttons">
-        {{-- Tombol ALL --}}
-        <button onclick="loadMenus('all', this)" class="kategori-btn px-3 py-1 rounded-full bg-pink-500 text-white">
-            All
-        </button>
-        {{-- Tombol Kategori --}}
-        @foreach ($categories as $category)
-            <button onclick="loadMenus('{{ $category->id }}', this)"
-                class="kategori-btn px-3 py-1 rounded-full bg-pink-500 text-gray-700">
-                {{ $category->nama }}
+    <!-- CATEGORY FILTER + VIEW MODE -->
+    <div class="relative flex items-center justify-between px-4 py-2 md:pb-2 w-full text-sm z-50">
+        <!-- Kategori -->
+        <div class="flex gap-3 overflow-x-auto flex-1 pr-3" id="kategori-buttons">
+            {{-- Tombol ALL --}}
+            <button onclick="loadMenus('all', this)" class="kategori-btn px-3 py-1 rounded-full bg-pink-500 text-white">
+                All
             </button>
-        @endforeach
+
+            {{-- Tombol Kategori Dinamis --}}
+            @foreach ($categories as $category)
+                <button onclick="loadMenus('{{ $category->id }}', this)"
+                    class="kategori-btn px-3 py-1 rounded-full bg-gray-200 text-gray-700 whitespace-nowrap">
+                    {{ $category->nama }}
+                </button>
+            @endforeach
+        </div>
+
+        <!-- Dropdown Tampilan -->
+        <div class="absolute right-4 md:static flex-shrink-0 z-50">
+            <label for="view-mode" class="text-gray-600 text-sm mr-2 hidden md:inline">Tampilan:</label>
+            <select id="view-mode" onchange="setViewMode(this.value)"
+                class="border border-gray-300 bg-white rounded-lg text-sm px-3 py-2 focus:ring-2 focus:ring-pink-400 focus:outline-none cursor-pointer">
+                <option value="card">Card</option>
+                <option value="list">List</option>
+            </select>
+        </div>
     </div>
+
+
 
     <!-- LIST MENU -->
     <div id="menu-list" class="max-w-7xl xl:max-w-full mx-auto p-4 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-4">
