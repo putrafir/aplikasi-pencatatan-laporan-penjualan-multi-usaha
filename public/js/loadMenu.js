@@ -1,8 +1,82 @@
 // simpan semua menu global
 let menus = [];
+let viewMode = localStorage.getItem("viewMode") || "card";
+
+// Fungsi ubah mode tampilan
+function setViewMode(mode) {
+    viewMode = mode;
+
+    localStorage.setItem("viewMode", mode);
+
+    renderMenus(menus);
+}
+
+// Fungsi render menu
+function renderMenus(dataMenus) {
+    const menuList = document.getElementById("menu-list");
+    menuList.innerHTML = "";
+
+    if (dataMenus.length === 0) {
+        menuList.innerHTML = `
+            <p class="col-span-full text-center text-gray-500">
+                Tidak ada menu ditemukan.
+            </p>`;
+        return;
+    }
+
+    if (viewMode === "card") {
+        menuList.className = "max-w-5xl mx-auto p-4 grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-4";
+        dataMenus.forEach(menu => {
+            const fotoUrl = menu.foto ? `/${menu.foto}` : "/img/illustrations/no-image.png";
+            menuList.innerHTML += `
+                <div class="h-80 bg-white rounded-xl shadow overflow-hidden hover:shadow-lg transition relative flex flex-col">
+                    <img class="rounded-t-lg h-[11rem] w-full object-cover" src="${fotoUrl}" alt="" />
+                    <div class="p-4 flex flex-col justify-between flex-1">
+                        <h3 class="font-semibold text-base sm:text-lg line-clamp-2 h-12">${menu.nama}</h3>
+                        <p class="text-purple-700 font-bold">Rp ${parseInt(menu.harga).toLocaleString("id-ID")}</p>
+                        <button onclick="tambahKeKeranjang(event, ${menu.id}, ${menu.business_id}, ${menu.harga})"
+                                class="mt-3 w-full bg-gradient-to-tl from-purple-700 to-pink-500 text-white py-2 rounded-lg text-sm">
+                            Tambah
+                        </button>
+                    </div>
+                </div>`;
+        });
+    } else {
+        menuList.className = "max-w-5xl mx-auto p-4 flex flex-col gap-3";
+
+        dataMenus.forEach(menu => {
+            const fotoUrl = menu.foto ? `/${menu.foto}` : "/img/illustrations/no-image.png";
+
+            menuList.innerHTML += `
+            <div class="flex items-center bg-white shadow-sm rounded-xl overflow-hidden hover:shadow-md transition p-3">
+                <!-- Gambar menu -->
+                <div class="flex-shrink-0">
+                    <img src="${fotoUrl}" class="w-20 h-20 object-cover rounded-lg" alt="${menu.nama}">
+                </div>
+
+                <!-- Info menu -->
+                <div class="flex-1 ml-4">
+                    <h3 class="font-semibold text-sm md:text-base text-gray-800 line-clamp-2">${menu.nama}</h3>
+                    <p class="text-purple-700 font-bold mt-1">Rp ${parseInt(menu.harga).toLocaleString("id-ID")}</p>
+                </div>
+
+                <!-- Tombol tambah -->
+                <div class="ml-3">
+                    <button onclick="tambahKeKeranjang(event, ${menu.id}, ${menu.business_id}, ${menu.harga})"
+                        class="bg-gradient-to-tl from-purple-700 to-pink-500 hover:opacity-90 text-white 
+                        px-5 py-2.5 rounded-xl text-sm md:text-base font-semibold shadow-md transition-transform transform hover:scale-105">
+                        Tambah
+                    </button>
+                </div>
+            </div>`;
+        });
+    }
+}
 
 // Load semua menu saat pertama kali halaman dibuka
 document.addEventListener("DOMContentLoaded", () => {
+    setViewMode(viewMode);
+
     loadMenus("all", document.querySelector(".kategori-btn"));
 });
 
@@ -23,44 +97,6 @@ searchForm.addEventListener("submit", function (e) {
     // render ulang hanya menu yang sesuai
     renderMenus(filteredMenus);
 });
-
-// fungsi render menu
-function renderMenus(dataMenus) {
-    const menuList = document.getElementById("menu-list");
-    menuList.innerHTML = "";
-
-    if (dataMenus.length === 0) {
-        menuList.innerHTML =
-            '<p class="col-span-full text-center text-gray-500">Tidak ada menu ditemukan.</p>';
-        return;
-    }
-
-    dataMenus.forEach((menu) => {
-        let fotoUrl = menu.foto
-            ? `/${menu.foto}`
-            : "/img/illustrations/no-image.png";
-        let html = `
-            <div>
-                <div class="h-80 bg-white rounded-xl shadow overflow-hidden hover:shadow-lg transition relative flex flex-col">
-                    <img class="rounded-t-lg h-[11rem] w-full object-cover"
-                         src="${fotoUrl}" alt="" />
-                    <div class="p-4 flex flex-col justify-between flex-1">
-                        <h3 class="font-semibold text-base sm:text-lg line-clamp-2 h-12">
-                            ${menu.nama}
-                        </h3>
-                        <p class="text-purple-700 font-bold">
-                            Rp ${parseInt(menu.harga).toLocaleString("id-ID")}
-                        </p>
-                        <button onclick="tambahKeKeranjang(event, ${menu.id}, ${menu.business_id}, ${menu.harga})"
-                            class="mt-3 w-full bg-gradient-to-tl from-purple-700 to-pink-500 hover:bg-green-600 text-white py-2 rounded-lg text-sm">
-                            Tambah
-                        </button>
-                    </div>
-                </div>
-            </div>`;
-        menuList.innerHTML += html;
-    });
-}
 
 // fungsi tombol kategori aktif
 function setActiveButton(button) {
