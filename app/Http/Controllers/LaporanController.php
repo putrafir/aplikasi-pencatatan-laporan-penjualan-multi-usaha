@@ -36,6 +36,7 @@ class LaporanController extends Controller
                 \Carbon\Carbon::parse($startDate)->startOfDay(),
                 \Carbon\Carbon::parse($endDate)->endOfDay(),
             ])
+            ->orderBy('stok_keluar', 'desc')
             ->get();
 
         $allItems = [];
@@ -52,6 +53,21 @@ class LaporanController extends Controller
             }
         }
 
+        $allItems = collect($allItems)
+            ->groupBy('nama')
+            ->map(function ($items) {
+                $jumlah = $items->sum('jumlah');
+                $harga = $items->first()['harga'] ?? 0;
+
+                return [
+                    'nama' => $items->first()['nama'],
+                    'jumlah' => $jumlah,
+                    'harga' => $harga,
+                    'total' => $jumlah * $harga,
+                ];
+            })
+            ->sortByDesc('jumlah')
+            ->values();
 
         // Pagination manual (karena stoknya pakai Collection, bukan QueryBuilder)
         $perPage = 5;

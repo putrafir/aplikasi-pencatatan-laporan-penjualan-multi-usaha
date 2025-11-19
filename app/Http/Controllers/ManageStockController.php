@@ -205,6 +205,7 @@ class ManageStockController extends Controller
             if ($stokKeluar > 0) {
                 RiwayatStok::create([
                     'stock_id' => $stock->id,
+                    'user_id'  => Auth::id(),
                     'status'   => 'keluar',
                     'jumlah'   => $stokKeluar,
                 ]);
