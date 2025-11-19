@@ -33,7 +33,8 @@ class DashboardController extends Controller
             while ($current <= $endOfMonth) {
                 $startOfWeek = $current->copy();
                 $endOfWeek = $current->copy()->endOfWeek();
-                if ($endOfWeek > $endOfMonth) $endOfWeek = $endOfMonth->copy();
+                if ($endOfWeek > $endOfMonth)
+                    $endOfWeek = $endOfMonth->copy();
 
                 $weeks[] = [
                     'start' => $startOfWeek->copy(),
@@ -115,7 +116,8 @@ class DashboardController extends Controller
             while ($current <= $endOfMonth) {
                 $startOfWeek = $current->copy();
                 $endOfWeek = $current->copy()->endOfWeek();
-                if ($endOfWeek > $endOfMonth) $endOfWeek = $endOfMonth->copy();
+                if ($endOfWeek > $endOfMonth)
+                    $endOfWeek = $endOfMonth->copy();
 
                 $weeks[] = [
                     'start' => $startOfWeek->copy(),
@@ -194,7 +196,8 @@ class DashboardController extends Controller
             while ($current <= $endOfMonth) {
                 $startOfWeek = $current->copy();
                 $endOfWeek = $current->copy()->endOfWeek();
-                if ($endOfWeek > $endOfMonth) $endOfWeek = $endOfMonth->copy();
+                if ($endOfWeek > $endOfMonth)
+                    $endOfWeek = $endOfMonth->copy();
 
                 $weeks[] = [
                     'start' => $startOfWeek->copy(),
@@ -313,10 +316,89 @@ class DashboardController extends Controller
                 ];
             }
 
+            // =================== MENU BEST SELLER ===================
+            $filterBestSeller = $request->get('filter_best_seller', 'hari');
+
+            // Tentukan rentang waktu
+            if ($filterBestSeller == 'bulan') {
+                $start = now()->startOfMonth();
+                $end = now()->endOfMonth();
+            } elseif ($filterBestSeller == 'minggu') {
+                $start = now()->startOfWeek();
+                $end = now()->endOfWeek();
+            } else {
+                $start = now()->startOfDay();
+                $end = now()->endOfDay();
+            }
+
+            $bestSellerRaw = Transaksi::whereBetween('created_at', [$start, $end])->get();
+
+            $menuCount = [];
+
+            foreach ($bestSellerRaw as $trx) {
+                $details = json_decode($trx->details, true);
+
+                if (is_array($details)) {
+                    foreach ($details as $item) {
+
+                        // agar tidak tabrakan antar business
+                        $key = ($trx->business_id ?? 'X') . '|' . ($item['nama'] ?? '-');
+
+                        $jumlah = $item['jumlah'] ?? 1;
+
+                        if (!isset($menuCount[$key])) {
+                            $menuCount[$key] = 0;
+                        }
+
+                        $menuCount[$key] += $jumlah;
+                    }
+                }
+            }
+
+            // Convert ke bentuk tabel
+            $bestSeller = collect($menuCount)
+                ->map(function ($jumlah, $key) {
+                    [$business_id, $nama] = explode('|', $key);
+                    return [
+                        'nama' => $nama,
+                        'jumlah' => $jumlah,
+                        'business_id' => intval($business_id),
+                        'business_name' => Business::find($business_id)->name ?? '-',
+                    ];
+                })
+                ->sortByDesc('jumlah')
+                ->take(10)
+                ->values();
             $totalMenuTerjual = $menuTerjual->sum('total_menu_terjual');
+
+            // =================== STOK SERING KELUAR ===================
+            $filterStokKeluar = request()->get('filter_stok_keluar', 'hari');
+
+            // FILTER RANGE
+            if ($filterStokKeluar == 'hari') {
+                $range = [now()->startOfDay(), now()->endOfDay()];
+            } elseif ($filterStokKeluar == 'minggu') {
+                $range = [now()->startOfWeek(), now()->endOfWeek()];
+            } else { // bulan
+                $range = [now()->startOfMonth(), now()->endOfMonth()];
+            }
+
+            $stokSeringKeluar = DB::table('riwayat_stoks')
+                ->join('stock', 'riwayat_stoks.stock_id', '=', 'stock.id')
+                ->join('business', 'stock.business_id', '=', 'business.id')
+                ->select(
+                    'stock.nama as nama_stock',
+                    'business.name as business_name',
+                    DB::raw('SUM(riwayat_stoks.jumlah) as total_keluar')
+                )
+
+                ->where('riwayat_stoks.status', 'keluar')
+                ->whereBetween('riwayat_stoks.created_at', $range)
+                ->groupBy('riwayat_stoks.stock_id', 'business.name')
+                ->orderByDesc('total_keluar')
+                ->take(10)
+                ->get();
         }
-
-
 
         return view('admin.dashboard', [
             'filterMenu' => $filterMenu,
@@ -331,11 +413,11 @@ class DashboardController extends Controller
             'filterStok' => $filterStok,
             'totalPendapatan' => $totalPendapatan,
             'totalStokKeluar' => $totalStokKeluar,
+            'bestSeller' => $bestSeller ?? collect(),
+            'filterBestSeller' => $filterBestSeller,
+            'stokSeringKeluar' => $stokSeringKeluar,
+            'filterStokKeluar' => $filterStokKeluar,
 
         ]);
     }
-
- 
-
- 
 }
