@@ -42,39 +42,52 @@ function renderMenus(dataMenus) {
                 </div>`;
         });
     } else {
-        menuList.className = "max-w-5xl mx-auto p-4 flex flex-col gap-3";
+        menuList.className = "max-w-5xl mx-auto p-4";
+
+        let wrapper = `
+    <div class="bg-white shadow-md rounded-xl divide-y">
+`;
 
         dataMenus.forEach(menu => {
             const fotoUrl = menu.foto ? `/${menu.foto}` : "/img/illustrations/no-image.png";
 
-            menuList.innerHTML += `
-            <div class="flex items-center bg-white shadow-sm rounded-xl overflow-hidden hover:shadow-md transition p-3">
-                <!-- Gambar menu -->
-                <div class="flex-shrink-0">
-                    <img src="${fotoUrl}" class="w-20 h-20 object-cover rounded-lg" alt="${menu.nama}">
-                </div>
+            wrapper += `
+        <div class="flex items-center p-4">
+            <div class="flex-shrink-0">
+                <img src="${fotoUrl}" class="w-20 h-20 object-cover rounded-lg" alt="${menu.nama}">
+            </div>
 
-                <!-- Info menu -->
-                <div class="flex-1 ml-4">
-                    <h3 class="font-semibold text-sm md:text-base text-gray-800 line-clamp-2">${menu.nama}</h3>
-                    <p class="text-purple-700 font-bold mt-1">Rp ${parseInt(menu.harga).toLocaleString("id-ID")}</p>
-                </div>
+            <div class="flex-1 ml-4">
+                <h3 class="font-semibold text-sm md:text-base text-gray-800 line-clamp-2">
+                    ${menu.nama}
+                </h3>
+                <p class="text-purple-700 font-bold mt-1">
+                    Rp ${parseInt(menu.harga).toLocaleString("id-ID")}
+                </p>
+            </div>
 
-                <!-- Tombol tambah -->
-                <div class="ml-3">
-                    <button onclick="tambahKeKeranjang(event, ${menu.id}, ${menu.business_id}, ${menu.harga})"
-                        class="bg-gradient-to-tl from-purple-700 to-pink-500 hover:opacity-90 text-white 
-                        px-5 py-2.5 rounded-xl text-sm md:text-base font-semibold shadow-md transition-transform transform hover:scale-105">
-                        Tambah
-                    </button>
-                </div>
-            </div>`;
+            <div class="ml-3">
+                <button onclick="tambahKeKeranjang(event, ${menu.id}, ${menu.business_id}, ${menu.harga})"
+                    class="bg-gradient-to-tl from-purple-700 to-pink-500 hover:opacity-90 text-white 
+                    px-4 py-2 rounded-xl text-sm md:text-base font-semibold shadow-md transition-transform hover:scale-105">
+                    Tambah
+                </button>
+            </div>
+        </div>
+    `;
         });
+
+        wrapper += `</div>`;
+
+        menuList.innerHTML = wrapper;
     }
 }
 
 // Load semua menu saat pertama kali halaman dibuka
 document.addEventListener("DOMContentLoaded", () => {
+    
+    document.getElementById("view-mode").value = viewMode;
+
     setViewMode(viewMode);
 
     loadMenus("all", document.querySelector(".kategori-btn"));
