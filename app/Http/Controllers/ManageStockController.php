@@ -219,27 +219,42 @@ class ManageStockController extends Controller
     {
         $business_id = $request->get('business_id');
 
+        // Cek data business
+        $business = $business_id
+            ? Business::find($business_id)
+            : Business::first(); // fallback agar tidak null
+
+        if (!$business) {
+            return back()->with('error', 'Data bisnis tidak ditemukan.');
+        }
+
         // Ambil semua data riwayat stok dengan relasi ke stok dan user
-        $riwayatStok = RiwayatStok::with(['stock', 'user'])
+        $riwayatStok = RiwayatStok::with(['stock.business', 'user'])
             ->when($business_id, function ($query, $business_id) {
                 $query->whereHas('stock', function ($q) use ($business_id) {
                     $q->where('business_id', $business_id);
                 });
             })
-            ->orderBy('created_at')
-            ->get();
-
-        // Tambahkan variabel tambahan agar tidak error di view
-        $business = $business_id
-            ? Business::find($business_id)
-            : Business::first(); // fallback agar tidak null
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'created_at' => $item->created_at->format('Y-m-d H:i'),
+                    'nama' => $item->stock->nama ?? '-',
+                    'business_name' => $item->stock->business->name ?? '-',
+                    'user_name' => $item->user->name ?? '-',
+                    'status' => ucfirst($item->status),
+                    'jumlah' => $item->jumlah,
+                ];
+            });
 
         $perPage = 15;
-        // $currentPage = $riwayatStok->currentPage();
 
-
-        // dd($business);
-
-        return view('admin.manage-stock.stok-history', compact('riwayatStok', 'business_id', 'business', 'perPage',));
+        return view('admin.manage-stock.stok-history', compact(
+            'riwayatStok',
+            'business_id',
+            'business',
+            'perPage'
+        ));
     }
 }

@@ -9,6 +9,6 @@
         'Status' => 'status',
         'Jumlah' => 'jumlah',
     ]" :rows="$riwayatStok" title="Riwayat Stok" :total="$riwayatStok->count()" :business_id="$business->id" :perPage="$perPage"
-        buttonAction="togglePopup('popup-add-kategori')" :actions="['edit' => 'openEditCategoryPopup']" />
+        buttonAction="togglePopup('popup-add-kategori')" />
 
 @endsection
