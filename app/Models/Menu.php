@@ -21,8 +21,5 @@ class Menu extends Model
         return $this->belongsTo(Business::class);
     }
 
-    public function sizes()
-    {
-        return $this->hasMany(Size::class);
-    }
+  
 }

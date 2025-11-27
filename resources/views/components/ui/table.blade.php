@@ -1,9 +1,9 @@
 @props([
     'headers' => [],
     'rows' => [],
-    'perPage',
-    'currentPage',
-    'total',
+    'perPage' => 0,
+    'currentPage' => 1,
+    'total' => 0,
     'actions' => [],
     'business_id',
     'title',
@@ -14,12 +14,19 @@
 ])
 
 @php
-    $perPage = $perPage > 0 ? $perPage : 10; // default 10 kalau 0/null
-    $totalPages = $total > 0 ? ceil($total / $perPage) : 1;
-    $currentPage = request()->get('page', 1);
-    $start = ($currentPage - 1) * $perPage + 1;
-    $end = min($start + $perPage - 1, $total);
+    // Pagination aktif hanya jika perPage > 0
+    $hasPagination = $perPage > 0;
 @endphp
+@if ($hasPagination)
+    @php
+        $perPage = $perPage > 0 ? $perPage : 0; // default 10 kalau 0/null
+        $totalPages = $total > 0 ? ceil($total / $perPage) : 1;
+        $currentPage = request()->get('page', 1);
+        $start = ($currentPage - 1) * $perPage + 1;
+        $end = min($start + $perPage - 1, $total);
+    @endphp
+@endif
+
 
 
 
@@ -35,7 +42,7 @@
 
 
 
-            <div class="flex-auto px-0 pb-2">
+            <div class="{{ $hasPagination ? '' : 'max-h-[298px] overflow-y-auto' }}">
                 <div class="p-0 overflow-x-auto">
                     <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">
                         <thead class="align-bottom">
@@ -58,20 +65,50 @@
                                 <tr>
 
 
-                                    @foreach ($headers as $label => $field)
-                                        <td
-                                            class="p-2 px-6 align-middle bg-transparent border-t whitespace-nowrap shadow-transparent">
-                                            <p class="mb-0 text-sm  font-thin leading-tight text-slate-600">
-                                                {{ data_get($row, $field) }}
-                                            </p>
-                                        </td>
+                                    @foreach ($headers as $label => $column)
+                                        {{-- Jika kolom berbentuk array → tampilkan gambar + title --}}
+                                        @if (is_array($column))
+                                            @php
+                                                $imgValue = data_get($row, $column['image']);
+                                                $titleValue = data_get($row, $column['title']);
+
+                                                $imgPath =
+                                                    $imgValue && file_exists(public_path($imgValue))
+                                                        ? asset($imgValue)
+                                                        : asset('img/illustrations/no-image.png');
+                                            @endphp
+
+                                            <td
+                                                class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+
+                                                <div class="flex px-2 py-1">
+                                                    <div>
+                                                        <img src="{{ $imgPath }}"
+                                                            class="mr-4 h-14 w-14 min-w-[56px] min-h-[56px] rounded-xl object-cover shadow"
+                                                            alt="img" />
+                                                    </div>
+                                                    <div class="flex flex-col justify-center">
+                                                        <h6 class="mb-0 text-sm font-semibold leading-normal">
+                                                            {{ $titleValue }}</h6>
+                                                    </div>
+                                                </div>
+
+                                            </td>
+                                        @else
+                                            <td
+                                                class="p-2 px-6 align-middle bg-transparent border-t whitespace-nowrap shadow-transparent">
+                                                <p class="mb-0 text-sm  font-thin leading-tight text-slate-600">
+                                                    {{ data_get($row, $column) }}
+                                                </p>
+                                            </td>
+                                        @endif
                                     @endforeach
 
                                     @if (!empty($actions))
                                         <td
                                             class="p-2 px-6 bg-transparent border-t whitespace-nowrap shadow-transparent">
                                             @foreach ($actions as $label => $function)
-                                                <button type="button" class="text-sm mx-1 {{ $label }}-button"
+                                                <button type="button" class="text-sm {{ $label }}-button"
                                                     onclick="{{ $function }}(this)">
                                                     {{ ucfirst($label) }}
                                                 </button>
@@ -89,50 +126,54 @@
                             @endforelse
                         </tbody>
                     </table>
-                    <nav class="flex items-center px-6 justify-between py-2" aria-label="Table navigation">
-                        <span class="text-sm text-slate-500">
-                            Menampilkan <span class="font-semibold">{{ $start }}</span>
-                            - <span class="font-semibold">{{ $end }}</span>
-                            dari <span class="font-semibold">{{ $total }}</span>
-                        </span>
 
-                        <ul class="inline-flex -space-x-px text-sm h-8">
-                            <li>
-                                <a href="?page={{ max(1, $currentPage - 1) }}"
-                                    class="px-3 h-8 flex items-center justify-center border rounded-l-lg bg-gradient-fuchsia {{ $currentPage == 1 ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-100 text-gray-500' }}">
-                                    <svg class="w-6 h-6 text-white" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                        viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m15 19-7-7 7-7" />
-                                    </svg>
+                    @if ($hasPagination)
+                        <nav class="flex items-center px-6 justify-between py-2" aria-label="Table navigation">
+                            <span class="text-sm text-slate-500">
+                                Menampilkan <span class="font-semibold">{{ $start }}</span>
+                                - <span class="font-semibold">{{ $end }}</span>
+                                dari <span class="font-semibold">{{ $total }}</span>
+                            </span>
 
-                                </a>
-                            </li>
+                            <ul class="inline-flex -space-x-px text-sm h-8">
+                                <li>
+                                    <a href="?page={{ max(1, $currentPage - 1) }}"
+                                        class="px-3 h-8 flex items-center justify-center border rounded-l-lg bg-gradient-fuchsia {{ $currentPage == 1 ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-100 text-gray-500' }}">
+                                        <svg class="w-6 h-6 text-white" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="m15 19-7-7 7-7" />
+                                        </svg>
 
-                            <li>
-                                <a href=""
-                                    class="px-3 h-8 flex items-center justify-center border
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href=""
+                                        class="px-3 h-8 flex items-center justify-center border
                  text-slate-700">
-                                    {{ $currentPage }}
-                                </a>
-                            </li>
+                                        {{ $currentPage }}
+                                    </a>
+                                </li>
 
-                            {{-- Next --}}
-                            <li>
-                                <a href="?page={{ min($totalPages, $currentPage + 1) }}"
-                                    class="px-3 h-8 flex items-center justify-center border rounded-e-lg bg-gradient-fuchsia-refresh {{ $currentPage == $totalPages ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-100 text-gray-500' }}">
-                                    <svg class="w-6 h-6 text-white" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                        viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m9 5 7 7-7 7" />
-                                    </svg>
+                                {{-- Next --}}
+                                <li>
+                                    <a href="?page={{ min($totalPages, $currentPage + 1) }}"
+                                        class="px-3 h-8 flex items-center justify-center border rounded-e-lg bg-gradient-fuchsia-refresh {{ $currentPage == $totalPages ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-100 text-gray-500' }}">
+                                        <svg class="w-6 h-6 text-white" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="m9 5 7 7-7 7" />
+                                        </svg>
 
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    @endif
+
                 </div>
             </div>
 

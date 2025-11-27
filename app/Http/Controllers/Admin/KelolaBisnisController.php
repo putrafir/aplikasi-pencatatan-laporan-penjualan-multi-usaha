@@ -26,14 +26,31 @@ class KelolaBisnisController extends Controller
         $business = Business::withCount(['menus', 'stocks', 'users', 'categories'])->findOrFail($id);
 
         $perPage = 5;
-        $currentPage = request()->get('page', 1); // ambil query string ?page=...
-        $allStocks = $business->stocks; // Collection
+        $currentPage = request()->get('page', 1);
 
-        $total = $allStocks->count();
+        // =========================
+        // PAGINATION STOCKS
+        // =========================
+        $allStocks = $business->stocks;
+        $totalStocks = $allStocks->count();
         $stocks = $allStocks->slice(($currentPage - 1) * $perPage, $perPage)->values();
 
+        // =========================
+        // PAGINATION MENUS
+        // =========================
+        $allMenus = $business->menus;
+        $totalMenus = $allMenus->count();
+        $menus = $allMenus->slice(($currentPage - 1) * $perPage, $perPage)->values();
 
-        return view('admin.kelola-bisnis.kelola', compact('business', 'stocks', 'total', 'perPage', 'currentPage'));
+        return view('admin.kelola-bisnis.kelola', compact(
+            'business',
+            'stocks',
+            'totalStocks',
+            'menus',
+            'totalMenus',
+            'perPage',
+            'currentPage'
+        ));
     }
 
     public function store(Request $request)
