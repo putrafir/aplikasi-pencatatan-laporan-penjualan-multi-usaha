@@ -42,7 +42,7 @@
 
 
 
-            <div class="{{ $hasPagination ? '' : 'max-h-[298px] overflow-y-auto' }}">
+            <div class="{{ $hasPagination ? '' : ' h-[298px] overflow-y-auto' }}">
                 <div class="p-0 overflow-x-auto">
                     <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">
                         <thead class="align-bottom">
