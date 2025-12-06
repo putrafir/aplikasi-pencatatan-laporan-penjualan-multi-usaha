@@ -21,15 +21,15 @@ class MenuFactory extends Factory
     public function definition(): array
     {
 
-        $faker = $this->faker;
-        $faker->addProvider(new Restaurant($faker));
+        // $faker = $this->faker;
+        // $faker->addProvider(new Restaurant($faker));
         return [
-            'nama' => $faker->foodName(),
-            'deskripsi' => fake()->sentence(),
-            'harga' => fake()->randomElement([10000, 15000, 20000, 25000]),
-            'kategori_id' => Category::inRandomOrder()->first()->id ?? Category::factory(),
-            'business_id' => Business::inRandomOrder()->first()->id ?? Business::factory(),
-            'super_kategori' => fake()->randomElement(['Smoothies', 'Hotang']),
+            // 'nama' => $faker->foodName(),
+            // 'deskripsi' => fake()->sentence(),
+            // 'harga' => fake()->randomElement([10000, 15000, 20000, 25000]),
+            // 'kategori_id' => Category::inRandomOrder()->first()->id ?? Category::factory(),
+            // 'business_id' => Business::inRandomOrder()->first()->id ?? Business::factory(),
+            // 'super_kategori' => fake()->randomElement(['Smoothies', 'Hotang']),
 
         ];
     }
