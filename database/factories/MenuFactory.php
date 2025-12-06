@@ -10,6 +10,7 @@ class MenuFactory extends Factory
 {
     public function definition(): array
     {
+
         return [
             'nama' => $this->faker->words(2, true),
             'deskripsi' => $this->faker->sentence(6),
@@ -18,6 +19,7 @@ class MenuFactory extends Factory
             // Relasi
             'kategori_id' => Category::factory(),
             'business_id' => Business::factory(),
+
 
             // Supaya tidak perlu file saat testing
             'foto' => 'img/illustrations/no-image.png',
