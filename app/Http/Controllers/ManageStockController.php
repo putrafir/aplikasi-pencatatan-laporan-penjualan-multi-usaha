@@ -54,9 +54,11 @@ class ManageStockController extends Controller
 
         $datanama = "data master";
 
+        $business_name = Business::find($business_id);
+
         $riwayatStok = RiwayatStok::latest()->take(5)->get();
 
-        return view('admin.manage-stock.index', compact('stocks', 'riwayatStok', 'businesses', 'datanama', 'business_id'));
+        return view('admin.manage-stock.index', compact('stocks', 'business_name', 'riwayatStok', 'businesses', 'datanama', 'business_id'));
     }
 
     public function store(Request $request)
@@ -142,6 +144,7 @@ class ManageStockController extends Controller
 
             RiwayatStok::create([
                 'stock_id' => $stock->id,
+                'user_id' => Auth::id(),
                 'status' => 'masuk',
                 'jumlah' => $data['jumlah_tambah'],
             ]);
@@ -202,6 +205,7 @@ class ManageStockController extends Controller
             if ($stokKeluar > 0) {
                 RiwayatStok::create([
                     'stock_id' => $stock->id,
+                    'user_id'  => Auth::id(),
                     'status'   => 'keluar',
                     'jumlah'   => $stokKeluar,
                 ]);
@@ -210,5 +214,48 @@ class ManageStockController extends Controller
 
         return redirect()->route('pegawai.transaksi.index')
             ->with('success', 'Sisa stok berhasil diperbarui dan log berhasil disimpan.');
+    }
+
+    public function stockHistory(Request $request)
+    {
+        $business_id = $request->get('business_id');
+
+        // Cek data business
+        $business = $business_id
+            ? Business::find($business_id)
+            : Business::first(); // fallback agar tidak null
+
+        if (!$business) {
+            return back()->with('error', 'Data bisnis tidak ditemukan.');
+        }
+
+        // Ambil semua data riwayat stok dengan relasi ke stok dan user
+        $riwayatStok = RiwayatStok::with(['stock.business', 'user'])
+            ->when($business_id, function ($query, $business_id) {
+                $query->whereHas('stock', function ($q) use ($business_id) {
+                    $q->where('business_id', $business_id);
+                });
+            })
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'created_at' => $item->created_at->format('Y-m-d H:i'),
+                    'nama' => $item->stock->nama ?? '-',
+                    'business_name' => $item->stock->business->name ?? '-',
+                    'user_name' => $item->user->name ?? '-',
+                    'status' => ucfirst($item->status),
+                    'jumlah' => $item->jumlah,
+                ];
+            });
+
+        $perPage = 15;
+
+        return view('admin.manage-stock.stok-history', compact(
+            'riwayatStok',
+            'business_id',
+            'business',
+            'perPage'
+        ));
     }
 }

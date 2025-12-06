@@ -8,12 +8,13 @@
 
                 <div class="px-6 flex my-9 items-center justify-between gap-2 mb-4">
                     <h6>Kelola Pegawai</h6>
-                    <x-plus-button buttonAction="togglePopup('popup-add-user')" label="Tambah Pegawai" :showLabel="true" />
+                    <x-plus-button buttonAction="togglePopup('popup-add-user')" label="TAMBAH" :showLabel="true"
+                        :button="true"/>
                 </div>
 
                 {{-- Modal Tambah User --}}
-                <x-modal-add id="popup-add-user" title="Add User" :isEdit="false" action="{{ route('admin.add-user') }}" method="POST"
-                    :inputs="[
+                <x-modal-add id="popup-add-user" title="Add User" :isEdit="false" action="{{ route('admin.add-user') }}"
+                    method="POST" :inputs="[
                         [
                             'label' => 'Name',
                             'name' => 'name',

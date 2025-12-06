@@ -78,6 +78,7 @@ Route::middleware(['owner', 'auth'])->group(function () {
     Route::delete('/admin/stock/{id}', [ManageStockController::class, 'destroy'])->name('admin.stock.destroy');
     Route::get('/admin/laporan/{id}/detail', [LaporanController::class, 'detailLaporan'])->name('admin.laporan.detailLaporan');
     Route::get('/admin/laporan/pegawai/{id}', [LaporanController::class, 'laporanPegawai'])->name('admin.laporan.pegawai');
+    Route::get('/admin/stock-history', [ManageStockController::class, 'stockHistory'])->name('admin.stock-history');
 
     //riwywatan stock
 

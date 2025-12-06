@@ -31,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
                 if ($user->role == 'owner') {
                     $businesses = Business::all();
                     // dd($businesses);
+
                     $view->with('businesses', $businesses);
                 }
             }

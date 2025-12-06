@@ -56,6 +56,132 @@
             <div id="legend-pendapatan" class="flex flex-wrap justify-center gap-4 p-4"></div>
         </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-4">
+            {{-- ============================
+     🏆 Tabel Menu Best Seller
+        ============================ --}}
+            <div class=" bg-white rounded-lg shadow-sm p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-900">Menu Best Seller</h3>
+
+                    <form id="filterBestSellerForm" method="get">
+                        <button id="dropdownBestSellerButton" data-dropdown-toggle="dropdownBestSeller" type="button"
+                            class="px-3 py-2 inline-flex items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100">
+                            {{ $filterBestSeller == 'bulan' ? 'Bulanan' : ($filterBestSeller == 'minggu' ? 'Mingguan' : 'Harian') }}
+                            <svg class="w-2.5 h-2.5 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="m1 1 4 4 4-4" />
+                            </svg>
+                        </button>
+
+                        <input type="hidden" id="filterBestSellerInput" name="filter_best_seller"
+                            value="{{ $filterBestSeller }}">
+
+                        <div id="dropdownBestSeller"
+                            class="hidden z-10 w-44 bg-white rounded shadow divide-y divide-gray-100">
+                            <ul class="py-2 text-sm text-gray-700">
+                                <li>
+                                    <a href="#" onclick="event.preventDefault(); setBestSellerFilter('hari')"
+                                        class="block px-4 py-2 hover:bg-gray-100">Harian</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="event.preventDefault(); setBestSellerFilter('minggu')"
+                                        class="block px-4 py-2 hover:bg-gray-100">Mingguan</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="event.preventDefault(); setBestSellerFilter('bulan')"
+                                        class="block px-4 py-2 hover:bg-gray-100">Bulanan</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+
+                <table class="w-full text-sm text-left">
+                    <thead>
+                        <tr class="text-gray-600 border-b">
+                            <th class="py-2">Menu</th>
+                            <th class="py-2">Jumlah Terjual</th>
+                            <th class="py-2">jenis usaha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($bestSeller as $item)
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="py-3">{{ $item['nama'] }}</td>
+                                <td class="py-3 font-semibold">{{ $item['jumlah'] }}</td>
+                                <td>{{ $item['business_name'] }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            {{-- ============================
+     📦 Stok yang Sering Keluar
+  ============================ --}}
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-900">Stok yang Sering Keluar</h3>
+
+                    <form id="filterStokKeluarForm" method="get">
+                        <button id="dropdownStokKeluarButton" data-dropdown-toggle="dropdownStokKeluar" type="button"
+                            class="px-3 py-2 inline-flex items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100">
+
+                            {{ $filterStokKeluar == 'bulan' ? 'Bulanan' : ($filterStokKeluar == 'minggu' ? 'Mingguan' : 'Harian') }}
+
+                            <svg class="w-2.5 h-2.5 ml-2" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="m1 1 4 4 4-4" />
+                            </svg>
+                        </button>
+
+                        <input type="hidden" id="filterStokKeluarInput" name="filter_stok_keluar"
+                            value="{{ $filterStokKeluar }}">
+
+                        <div id="dropdownStokKeluar"
+                            class="hidden z-10 w-44 bg-white rounded shadow divide-y divide-gray-100">
+                            <ul class="py-2 text-sm text-gray-700">
+                                <li>
+                                    <a href="#" onclick="event.preventDefault(); setStokKeluarFilter('hari')"
+                                        class="block px-4 py-2 hover:bg-gray-100">Harian</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="event.preventDefault(); setStokKeluarFilter('minggu')"
+                                        class="block px-4 py-2 hover:bg-gray-100">Mingguan</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="event.preventDefault(); setStokKeluarFilter('bulan')"
+                                        class="block px-4 py-2 hover:bg-gray-100">Bulanan</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+
+                <table class="w-full text-sm text-left">
+                    <thead>
+                        <tr class="text-gray-600 border-b">
+                            <th class="py-2">Nama Bahan</th>
+                            <th class="py-2">Jumlah Keluar</th>
+                            <th class="py-2">Usaha</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach ($stokSeringKeluar as $item)
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="py-3">{{ $item->nama_stock }}</td>
+                                <td class="py-3 font-semibold">{{ $item->total_keluar }}</td>
+                                <td>{{ $item->business_name }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-0">
 
             {{-- ============================
@@ -183,7 +309,8 @@
                     return colorMap.get(name);
                 }
 
-                function makeChart(elementId, legendId, rawSeries, categories, dataKey, valueFormatter, unit = '', xLabel = 'Tanggal', yLabel = 'Jumlah') {
+                function makeChart(elementId, legendId, rawSeries, categories, dataKey, valueFormatter, unit = '',
+                    xLabel = 'Tanggal', yLabel = 'Jumlah') {
                     const el = document.getElementById(elementId);
                     if (!el) return;
 
@@ -197,18 +324,31 @@
                         chart: {
                             height: 300,
                             type: "area",
-                            toolbar: { show: false },
+                            toolbar: {
+                                show: false
+                            },
                             fontFamily: "Inter, sans-serif"
                         },
                         xaxis: {
                             categories: categories,
-                            title: { text: xLabel, style: { fontSize: '12px', fontWeight: 600 } },
+                            title: {
+                                text: xLabel,
+                                style: {
+                                    fontSize: '12px',
+                                    fontWeight: 600
+                                }
+                            },
                             labels: {
-                                style: { fontFamily: "Inter, sans-serif", cssClass: 'text-xs fill-gray-500' },
+                                style: {
+                                    fontFamily: "Inter, sans-serif",
+                                    cssClass: 'text-xs fill-gray-500'
+                                },
                                 formatter: function(value) {
                                     if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
                                         const [y, m, d] = value.split('-');
-                                        const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+                                        const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul",
+                                            "Agu", "Sep", "Okt", "Nov", "Des"
+                                        ];
                                         return `${parseInt(d)} ${monthNames[parseInt(m) - 1]}`;
                                     }
                                     return value;
@@ -216,17 +356,27 @@
                             }
                         },
                         yaxis: {
-                            title: { text: yLabel, style: { fontSize: '12px', fontWeight: 600 } },
+                            title: {
+                                text: yLabel,
+                                style: {
+                                    fontSize: '12px',
+                                    fontWeight: 600
+                                }
+                            },
                             labels: {
                                 formatter: function(value) {
-                                    return valueFormatter ? valueFormatter(value) : value.toLocaleString('id-ID');
+                                    return valueFormatter ? valueFormatter(value) : value.toLocaleString(
+                                        'id-ID');
                                 }
                             }
                         },
                         tooltip: {
                             shared: true,
-                            custom: function({ dataPointIndex }) {
-                                let html = `<div class="bg-gray-800 text-white p-2 rounded-lg shadow-md text-sm">`;
+                            custom: function({
+                                dataPointIndex
+                            }) {
+                                let html =
+                                    `<div class="bg-gray-800 text-white p-2 rounded-lg shadow-md text-sm">`;
                                 rawSeries.forEach((s) => {
                                     const color = getColorForName(s.name);
                                     const dataObj = s.data[dataPointIndex] || {};
@@ -240,11 +390,25 @@
                                 return html + `</div>`;
                             }
                         },
-                        fill: { type: "gradient", gradient: { opacityFrom: 0.55, opacityTo: 0 } },
-                        stroke: { width: 6 },
-                        dataLabels: { enabled: false },
-                        legend: { show: false },
-                        grid: { show: true },
+                        fill: {
+                            type: "gradient",
+                            gradient: {
+                                opacityFrom: 0.55,
+                                opacityTo: 0
+                            }
+                        },
+                        stroke: {
+                            width: 6
+                        },
+                        dataLabels: {
+                            enabled: false
+                        },
+                        legend: {
+                            show: false
+                        },
+                        grid: {
+                            show: true
+                        },
                     };
 
                     new ApexCharts(el, options).render();
@@ -263,15 +427,30 @@
                     }).join('');
                 }
 
-                makeChart("labels-chart", "legend-pendapatan", @json($seriesPendapatan), @json($categoriesPendapatan), "pendapatan",
+                makeChart("labels-chart", "legend-pendapatan", @json($seriesPendapatan),
+                    @json($categoriesPendapatan), "pendapatan",
                     (v) => "Rp" + v.toLocaleString("id-ID"), "Rp", "Tanggal", "Jumlah Pendapatan (Rp)");
 
-                makeChart("stok-keluar-chart", "legend-stok", @json($stokSeries), @json($categoriesStok), "stok_keluar", null, "",
+                makeChart("stok-keluar-chart", "legend-stok", @json($stokSeries),
+                    @json($categoriesStok), "stok_keluar", null, "",
                     "Tanggal", "Jumlah Stok yang Keluar");
 
-                makeChart("menu-terjual-chart", "legend-menu", @json($menuSeries), @json($categoriesMenu), "jumlah_menu", null, "",
+                makeChart("menu-terjual-chart", "legend-menu", @json($menuSeries),
+                    @json($categoriesMenu), "jumlah_menu", null, "",
                     "Tanggal", "Jumlah Menu yang Terjual");
             });
         </script>
-
+        <script>
+            function setBestSellerFilter(filter) {
+                document.getElementById("filterBestSellerInput").value = filter;
+                document.getElementById("filterBestSellerForm").submit();
+            }
+        </script>
+        <script>
+            function setStokKeluarFilter(filter) {
+                document.getElementById("filterStokKeluarInput").value = filter;
+                document.getElementById("filterStokKeluarForm").submit();
+            }
+        </script>
+    </div>
 @endsection

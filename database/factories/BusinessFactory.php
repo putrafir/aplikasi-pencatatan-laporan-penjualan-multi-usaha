@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Business;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Business>
  */
@@ -23,6 +24,7 @@ class BusinessFactory extends Factory
                 'Pisgor',
                 'Miss',
             ]),
+
         ];
     }
 }

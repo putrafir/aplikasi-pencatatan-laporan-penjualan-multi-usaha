@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('stock_id')->constrained('stock')->onDelete('cascade');
             $table->enum('status', ['masuk', 'keluar']);
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->integer('jumlah');
             $table->timestamps();
         });

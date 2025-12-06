@@ -1,3 +1,31 @@
+@php
+    $kelolaStokDropdown = [
+        [
+            'label' => 'Riwayat Stok',
+            'route' => 'admin.stock-history',
+        ],
+        [
+            'label' => 'Tambah Stok',
+            'children' => $businesses->map(
+                fn($b) => [
+                    'label' => $b->name,
+                    'route' => 'admin.manage-stock',
+                    'params' => ['id' => $b->id],
+                ],
+            ),
+        ],
+    ];
+
+    $businesItems = $businesses
+        ->map(
+            fn($b) => [
+                'label' => $b->name,
+                'route' => 'admin.laporan',
+                'params' => ['id' => $b->id],
+            ],
+        )
+        ->toArray();
+@endphp
 <aside
     class="max-w-62.5 ease-nav-brand z-50 fixed inset-y-0 my-4 block w-full  -translate-x-full flex-wrap items-center justify-between overflow-y-auto rounded-2xl border-0 bg-white p-0 antialiased shadow-none transition-transform duration-200 lg:left-0 lg:translate-x-0 lg:bg-transparent"
     :class="{ '-translate-x-full': !sidebarOpen, 'translate-x-0': sidebarOpen }">
@@ -89,20 +117,20 @@
                     </g>
                 </svg>
             </x-sidebar-item>
-            <x-sidebar-item route="admin.manage-stock" label="Kelola Stok" :dropdownItems="$businesses">
-                <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            <x-sidebar-item route="admin.manage-stock" label="Kelola Stok" :dropdownItems="$kelolaStokDropdown">
+                <svg width="16" height="16" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink">
                     <title>office</title>
                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                         <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
                             <g transform="translate(1716.000000, 291.000000)">
                                 <g transform="translate(153.000000, 2.000000)">
+                                    <path class=" {{ Request::routeIs('admin.manage-stock*') ? '' : 'fill-slate-800' }}"
+                                        d="M16 16.1362V29C15.832 28.9993 15.667 28.9563 15.52 28.875L4.52 22.8525C4.36293 22.7665 4.23181 22.64 4.14035 22.4861C4.04888 22.3322 4.00041 22.1565 4 21.9775V10.0225C4.0004 9.88241 4.03021 9.74401 4.0875 9.61621L16 16.1362Z">
+                                    </path>
                                     <path
                                         class="opacity-60 {{ Request::routeIs('admin.manage-stock*') ? '' : 'fill-slate-800' }}"
-                                        d="M12.25,17.5 L8.75,17.5 L8.75,1.75 C8.75,0.78225 9.53225,0 10.5,0 L31.5,0 C32.46775,0 33.25,0.78225 33.25,1.75 L33.25,12.25 L29.75,12.25 L29.75,3.5 L12.25,3.5 L12.25,17.5 Z">
-                                    </path>
-                                    <path class="{{ Request::routeIs('admin.manage-stock*') ? '' : 'fill-slate-800' }}"
-                                        d="M40.25,14 L24.5,14 C23.53225,14 22.75,14.78225 22.75,15.75 L22.75,38.5 L19.25,38.5 L19.25,22.75 C19.25,21.78225 18.46775,21 17.5,21 L1.75,21 C0.78225,21 0,21.78225 0,22.75 L0,40.25 C0,41.21775 0.78225,42 1.75,42 L40.25,42 C41.21775,42 42,41.21775 42,40.25 L42,15.75 C42,14.78225 41.21775,14 40.25,14 Z M12.25,36.75 L7,36.75 L7,33.25 L12.25,33.25 L12.25,36.75 Z M12.25,29.75 L7,29.75 L7,26.25 L12.25,26.25 L12.25,29.75 Z M35,36.75 L29.75,36.75 L29.75,33.25 L35,33.25 L35,36.75 Z M35,29.75 L29.75,29.75 L29.75,26.25 L35,26.25 L35,29.75 Z M35,22.75 L29.75,22.75 L29.75,19.25 L35,19.25 L35,22.75 Z">
+                                        d="M27.96 8.26877L16.96 2.25002C16.6661 2.08763 16.3358 2.00244 16 2.00244C15.6642 2.00244 15.3339 2.08763 15.04 2.25002L4.04 8.27127C3.72586 8.44315 3.46363 8.69622 3.28069 9.00405C3.09775 9.31188 3.00081 9.66319 3 10.0213V21.9763C3.00081 22.3344 3.09775 22.6857 3.28069 22.9935C3.46363 23.3013 3.72586 23.5544 4.04 23.7263L15.04 29.7475C15.3339 29.9099 15.6642 29.9951 16 29.9951C16.3358 29.9951 16.6661 29.9099 16.96 29.7475L27.96 23.7263C28.2741 23.5544 28.5364 23.3013 28.7193 22.9935C28.9023 22.6857 28.9992 22.3344 29 21.9763V10.0225C28.9999 9.6638 28.9032 9.31172 28.7203 9.00317C28.5373 8.69462 28.2747 8.44096 27.96 8.26877ZM16 4.00002L26.0425 9.50002L22.3213 11.5375L12.2775 6.03752L16 4.00002ZM16 15L5.9575 9.50002L10.195 7.18002L20.2375 12.68L16 15ZM5 11.25L15 16.7225V27.4463L5 21.9775V11.25ZM27 21.9725L17 27.4463V16.7275L21 14.5388V19C21 19.2652 21.1054 19.5196 21.2929 19.7071C21.4804 19.8947 21.7348 20 22 20C22.2652 20 22.5196 19.8947 22.7071 19.7071C22.8946 19.5196 23 19.2652 23 19V13.4438L27 11.25V21.9713V21.9725Z">
                                     </path>
                                 </g>
                             </g>
@@ -110,7 +138,7 @@
                     </g>
                 </svg>
             </x-sidebar-item>
-            <x-sidebar-item route="admin.laporan" label="Laporan" :dropdownItems="$businesses">
+            <x-sidebar-item route="admin.laporan" label="Laporan" :dropdownItems="$businesItems">
                 <svg width="12" height="12" viewBox="0 0 19 22" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <title>office</title>
